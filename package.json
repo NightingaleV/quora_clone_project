@@ -1,0 +1,11 @@
+{
+  "name": "quora_clone",
+  "version": "1.0.0",
+  "description": "quora_clone_project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vitezslav Slavik",
+  "license": "MIT"
+}
