@@ -51,7 +51,9 @@ THIRD_PARTY_APPS = [
 ]
 LOCAL_APPS = [
     'quora_clone.apps.users.apps.UsersAppConfig',
+    'quora_clone.apps.topics.apps.TopicsAppConfig',
 ]
+
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 # AUTHENTICATION
