@@ -6,6 +6,7 @@ from .forms import UserCreationForm, UserChangeForm
 User = get_user_model()
 
 
+# TODO add TopicsSubscription inline from topics.admin
 @admin.register(User)
 class UserAdmin(auth_admin.UserAdmin):
     form = UserChangeForm

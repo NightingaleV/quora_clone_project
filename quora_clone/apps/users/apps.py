@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 
 
-class UsersConfig(AppConfig):
-    name = 'apps.users'
+class UsersAppConfig(AppConfig):
+    name = 'quora_clone.apps.users'
+    verbose_name = 'UsersApp'

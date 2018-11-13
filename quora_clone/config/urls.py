@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+# TODO Url patterns for User/Topics
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
