@@ -4,6 +4,14 @@ from django.utils.text import slugify
 from django.urls import reverse
 
 
+# Topic Manager
+# ------------------------------------------------------------------------------
+class TopicManager:
+    pass
+
+
+# Topic Model
+# ------------------------------------------------------------------------------
 class Topic(models.Model):
     """ Group containing posts """
     name = models.CharField(max_length=75, unique=True)
@@ -25,6 +33,8 @@ class Topic(models.Model):
         return reverse('topics:topic-detail', kwargs={'topic-slug': self.name})
 
 
+# Topic <-> User relationship
+# ------------------------------------------------------------------------------
 class TopicSubscription(models.Model):
     """ Bridge Table for Topics <-> User relationship """
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
