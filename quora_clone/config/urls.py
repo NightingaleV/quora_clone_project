@@ -18,6 +18,6 @@ from django.urls import path, include
 
 # TODO Url patterns for User/Topics
 urlpatterns = [
-    path('topics/', include('apps.topics.urls')),
+    path('topics/', include('quora_clone.apps.topics.urls')),
     path('admin/', admin.site.urls),
 ]

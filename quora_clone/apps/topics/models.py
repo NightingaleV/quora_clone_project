@@ -16,11 +16,11 @@ class Topic(models.Model):
     """ Group containing posts """
     name = models.CharField(max_length=75, unique=True)
     slug = models.SlugField(allow_unicode=True, unique=True)
-    subscribers = models.ManyToManyField(AUTH_USER_MODEL, through='TopicSubscription',
-                                         related_name='topics')
+    subscribers = models.ManyToManyField(AUTH_USER_MODEL, through='TopicSubscription')
 
     class Meta:
         ordering = ['name']
+        app_label = 'topics'
 
     def __str__(self):
         return f'# {self.name}'
