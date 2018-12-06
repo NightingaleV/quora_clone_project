@@ -1,5 +1,5 @@
 from django.db import models
-from config.settings.base import AUTH_USER_MODEL
+from quora_clone.config.settings.base import AUTH_USER_MODEL
 from django.utils.text import slugify
 from django.urls import reverse
 

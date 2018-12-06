@@ -1,6 +1,5 @@
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.urls import resolve
-from django.http import HttpRequest
 from django.template.loader import render_to_string
 from .views import ListTopic
 
@@ -24,7 +23,7 @@ class TestTopicListView(TestCase):
         self.assertEqual(found.func.view_class, ListTopic)
 
     def test_topic_list_template_implementation(self):
-        request = HttpRequest()
+        request = RequestFactory()
         v = setup_view(ListTopic(), request)
         response = v.get(request=request).render()
         expected_html = render_to_string('topics/topics_list.html')
