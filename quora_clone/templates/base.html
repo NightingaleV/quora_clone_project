@@ -2,9 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>
+        {% block title %}{% endblock %}
+    </title>
 </head>
 <body>
+{% include 'navbar.html' %}
+{% block top-content %}
+    
+{% endblock %}
+{% block content %}
 
+{% endblock %}
+{% block footer %}
+
+{% endblock %}
 </body>
 </html>
