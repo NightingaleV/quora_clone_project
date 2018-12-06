@@ -1,9 +1,12 @@
 from django.test import TestCase
 from django.urls import resolve
-import sys
+from django.http import HttpRequest
+from django.template.loader import render_to_string
+
+from django.views import generic
 
 from .models import Topic
-from . import views
+from .views import ListTopic
 
 
 # Create your tests here.
@@ -12,7 +15,14 @@ class TopicTest(TestCase):
         found = resolve('/topics/')
         # Why root module not included?
         print(found.func.view_class.__module__)
-        self.assertEqual(found.func.view_class.__name__, views.ListTopic.__name__)
+        self.assertEqual(found.func.view_class.__name__, ListTopic.__name__)
+
+    def test_topic_list_template_implementation(self):
+        request = HttpRequest()
+        topic_list = ListTopic()
+        response = topic_list.get(request=request)
+        expected_html = render_to_string('topics/topics_list.html')
+        self.assertEqual(response.content.decode(), expected_html)
 
     def test_string_representation(self):
         topic = Topic(name='Default Topic')
