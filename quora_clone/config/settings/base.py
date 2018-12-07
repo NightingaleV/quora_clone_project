@@ -1,12 +1,16 @@
 import environ
+import os
 
+# Read Env Variables
 ROOT_DIR = environ.Path(__file__) - 4
-PROJECT_DIR = ROOT_DIR.path('quora_clone')
-APPS_DIR = PROJECT_DIR.path('apps')
-TEMPLATES_DIR = PROJECT_DIR.path('templates')
-
 ENV = environ.Env()
 ENV.read_env(str(ROOT_DIR.path('.envs/local.env')))
+
+# Use os.path - cause Pycharm do not recognise folders from environ
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ASSET_DIR = os.path.join(PROJECT_DIR, 'static')
+TEMPLATES_DIR = os.path.join(PROJECT_DIR, 'templates')
+MEDIA_DIR = os.path.join(PROJECT_DIR, 'media')
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -119,9 +123,7 @@ STATIC_ROOT = str(ROOT_DIR('static'))
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
-STATICFILES_DIRS = [
-    str(PROJECT_DIR.path('static')),
-]
+STATICFILES_DIRS = [ASSET_DIR]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -131,7 +133,7 @@ STATICFILES_FINDERS = [
 # MEDIA
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = str(PROJECT_DIR('media'))
+MEDIA_ROOT = MEDIA_DIR
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = '/media/'
 
@@ -144,7 +146,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
         'DIRS': [
-            str(PROJECT_DIR.path('templates')),
+            TEMPLATES_DIR,
         ],
         'OPTIONS': {
             # https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
