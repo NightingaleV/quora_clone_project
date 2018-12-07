@@ -1,10 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'topics/base_topic.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block pre-content %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="row content-topic">
+        <div class="col-12 ui divided items topic-list row justify-content-center">
+            {% for topic in topics %}
+                <div class="col-6 item">
+                    <div class="image">
+                        <img src="{% static 'images/image.png' %}">
+                    </div>
+                    <div class="content">
+                        <a class="header"><h2>{{ topic.name }}</h2></a>
+                        <div class="meta">
+                    <span class="cinema">Subscribers: <span
+                            class="subscribers-counter">1</span><i
+                            class="ui icon user"></i></span>
+                        </div>
+                        <div class="description">
+                            <p></p>
+                        </div>
+                        <div class="extra">
+                            <button type="button" data-topic-id="{{ topic.pk }}"
+                                    class="ui small blue button button-subscribe">
+                                <i class="left user plus icon"></i><span
+                                    class="subscribe-text"> Subscribe</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block post-content %}
+
+{% endblock %}
