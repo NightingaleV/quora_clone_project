@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,11 +6,16 @@
     <title>
         {% block title %}{% endblock %}
     </title>
+    <link rel="stylesheet" href="{% static 'bootstrap/bootstrap-reboot.min.css' %}">
+    <link rel="stylesheet" href="{% static 'semantic_ui/semantic.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/bootstrap-grid.min.css' %}">
+    <link rel="stylesheet" href="{% static 'semantic_ui/icon.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/master.min.css' %}">
 </head>
 <body>
 {% include 'navbar.html' %}
 {% block top-content %}
-    
+
 {% endblock %}
 {% block content %}
 
@@ -18,4 +24,9 @@
 
 {% endblock %}
 </body>
+<script src="{% static 'jquery/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'bootstrap/bootstrap.min.js' %}"></script>
+<script src="{% static 'semantic_ui/semantic.min.js' %}"></script>
+
+<script src="{% static 'js/master.min.js' %}"></script>
 </html>
