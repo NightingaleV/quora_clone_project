@@ -8,3 +8,4 @@ from .models import Topic
 class ListTopic(ListView):
     model = Topic
     template_name = 'topics/topics_list.html'
+    context_object_name = 'topics'

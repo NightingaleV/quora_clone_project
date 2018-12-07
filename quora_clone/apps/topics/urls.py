@@ -7,5 +7,5 @@ from .views import ListTopic
 app_name = 'topics'
 
 urlpatterns = [
-    path('', ListTopic.as_view())
+    path('', ListTopic.as_view(), name='topic-list')
 ]
