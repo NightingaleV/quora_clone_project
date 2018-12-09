@@ -14,7 +14,9 @@
                         <img src="{% static 'images/image.png' %}">
                     </div>
                     <div class="content">
-                        <a class="header"><h2>{{ topic.name }}</h2></a>
+                        <a href="{% url 'topics:topic-detail' topic_slug=topic.slug %}"
+                           class="header"><h2
+                        >{{ topic.name }}</h2></a>
                         <div class="meta">
                     <span class="cinema">Subscribers: <span
                             class="subscribers-counter">1</span><i
