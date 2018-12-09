@@ -2,12 +2,14 @@ from django.db import models
 from quora_clone.config.settings.base import AUTH_USER_MODEL
 from django.utils.text import slugify
 from django.urls import reverse
+from django.db.models import QuerySet
 
 
-# Topic Manager
+# Topic Query Set
 # ------------------------------------------------------------------------------
-class TopicManager:
-    pass
+class TopicQuerySet(QuerySet):
+    def related_questions(self):
+        return self.filter()
 
 
 # Topic Model
@@ -18,9 +20,10 @@ class Topic(models.Model):
     slug = models.SlugField(allow_unicode=True, unique=True)
     subscribers = models.ManyToManyField(AUTH_USER_MODEL, through='TopicSubscription')
 
+    object = TopicQuerySet.as_manager()
+
     class Meta:
         ordering = ['name']
-        app_label = 'topics'
 
     def __str__(self):
         return f'# {self.name}'
