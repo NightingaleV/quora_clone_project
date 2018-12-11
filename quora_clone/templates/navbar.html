@@ -31,18 +31,18 @@
             <a href="" class="item"><i class="ui icon sign-out"></i>Logout</a>
         {% else %}
             <div class="item">
-                <a href="" class="ui button red">
+                <a href="{% url 'users:login' %}" class="ui button red">
                     Ask a question <i class="ui fitted white icon question"></i>
                 </a>
             </div>
             <div class="right menu">
                 <div class="item">
-                    <a href="{% url 'users:registration' %}" class="ui button primary"><i class="ui icon user
-                    plus"></i>Sign
-                        Up</a>
+                    <a href="{% url 'users:login' %}" class="ui button grey"><i class="ui icon
+                    sign-in"></i>Login</a>
                 </div>
                 <div class="item">
-                    <a href="" class="ui button grey"><i class="ui icon sign-in"></i>Log in</a>
+                    <a href="{% url 'users:registration' %}" class="ui button primary">
+                        <i class="ui icon user plus"></i>SignUp</a>
                 </div>
             </div>
         {% endif %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Sign in and browse the site as you wish
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+            <h1 class="ui header">Login</h1>
+        </div>
+        <div class="col-12 d-flex justify-content-center">
+            <form method="POST" action="{% url 'users:login' %}"
+                  class="col-5 ui equal width form d-flex flex-column justify-content-center">
+                {% csrf_token %}
+                {% if form.non_fields_errors %}
+                    <div class="ui visible small error message">
+                    <i class="close icon"></i>
+                    <div class="header">
+                        Ups! Something went wrong:
+                    </div>
+                    <ul class="list">
+                        {{ form.non_fields_errors }}
+                    </ul>
+                </div>
+                {% endif %}
+                <div class="fields">
+                    <div class="field">
+                        <label for="{{ form.username.id_for_label }}">Username</label>
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <div class="ui visible tiny error message">
+                                <i class="close icon"></i>{{ form.username.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="field">
+                        <label for="{{ form.password.id_for_label }}">Password</label>
+                        {{ form.password }}
+                    </div>
+                </div>
+                {% if form.password.errors %}
+                    <div class="ui visible tiny error message"><i class="close icon"></i>
+                        {{ form.password.errors }}
+                    </div>
+                {% endif %}
+                <button type="submit" class="ui primary button">Login</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
