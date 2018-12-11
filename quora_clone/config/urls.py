@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import TemplateView
 
-# TODO Url patterns for User/Topics
 urlpatterns = [
+    path('', TemplateView.as_view(template_name='pages/index.html'), name='home-page'),
     path('topics/', include('quora_clone.apps.topics.urls')),
+    path('users/', include('quora_clone.apps.users.urls')),
     path('admin/', admin.site.urls),
 ]

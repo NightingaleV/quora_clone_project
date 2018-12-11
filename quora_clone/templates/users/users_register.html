@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Create your user profile and explore the wisdom
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+            <h1 class="ui header">Create your account</h1>
+        </div>
+        <div class="col-12 d-flex justify-content-center">
+            <form method="POST" action=""
+                  class="col-5 ui equal width form d-flex flex-column justify-content-center">
+                {% csrf_token %}
+                <div class="ui error message">
+                    <div class="header">Action Forbidden</div>
+                    <p>{{ form.non_fields_errors }}</p>
+                </div>
+                <div class="fields">
+                    <div class="field">
+                        {{ form.username.errors }}
+                        <label for="{{ form.username.id_for_label }}">Username</label>
+                        {{ form.username }}
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="field">
+                        <label for="{{ form.first_name.id_for_label }}">First name</label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="field">
+                        <label for="form.last_name.id_for_label">Last name</label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="field">
+                        <label for="{{ form.email.id_for_label }}">Email</label>
+                        {{ form.email }}
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="field">
+                        <label for="{{ form.password.id_for_label }}">Password</label>
+                        {{ form.password1 }}
+                    </div>
+                    <div class="field">
+                        <label for="{{ form.password2.id_for_label }}">Confirm the password</label>
+                        {{ form.password2 }}
+                    </div>
+                </div>
+                <button type="submit" class="ui primary button">Sign Up</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,11 +1,9 @@
 """ Topics - URL mapping """
 from django.urls import path, include
-from django.views.generic import TemplateView
-from .views import ListTopic
+from .views import UserCreateView
 
-
-app_name = 'topics'
+app_name = 'users'
 
 urlpatterns = [
-    path('', ListTopic.as_view())
+    path('register/', UserCreateView.as_view(), name='registration')
 ]

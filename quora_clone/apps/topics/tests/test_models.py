@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from .models import Topic
-from .models import TopicSubscription
+from quora_clone.apps.topics.models import Topic
+from quora_clone.apps.topics.models import TopicSubscription
 
 
 class TopicModelsTests(TestCase):
