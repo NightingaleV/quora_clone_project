@@ -1,5 +1,5 @@
 from django.test import TestCase, RequestFactory, Client
-from .forms import UserCreationForm
+from quora_clone.apps.users.forms import UserCreationForm
 
 
 class TestUserCreationForm(TestCase):
