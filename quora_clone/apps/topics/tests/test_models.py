@@ -4,7 +4,7 @@ from quora_clone.apps.topics.models import Topic
 from quora_clone.apps.topics.models import TopicSubscription
 
 
-class TopicModelsTests(TestCase):
+class TestTopicModel(TestCase):
 
     def test_string_representation(self):
         topic = Topic(name='Default Topic')
