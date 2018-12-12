@@ -33,7 +33,7 @@ class Topic(models.Model):
         super(Topic, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('topics:detail', kwargs={'topic': self.name})
+        return reverse('topics:detail', kwargs={'topic_slug': self.slug})
 
 
 # Topic <-> User relationship

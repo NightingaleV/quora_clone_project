@@ -8,5 +8,5 @@ app_name = 'topics'
 
 urlpatterns = [
     path('', ListTopic.as_view(), name='list'),
-    path('<slug:topic_slug>', DetailTopic.as_view(), name='detail')
+    path('<slug:topic_slug>/', DetailTopic.as_view(), name='detail')
 ]

@@ -19,7 +19,7 @@ class TestUserCreationForm(TestCase):
             self.user
         )
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.clean_username(), self.user['username'])
+        self.assertEqual(self.user['username'], form.clean_username())
 
         form.save()
 

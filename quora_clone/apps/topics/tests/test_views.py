@@ -19,26 +19,25 @@ class TestTopicListView(TestCase):
 
     # Test URLs
     def test_topic_list_url(self):
-        self.assertEqual(reverse(self.url_name), self.url_path)
-        self.assertEqual(resolve(self.url_path).view_name, self.url_name)
+        self.assertEqual(self.url_path, reverse(self.url_name))
+        self.assertEqual(self.url_name, resolve(self.url_path).view_name)
 
     # Test URL returning a expected view
     def test_topic_url_resolves_to_topic_view(self):
         resolver = resolve(self.url_path)
-        self.assertEqual(resolver.func.view_class, ListTopic)
+        self.assertEqual(ListTopic, resolver.func.view_class)
 
     # Test View Template Implementation
     def test_topic_list_template_implementation(self):
-
         # If using the right template
         self.assertTemplateUsed(self.response, self.template)
 
         # If return correct template content
         expected_html = render_to_string(self.template)
-        self.assertHTMLEqual(self.response.content.decode(), expected_html)
+        self.assertHTMLEqual(expected_html, self.response.content.decode())
 
         # If page loads with status 200
-        self.assertEqual(self.response.status_code, 200, f'Problem with template {self.template}')
+        self.assertEqual(200, self.response.status_code, f'Problem with template {self.template}')
 
     # Test Return 200 for logged user
     def test_templates_for_user(self):
@@ -47,13 +46,12 @@ class TestTopicListView(TestCase):
         user.save()
 
         self.client.login(username='test_user', password='12345')
-        self.assertEqual(self.response.status_code, 200, f'Problem with template {self.template}')
+        self.assertEqual(200, self.response.status_code, f'Problem with template {self.template}')
 
     # Test View Context Object
     def test_topic_list_view_context(self):
         for key in self.context_keys:
-            self.assertTrue(key in self.response.context, f'Key {key} not in the context object')
-
+            self.assertTrue(f'Key {key} not in the context object', key in self.response.context)
 
 # url = reverse('archive', args=[1988])
 # assertEqual(url, '/archive/1988/')
