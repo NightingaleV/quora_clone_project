@@ -26,14 +26,14 @@ class Topic(models.Model):
         ordering = ['name']
 
     def __str__(self):
-        return f'# {self.name}'
+        return f'#{self.name}'
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Topic, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('topics:topic-detail', kwargs={'topic-slug': self.name})
+        return reverse('topics:detail', kwargs={'topic': self.name})
 
 
 # Topic <-> User relationship

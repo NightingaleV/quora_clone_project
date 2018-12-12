@@ -26,8 +26,10 @@
                     Ask <i class="ui fitted white icon question"></i>
                 </a>
             </div>
-            <a href="" class="item"><i
-                    class="ui icon user"></i> {{ user.username }}</a>
+            <a href="{% url 'users:profile' request.user.username %}" class="item">
+                <i class="ui icon user"></i>
+                {{ user.username }}
+            </a>
             <a href="" class="item"><i class="ui icon sign-out"></i>Logout</a>
         {% else %}
             <div class="item">

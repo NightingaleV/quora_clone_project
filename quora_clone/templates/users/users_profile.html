@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Your profile
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+            <h1 class="ui header">Profile: {{ object }}</h1>
+        </div>
+        <div class="col-12 d-flex justify-content-center">
+        <h2>{{ object.get_absolute_url }}</h2>
+        </div>
+    </div>
+{% endblock %}

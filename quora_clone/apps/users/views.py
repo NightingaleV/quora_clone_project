@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView, FormView
 from django.contrib.auth.views import LoginView, LogoutView
-
+# Custom Imports
 from .forms import UserCreationForm
 
 User = get_user_model()
@@ -23,3 +23,10 @@ class UserRedirectView(RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         return reverse('home-page')
+
+
+class UserProfileView(DetailView):
+    template_name = 'users/users_profile.html'
+    model = User
+    slug_field = "username"
+    slug_url_kwarg = "username"

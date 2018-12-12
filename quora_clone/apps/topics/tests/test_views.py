@@ -15,13 +15,7 @@ class TestTopicListView(TestCase):
         self.url_name = 'topics:list'
         self.template = 'topics/topics_list.html'
         self.context_keys = ['topics']
-
-    def get_response(self):
-        try:
-            response = self.client.get(self.url_path)
-            return response
-        except NoReverseMatch:
-            self.fail(f'Template URLs Error: {self.template}')
+        self.response = self.client.get(self.url_path)
 
     # Test URLs
     def test_topic_list_url(self):
@@ -35,17 +29,16 @@ class TestTopicListView(TestCase):
 
     # Test View Template Implementation
     def test_topic_list_template_implementation(self):
-        response = self.get_response()
 
         # If using the right template
-        self.assertTemplateUsed(response, self.template)
+        self.assertTemplateUsed(self.response, self.template)
 
         # If return correct template content
         expected_html = render_to_string(self.template)
-        self.assertHTMLEqual(response.content.decode(), expected_html)
+        self.assertHTMLEqual(self.response.content.decode(), expected_html)
 
         # If page loads with status 200
-        self.assertEqual(response.status_code, 200, f'Problem with template {self.template}')
+        self.assertEqual(self.response.status_code, 200, f'Problem with template {self.template}')
 
     # Test Return 200 for logged user
     def test_templates_for_user(self):
@@ -54,14 +47,12 @@ class TestTopicListView(TestCase):
         user.save()
 
         self.client.login(username='test_user', password='12345')
-        response = self.get_response()
-        self.assertEqual(response.status_code, 200, f'Problem with template {self.template}')
+        self.assertEqual(self.response.status_code, 200, f'Problem with template {self.template}')
 
     # Test View Context Object
     def test_topic_list_view_context(self):
-        response = self.get_response()
         for key in self.context_keys:
-            self.assertTrue(key in response.context, f'Key {key} not in the context object')
+            self.assertTrue(key in self.response.context, f'Key {key} not in the context object')
 
 
 # url = reverse('archive', args=[1988])
@@ -97,16 +88,3 @@ class TestTopicListView(TestCase):
 #         content = {"id": 3, "title": "title3", "slug": "slug3",
 #                    "scoops_remaining": 0}
 #         self.assertEquals(data, content)
-
-
-# Set request into CBViews
-def setup_view(view, request, *args, **kwargs):
-    """
-    Mimic ``as_view()``, but returns view instance.
-    Use this function to get view instances on which you can run unit tests,
-    by testing specific methods.
-    """
-    view.request = request
-    view.args = args
-    view.kwargs = kwargs
-    return view

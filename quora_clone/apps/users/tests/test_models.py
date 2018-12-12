@@ -2,16 +2,14 @@ from django.test import TestCase
 
 from quora_clone.apps.users.models import User
 
-#
-# class TopicModelsTests(TestCase):
-#
-#     def test_string_representation(self):
-#         topic = Topic(name='Default Topic')
-#         self.assertEqual(str(topic), '# {}'.format(topic.name))
-#
-#     def test_verbose_name_plural(self):
-#         self.assertEqual(str(Topic._meta.verbose_name_plural), "topics")
-#
-#     # def test_topic_get_absolute_url(self):
-#     #     topic = Topic(name='Default Topic')
-#     #     self.assertEqual(topic.get_absolute_url(), f'/topics/{Topic.name}')
+
+class UserModelTests(TestCase):
+
+    def setUp(self):
+        self.user = User(username='TestUser')
+
+    def test_string_representation(self):
+        self.assertEqual(str(self.user), f'@{self.user.username}')
+
+    def test_topic_get_absolute_url(self):
+        self.assertEqual(self.user.get_absolute_url(), f'/users/{self.user.username}/')
