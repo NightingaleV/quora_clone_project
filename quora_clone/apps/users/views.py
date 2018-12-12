@@ -28,5 +28,6 @@ class UserRedirectView(RedirectView):
 class UserProfileView(DetailView):
     template_name = 'users/users_profile.html'
     model = User
-    slug_field = "username"
+    slug_field = 'username'
     slug_url_kwarg = "username"
+    context_object_name = 'user'
