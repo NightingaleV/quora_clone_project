@@ -30,7 +30,7 @@
                 <i class="ui icon user"></i>
                 {{ user.username }}
             </a>
-            <a href="" class="item"><i class="ui icon sign-out"></i>Logout</a>
+            <a href="{% url 'users:logout' %}" class="item"><i class="ui icon sign-out"></i>Logout</a>
         {% else %}
             <div class="item">
                 <a href="{% url 'users:login' %}" class="ui button red">

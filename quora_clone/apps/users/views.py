@@ -27,6 +27,10 @@ class UserLoginView(LoginView):
     template_name = 'users/users_login.html'
 
 
+class UserLogoutView(LogoutView):
+    next_page = 'users:login'
+
+
 class UserRedirectView(RedirectView):
     permanent = False
 
