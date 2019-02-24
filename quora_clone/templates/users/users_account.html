@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Sign in and browse the site as you wish
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-3">
+            <div class="ui vertical labeled icon menu ">
+                <span class="ui header medium item">Feeds</span>
+                <a href="" class="item">
+                    <i class="ui icon thumbtack"></i> Saved Questions
+                </a>
+                <a href="" class="item">
+                    <i class="ui icon bookmark"></i> Bookmarks
+                </a>
+            </div>
+        </div>
+        <div class="col-8">
+            <h1>Welcome {{ user }}</h1>
+            <div class="ui items">
+                <div class="item">
+                    <div class="image">
+                        <img src="https://semantic-ui.com/images/avatar/large/steve.jpg">
+                    </div>
+                    <div class="content">
+                        <h1 class="ui header">{{ user }}</h1>
+                        <div class="meta">
+                            <span>First Name</span> Admin
+                        </div>
+                        <div class="description">
+                            <p>true description</p>
+                        </div>
+                        <div class="extra">
+                            <a href="" class="ui small primary button">Edit Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

@@ -1,6 +1,14 @@
 html {
   font-size: 100%; }
 
+.menu.top {
+  min-height: 64px;
+  min-height: 4rem; }
+
+.page-wrapper {
+  margin-top: 64px;
+  margin-top: 4rem; }
+
 .topic-list.ui.divided.items > .item {
   margin: 0;
   padding: 16px 0 !important;

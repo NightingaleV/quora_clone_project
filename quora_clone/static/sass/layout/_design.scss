@@ -1,0 +1,11 @@
+$top-menu-height: 4rem;
+
+.menu {
+  &.top {
+    min-height: $top-menu-height;
+  }
+}
+
+.page-wrapper {
+  margin-top: $top-menu-height;
+}
