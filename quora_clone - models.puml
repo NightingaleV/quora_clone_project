@@ -1,0 +1,76 @@
+@startuml
+class User {
+- pk
+- username
+- first_name
+- last_name
+- email
+- password1
+- password2
+- profile_image
+}
+
+class FollowingBridge {
++ Follower
++ User
++ created_at
+}
+
+class Topic {
+- name
+- slug
+- subscribers
+}
+
+class Question{
++ name
++ slug
++ topic
++ asker
++ created_at
+}
+
+class Answer {
++ question
++ author
++ created_at
++ answer
++ last_edited
+}
+
+
+User "Asked by" ||--o{ "Asked" Question::asker : Asking
+User "Written By" ||--o{ "Write" Answer::author : Answering
+User }o--o{ FollowingBridge
+FollowingBridge }o--o{ User
+
+User }o--o{ UpvotesBridge
+Answer }--{ UpvotesBridge
+Topic ||--o{ Question::topic
+Question ||--o{ Answer::question
+
+class TopicSubscriptionBridge{
++ topic
++ model
++ interested
++ knowlage
+}
+
+class UpvotesBridge{
++ user
++ answer
+}
+
+User --o{ TopicSubscriptionBridge
+Topic --o{ TopicSubscriptionBridge
+
+
+class Activity{
++ user
++ action
++ on_object
+}
+
+
+
+@enduml
