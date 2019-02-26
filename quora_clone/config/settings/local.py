@@ -48,14 +48,18 @@ TEMPLATES[0]['OPTIONS']['debug'] = DEBUG  # noqa F405
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 EMAIL_BACKEND = ENV('DJANGO_EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-host
-EMAIL_HOST = 'localhost'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = ENV('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = ENV('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-port
-EMAIL_PORT = 1025
+# EMAIL_PORT = 1025
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites
-#INSTALLED_APPS += ['debug_toolbar']  # noqa F405
+INSTALLED_APPS += ['debug_toolbar']  # noqa F405
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
 MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']  # noqa F405
 # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config

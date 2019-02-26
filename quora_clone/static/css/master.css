@@ -7,7 +7,9 @@ html {
 
 .page-wrapper {
   margin-top: 64px;
-  margin-top: 4rem; }
+  margin-top: 4rem;
+  padding-top: 32px;
+  padding-top: 2rem; }
 
 .topic-list.ui.divided.items > .item {
   margin: 0;

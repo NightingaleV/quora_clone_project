@@ -36,12 +36,13 @@ class UserLogoutView(LogoutView):
 
 
 # PASSWORD CHANGE
-class UserChangePasswordView(PasswordChangeView):
-    pass
+class UserPasswordChangeView(PasswordChangeView):
+    template_name = 'users/users_password_change.html'
+    success_url = reverse_lazy('users:password-change-done')
 
 
-class UserChangePasswordDoneView(PasswordChangeDoneView):
-    pass
+class UserPasswordChangeDoneView(PasswordChangeDoneView):
+    template_name = 'users/users_password_change_done.html'
 
 
 class UserRedirectView(RedirectView):

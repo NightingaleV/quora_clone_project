@@ -52,7 +52,6 @@ DJANGO_APPS = [
     'django.contrib.admin',
 ]
 THIRD_PARTY_APPS = [
-    'debug_toolbar',
 ]
 LOCAL_APPS = [
     'quora_clone.apps.topics.apps.TopicsAppConfig',
