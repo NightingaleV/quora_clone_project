@@ -38,3 +38,7 @@ $('.message .close')
     ;
   })
 ;
+
+$(document).ready(function(){
+    $('.menu .item').tab({history:false});
+});
