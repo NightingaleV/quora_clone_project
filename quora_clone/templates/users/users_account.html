@@ -6,37 +6,69 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-3">
-            <div class="ui vertical labeled icon menu ">
-                <span class="ui header medium item">Feeds</span>
-                <a href="" class="item">
-                    <i class="ui icon thumbtack"></i> Saved Questions
-                </a>
-                <a href="" class="item">
-                    <i class="ui icon bookmark"></i> Bookmarks
-                </a>
+        <div class="col-10 offset-1">
+            <div class="ui top attached tabular menu">
+                <a class="item active" data-tab="Profile"><i class="ui icon user"></i> Profile</a>
+                <a class="item" data-tab="Answers"><i class="ui icon archive"></i> Answers</a>
+                <a class="item" data-tab="Bookmarks"><i class="ui icon bookmark"></i> Bookmarks</a>
+                <a class="item" data-tab="Followers"><i class="ui icon users"></i> Followers</a>
+                <a class="item" data-tab="Following"><i class="ui icon user circle"></i>Following</a>
             </div>
-        </div>
-        <div class="col-8">
-            <h1>Welcome {{ user }}</h1>
-            <div class="ui items">
-                <div class="item">
-                    <div class="image">
-                        <img src="https://semantic-ui.com/images/avatar/large/steve.jpg">
+            <div class="ui bottom attached active tab segment" data-tab="Profile">
+                <div class="ui items">
+                    <div class="item">
+                        <div class="ui circular medium image">
+                            <img src="https://semantic-ui.com/images/avatar/large/steve.jpg">
+                        </div>
+                        <div class="content">
+                            <h1 class="ui header">{{ user }}</h1>
+                            <div class="meta">
+                                <div class="ui list">
+                                    <div class="item">Name:
+                                        <span class="ui medium header">{{ user.first_name }} {{ user.last_name }}</span>
+                                    </div>
+                                    <div class="item">Gender: <span class="ui medium header">Male</span></div>
+                                </div>
+                            </div>
+                            <div class="description">
+                                <span class="ui meta">Description:</span>
+                                <p>This is something about me</p>
+                            </div>
+                            <div class="buttons mt-4 ml-1">
+                                <a href="" class="ui primary button">Edit Profile</a>
+                                <a href="" class="ui button ml-3">Change password</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="content">
-                        <h1 class="ui header">{{ user }}</h1>
-                        <div class="meta">
-                            <span>First Name</span> Admin
+                </div>
+            </div>
+            <div class="ui bottom attached tab segment" data-tab="Answers">
+                <div class="ui items">
+                    <div class="item">
+                        <div class="ui small image">
+                            <img src="https://semantic-ui.com/images/avatar/large/steve.jpg">
                         </div>
-                        <div class="description">
-                            <p>true description</p>
-                        </div>
-                        <div class="extra">
-                            <a href="" class="ui small primary button">Edit Profile</a>
+                        <div class="content">
+                            <h1 class="ui header">awdawdawd{{ user }}</h1>
+                            <div class="meta">
+                                <div class="ui list">
+                                    <div class="item">Name:
+                                        <span class="ui medium header">{{ user.first_name }} {{ user.last_name }}</span>
+                                    </div>
+                                    <div class="item">Gender: <span class="ui medium header">Male</span></div>
+                                </div>
+                            </div>
+                            <div class="description">
+                                <span class="ui meta">Description:</span>
+                                <p>This is something about me</p>
+                            </div>
+                            <div class="extra">
+                                <a href="" class="ui small primary button">Edit Profile</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 {% endblock %}
