@@ -46,6 +46,7 @@
                         {{ form.password.errors }}
                     </div>
                 {% endif %}
+            <p><a href="{% url 'users:password-reset' %}">Want to reset</a></p>
                 <button type="submit" class="ui primary button">Login</button>
             </form>
         </div>

@@ -3,7 +3,9 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model, authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (LoginView, LogoutView,
-                                       PasswordChangeView, PasswordChangeDoneView)
+                                       PasswordChangeView, PasswordChangeDoneView,
+                                       PasswordResetView, PasswordResetDoneView,
+                                       PasswordResetConfirmView, PasswordResetCompleteView)
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView, FormView
 from django.contrib.auth import get_user
 # Custom Imports
@@ -33,6 +35,27 @@ class UserLoginView(LoginView):
 
 class UserLogoutView(LogoutView):
     next_page = 'users:login'
+
+
+# PASSWORD RESET
+class UserPasswordResetView(PasswordResetView):
+    template_name = 'users/users_password_reset.html'
+    success_url = reverse_lazy('users:password-reset-done')
+    html_email_template_name = 'users/users_password_reset_email.html'
+    email_template_name = 'users/users_password_reset_email.html'
+
+
+class UserPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'users/users_password_reset_done.html'
+
+
+class UserPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'users/users_password_reset_confirm.html'
+    success_url = reverse_lazy('users:password-reset-complete')
+
+
+class UserPasswordResetCompleteView(PasswordResetCompleteView):\
+    template_name = 'users/users_password_reset_complete.html'
 
 
 # PASSWORD CHANGE
