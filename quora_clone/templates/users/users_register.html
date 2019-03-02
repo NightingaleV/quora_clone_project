@@ -15,14 +15,14 @@
                 {% csrf_token %}
                 {% if form.non_fields_errors %}
                     <div class="ui visible small error message">
-                    <i class="close icon"></i>
-                    <div class="header">
-                        Ups! Something went wrong:
+                        <i class="close icon"></i>
+                        <div class="header">
+                            Ups! Something went wrong:
+                        </div>
+                        <ul class="list">
+                            {{ form.non_fields_errors }}
+                        </ul>
                     </div>
-                    <ul class="list">
-                        {{ form.non_fields_errors }}
-                    </ul>
-                </div>
                 {% endif %}
                 <div class="fields">
                     <div class="field">
@@ -51,6 +51,17 @@
                         {{ form.last_name.errors }}
                     </div>
                 {% endif %}
+                <div class="fields">
+                    <div class="field">
+                        <label for="{{ form.gender.id_for_label }}">Gender</label>
+                        {{ form.gender }}
+                        {% if form.gender.errors %}
+                            <div class="ui visible tiny error message">
+                                <i class="close icon"></i>{{ form.gender.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
                 <div class="fields">
                     <div class="field">
                         <label for="{{ form.email.id_for_label }}">Email</label>

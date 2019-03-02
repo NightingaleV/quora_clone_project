@@ -18,10 +18,13 @@
                 <div class="ui items">
                     <div class="item">
                         <div class="ui circular medium image">
+
                             {% if user.profile_image %}
-                                <img src="{{ user.profile_image.url }}">
-                                {% else %}
+                                <img src="{{ user.profile_image.url }}" alt="{{ user.username }} - profile picture">
+                                {% elif user.gender == 'Male' %}
                                 <img src="https://semantic-ui.com/images/avatar/large/steve.jpg">
+                                {% elif user.gender == 'Female' %}
+                                <img src="https://semantic-ui.com/images/avatar2/large/kristy.png">
                             {% endif %}
                         </div>
                         <div class="content">
