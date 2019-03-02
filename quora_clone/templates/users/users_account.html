@@ -18,7 +18,11 @@
                 <div class="ui items">
                     <div class="item">
                         <div class="ui circular medium image">
-                            <img src="https://semantic-ui.com/images/avatar/large/steve.jpg">
+                            {% if user.profile_image %}
+                                <img src="{{ user.profile_image.url }}">
+                                {% else %}
+                                <img src="https://semantic-ui.com/images/avatar/large/steve.jpg">
+                            {% endif %}
                         </div>
                         <div class="content">
                             <h1 class="ui header">{{ user }}</h1>
@@ -27,15 +31,15 @@
                                     <div class="item">Name:
                                         <span class="ui medium header">{{ user.first_name }} {{ user.last_name }}</span>
                                     </div>
-                                    <div class="item">Gender: <span class="ui medium header">Male</span></div>
+                                    <div class="item">Gender: <span class="ui medium header">{{ user.gender }}</span></div>
                                 </div>
                             </div>
                             <div class="description">
                                 <span class="ui meta">Description:</span>
-                                <p>This is something about me</p>
+                                <p>{{ user.description }}</p>
                             </div>
                             <div class="buttons mt-4 ml-1">
-                                <a href="" class="ui primary button">Edit Profile</a>
+                                <a href="{% url 'users:profile-edit' %}" class="ui primary button">Edit Profile</a>
                                 <a href="{% url 'users:password-change' %}" class="ui button ml-3">Change password</a>
                             </div>
                         </div>

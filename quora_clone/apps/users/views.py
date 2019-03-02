@@ -9,7 +9,7 @@ from django.contrib.auth.views import (LoginView, LogoutView,
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView, FormView
 from django.contrib.auth import get_user
 # Custom Imports
-from .forms import UserCreationForm
+from .forms import UserCreationForm, UserUpdateForm
 
 User = get_user_model()
 
@@ -26,6 +26,20 @@ class UserCreateView(FormView):
         password = form.cleaned_data['password2']
         user = authenticate(username=username, password=password)
         login(self.request, user)
+        return valid
+
+
+class UserUpdateView(UpdateView):
+    template_name = 'users/users_profile_edit.html'
+    form_class = UserUpdateForm
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def form_valid(self, form):
+        form.save()
+        valid = super().form_valid(form)
+
         return valid
 
 

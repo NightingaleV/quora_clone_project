@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Create your user profile and explore the wisdom
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+            <h1 class="ui header">Create your account</h1>
+        </div>
+        <div class="col-12 d-flex justify-content-center">
+            <form method="POST"
+                  class="col-5 ui equal width form d-flex flex-column justify-content-center" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% if form.non_fields_errors %}
+                    <div class="ui visible small error message">
+                        <i class="close icon"></i>
+                        <div class="header">
+                            Ups! Something went wrong:
+                        </div>
+                        <ul class="list">
+                            {{ form.non_fields_errors }}
+                        </ul>
+                    </div>
+                {% endif %}
+                <div class="fields">
+                    <div class="field">
+                        <label for="{{ form.first_name.id_for_label }}">First name</label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="field">
+                        <label for="{{ form.last_name.id_for_label }}">Last name</label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+                {% if form.first_name.errors or form.last_name.errors %}
+                    <div class="ui visible error tiny message"><i class="close icon"></i>
+                        {{ form.first_name.errors }}
+                        {{ form.last_name.errors }}
+                    </div>
+                {% endif %}
+                <div class="fields">
+                    <div class="field">
+                        <label for="{{ form.gender.id_for_label }}">Gender</label>
+                        {{ form.gender }}
+                        {% if form.gender.errors %}
+                            <div class="ui visible tiny error message">
+                                <i class="close icon"></i>{{ form.gender.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="field">
+                        <label for="{{ form.profile_image.id_for_label }}">Profile Image</label>
+                        {{ form.profile_image }}
+                        {% if form.profile_image.errors %}
+                            <div class="ui visible tiny error message">
+                                <i class="close icon"></i>{{ form.profile_image.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="field">
+                        <label for="{{ form.description.id_for_label }}">Description</label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="ui visible tiny error message">
+                                <i class="close icon"></i>{{ form.description.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <button type="submit" class="ui primary button">Save</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
