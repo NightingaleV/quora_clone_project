@@ -18,11 +18,12 @@ User = get_user_model()
 class UserCreateView(CreateView):
     form_class = UserCreationForm
     template_name = 'users/users_register.html'
-    success_url = reverse_lazy('home-page')
 
-    # def get_success_url(self):
-    #     url = reverse_lazy('perfiles:propio', kwargs={'username': self.request.user.username})
-    #     return url
+    # success_url = reverse_lazy('home-page')
+
+    def get_success_url(self):
+        url = reverse_lazy('users:profile', kwargs={'username': self.request.user.username})
+        return url
 
     def form_valid(self, form):
         self.object = form.save()
@@ -72,8 +73,8 @@ class UserPasswordResetConfirmView(PasswordResetConfirmView):
     success_url = reverse_lazy('users:password-reset-complete')
 
 
-class UserPasswordResetCompleteView(PasswordResetCompleteView):\
-    template_name = 'users/users_password_reset_complete.html'
+class UserPasswordResetCompleteView(PasswordResetCompleteView): \
+        template_name = 'users/users_password_reset_complete.html'
 
 
 # PASSWORD CHANGE
@@ -110,5 +111,5 @@ class UserProfileView(DetailView):
     template_name = 'users/users_profile.html'
     model = User
     slug_field = 'username'
-    slug_url_kwarg = "username"
+    slug_url_kwarg = "alias"
     context_object_name = 'user'

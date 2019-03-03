@@ -36,6 +36,6 @@ urlpatterns = [
     path('redirect/', UserRedirectView.as_view(), name='redirect'),
     # User Profiles
     path('my-profile/', UserAccountView.as_view(), name='account'),
-    path('@<str:username>/profile/', UserProfileView.as_view(), name='profile'),
+    path('@<str:alias>/', UserProfileView.as_view(), name='profile'),
     # path('', include('django.contrib.auth.urls')),
 ]

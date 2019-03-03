@@ -20,12 +20,10 @@ class User(AbstractUser):
         return "@{}".format(self.username)
 
     def get_absolute_url(self):
-        return reverse('users:profile', kwargs={'username': self.username})
+        return reverse('users:profile', kwargs={'alias': self.username})
 
     def save(self, *args, **kwargs):
-        print('Savuju v Modelu')
-        # self.profile_image = 'profile_images/defaults/default_m_003.jpg'
-        super().save(*args, **kwargs)  # Call the "real" save() method.
+        super().save(*args, **kwargs)
 
     @classmethod
     def save_default_image(cls, sender, instance, created, *args, **kwargs):
