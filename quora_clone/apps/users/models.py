@@ -9,7 +9,7 @@ from django.db.models.signals import post_save
 
 
 class User(AbstractUser):
-    GENDER_CHOICES = (('male', 'Male'), ('female', 'Female'))
+    GENDER_CHOICES = (('Male', 'Male'), ('Female', 'Female'))
 
     description = models.TextField(max_length=75, blank=True)
     gender = models.CharField(max_length=8, default='Male', blank=False, choices=GENDER_CHOICES)
