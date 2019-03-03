@@ -14,6 +14,7 @@ class User(AbstractUser):
     description = models.TextField(max_length=75, blank=True)
     gender = models.CharField(max_length=8, default='Male', blank=False, choices=GENDER_CHOICES)
     profile_image = models.ImageField(upload_to='profile_images/', blank=True)
+    follow_system = models.ManyToManyField('self', symmetrical=False, through='UserFollowersBridge')
 
     def __str__(self):
         return "@{}".format(self.username)
@@ -40,3 +41,15 @@ class User(AbstractUser):
 
 # Django Db Signal - Observer Registration
 post_save.connect(User.save_default_image, sender=User)
+
+
+class UserFollowersBridge(models.Model):
+    followers = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
+    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('followers', 'following')
+
+    def __str__(self):
+        return f'{self.follower} is following {self.following}'

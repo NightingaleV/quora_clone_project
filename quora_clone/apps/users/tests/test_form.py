@@ -9,6 +9,7 @@ class TestUserCreationForm(TestCase):
         self.user = {
             'username': 'johndoe23',
             'email': 'johndoe@gmail.com',
+            'gender': 'male',
             'first_name': 'John',
             'last_name': 'Doe',
             'password1': 'battlefield1',

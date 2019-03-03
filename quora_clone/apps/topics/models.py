@@ -3,6 +3,7 @@ from quora_clone.config.settings.base import AUTH_USER_MODEL
 from django.utils.text import slugify
 from django.urls import reverse
 from django.db.models import QuerySet
+from django.core.validators import MaxValueValidator
 
 
 # Topic Query Set
@@ -40,8 +41,10 @@ class Topic(models.Model):
 # ------------------------------------------------------------------------------
 class TopicSubscription(models.Model):
     """ Bridge Table for Topics <-> User relationship """
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='subscribtion')
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
+    interest = models.PositiveSmallIntegerField(blank=True, default=0, validators=[MaxValueValidator(10)])
+    knowlage = models.PositiveSmallIntegerField(blank=True, default=0, validators=[MaxValueValidator(10)])
 
     class Meta:
         unique_together = ('topic', 'user')
