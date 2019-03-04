@@ -55,6 +55,7 @@ THIRD_PARTY_APPS = [
 ]
 LOCAL_APPS = [
     'quora_clone.apps.topics.apps.TopicsAppConfig',
+    'quora_clone.apps.posts.apps.PostsAppConfig',
     'quora_clone.apps.users.apps.UsersAppConfig',
 ]
 
