@@ -15,7 +15,7 @@ class Question(CreationModificationDateMixin, models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, related_name='questions', on_delete=models.SET_NULL, null=True)
 
     class Meta:
-        ordering = '-created_at'
+        ordering = ['-created_at']
 
     def __str__(self):
         return f'{self.content}'
@@ -29,7 +29,8 @@ class Answer(CreationModificationDateMixin, models.Model):
     content = models.TextField()
     author = models.ForeignKey(AUTH_USER_MODEL, related_name='answers', on_delete=models.CASCADE)
     question = models.ForeignKey(Question, related_name='answers', on_delete=models.CASCADE)
-    bookmarks = models.ManyToManyField(AUTH_USER_MODEL, through='BookmarkAnswer')
+    bookmarks = models.ManyToManyField(AUTH_USER_MODEL, through='Bookmarks', related_name='bookmarks')
+    upvotes = models.ManyToManyField(AUTH_USER_MODEL, through='Upvotes', related_name='upvotes')
 
     class Meta:
         ordering = ['-created_at']
@@ -39,8 +40,8 @@ class Answer(CreationModificationDateMixin, models.Model):
         return f'{self.content}'
 
 
-class Bookmark(models.Model):
-    user = models.ForeignKey(AUTH_USER_MODEL, related_name='bookmarks', on_delete=models.CASCADE)
+class Bookmarks(models.Model):
+    user = models.ForeignKey(AUTH_USER_MODEL, related_name='saved', on_delete=models.CASCADE)
     bookmark = models.ForeignKey(Answer, related_name='saved_by', on_delete=models.CASCADE)
     created_at = models.DateTimeField(_('creation date and time'), auto_now_add=True)
 
@@ -48,11 +49,11 @@ class Bookmark(models.Model):
         return f"{self.user} save the {self.bookmark}"
 
     class Meta:
-        unique_together = ('answer', 'user')
+        unique_together = ['bookmark', 'user']
 
 
-class Upvote(models.Model):
-    user = models.ForeignKey(AUTH_USER_MODEL,related_name='upvotes', on_delete=models.CASCADE)
+class Upvotes(models.Model):
+    user = models.ForeignKey(AUTH_USER_MODEL, related_name='upvoted', on_delete=models.CASCADE)
     answer = models.ForeignKey(Answer, related_name='upvoted_by', on_delete=models.CASCADE)
     created_at = models.DateTimeField(_('creation date and time'), auto_now_add=True)
 
@@ -60,4 +61,4 @@ class Upvote(models.Model):
         return f"{self.user} upvoted the {self.answer}"
 
     class Meta:
-        unique_together = ('answer', 'user')
+        unique_together = ['answer', 'user']
