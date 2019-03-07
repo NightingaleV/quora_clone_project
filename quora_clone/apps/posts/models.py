@@ -27,14 +27,14 @@ class Question(CreationModificationDateMixin, models.Model):
 
 class Answer(CreationModificationDateMixin, models.Model):
     content = models.TextField()
-    author = models.ForeignKey(AUTH_USER_MODEL, related_name='answers', on_delete=models.CASCADE)
+    user = models.ForeignKey(AUTH_USER_MODEL, related_name='answers', on_delete=models.CASCADE)
     question = models.ForeignKey(Question, related_name='answers', on_delete=models.CASCADE)
     bookmarks = models.ManyToManyField(AUTH_USER_MODEL, through='Bookmarks', related_name='bookmarks')
     upvotes = models.ManyToManyField(AUTH_USER_MODEL, through='Upvotes', related_name='upvotes')
 
     class Meta:
         ordering = ['-created_at']
-        unique_together = ['id', 'author', 'question']
+        unique_together = ['id', 'user', 'question']
 
     def __str__(self):
         return f'{self.content}'

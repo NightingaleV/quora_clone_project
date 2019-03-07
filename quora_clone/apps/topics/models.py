@@ -21,7 +21,7 @@ class Topic(models.Model):
     slug = models.SlugField(allow_unicode=True, unique=True)
     subscribers = models.ManyToManyField(AUTH_USER_MODEL, through='TopicSubscription')
 
-    object = TopicQuerySet.as_manager()
+    objects = TopicQuerySet.as_manager()
 
     class Meta:
         ordering = ['name']
