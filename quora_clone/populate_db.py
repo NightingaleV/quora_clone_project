@@ -13,8 +13,9 @@ django.setup()
 from quora_clone.apps.topics.models import Topic, TopicSubscription
 from quora_clone.apps.posts.models import Question, Answer, Upvotes
 
-TOPICS = ['Health', 'History', 'Technology', 'Sports', 'Life', 'Finance', 'Design',
-          'Humor', 'Entertainment', 'Marketing', 'Psychology', 'The Universe', 'Cooking']
+TOPICS = ['Art','Food', 'Gaming','Health', 'History', 'Technology', 'Sports', 'Life', 'Finance', 'Design',
+          'Humor', 'Entertainment', 'Marketing', 'Psychology', 'The Universe', 'Productivity',]
+
 
 User = get_user_model()
 fake = Faker()

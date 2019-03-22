@@ -42,12 +42,12 @@ post_save.connect(User.save_default_image, sender=User)
 
 
 class UserFollowersBridge(models.Model):
-    followers = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')
     following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('followers', 'following')
+        unique_together = ('follower', 'following')
 
     def __str__(self):
         return f'{self.follower} is following {self.following}'

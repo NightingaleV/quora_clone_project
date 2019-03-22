@@ -22,7 +22,7 @@ class UserCreateView(CreateView):
     # success_url = reverse_lazy('home-page')
 
     def get_success_url(self):
-        url = reverse_lazy('users:profile', kwargs={'username': self.request.user.username})
+        url = reverse_lazy('users:profile', kwargs={'alias': self.request.user.username})
         return url
 
     def form_valid(self, form):
@@ -92,19 +92,6 @@ class UserRedirectView(RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         return reverse('home-page')
-
-
-class UserAccountView(LoginRequiredMixin, DetailView):
-    model = User
-    context_object_name = 'user'
-    template_name = 'users/users_account.html'
-
-    def get_object(self, queryset=None):
-        return self.request.user
-
-    def get_context_data(self, **kwargs):
-        context = super(UserAccountView, self).get_context_data(**kwargs)
-        return context
 
 
 class UserProfileView(DetailView):
