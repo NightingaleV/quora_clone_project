@@ -14,6 +14,7 @@ const runSequence = require('run-sequence');
 const spawn = require('child_process').spawn;
 const browserSync = require('browser-sync').create();
 const reload = browserSync.reload;
+const cache = require('gulp-cache');
 
 const app = 'quora_clone';
 const paths = {
@@ -69,6 +70,15 @@ gulp.task('runServer', function (cb) {
     });
 });
 
+gulp.task('clearCache', function() {
+  // Still pass the files to clear cache for
+  // gulp.src('./lib/*.js')
+  // .pipe(cache.clear());
+
+  // Or, just call this for everything
+  cache.clearAll();
+});
+
 // Browser sync server for live reload
 gulp.task('browserSync', function () {
     browserSync.init(
@@ -79,9 +89,9 @@ gulp.task('browserSync', function () {
 
 // Watcher
 gulp.task('watcher', function () {
-    gulp.watch(paths.SASS + '/**/*.scss', ['sass']);
-    gulp.watch(paths.JS + '/**/*.js', ['scripts']).on("change", reload);
-    gulp.watch(paths.IMAGES + '/*', ['imgCompression']);
+    gulp.watch(paths.SASS + '/**/*.scss', ['sass', 'clearCache']);
+    gulp.watch(paths.JS + '/**/*.js', ['scripts', 'clearCache']).on("change", reload);
+    gulp.watch(paths.IMAGES + '/*', ['imgCompression', 'clearCache']);
     gulp.watch(paths.TEMPLATES + '/**/*.html').on("change", reload);
 });
 
