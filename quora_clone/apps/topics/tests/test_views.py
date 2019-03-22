@@ -53,6 +53,7 @@ class TestTopicListView(TestCase):
         for key in self.context_keys:
             self.assertTrue(f'Key {key} not in the context object', key in self.response.context)
 
+
 # url = reverse('archive', args=[1988])
 # assertEqual(url, '/archive/1988/')
 

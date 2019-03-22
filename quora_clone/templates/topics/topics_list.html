@@ -9,28 +9,40 @@
     <div class="row content-topic">
         <div class="col-12 ui divided items topic-list row justify-content-center">
             {% for topic in topics %}
-                <div class="col-6 item">
+                <div class="col-6 topic item">
                     <div class="image">
                         <img src="{% static 'images/image.png' %}">
                     </div>
                     <div class="content">
-                        <a href="{% url 'topics:topic-detail' topic_slug=topic.slug %}"
+                        <a href=""
                            class="header"><h2
                         >{{ topic.name }}</h2></a>
                         <div class="meta">
-                    <span class="cinema">Subscribers: <span
-                            class="subscribers-counter">1</span><i
-                            class="ui icon user"></i></span>
+                            <div class="ui tiny label">Subscribers: <span
+                                    class="subscribers-counter">{{ topic.subscribers.count }}</span><i
+                                    class="ui icon user"></i></div>
                         </div>
                         <div class="description">
                             <p></p>
                         </div>
                         <div class="extra">
-                            <button type="button" data-topic-id="{{ topic.pk }}"
-                                    class="ui small blue button button-subscribe">
-                                <i class="left user plus icon"></i><span
-                                    class="subscribe-text"> Subscribe</span>
-                            </button>
+                            {% if user in topic.subscribers.all %}
+                                <div class="ui left labeled button btn-subscribe" data-topic-id="{{ topic.pk }}">
+                                    <div class="ui basic label"><i
+                                            class="ui icon user"></i>{{ topic.subscribers.count }}</div>
+                                    <button class="ui button"><i
+                                            class="ui icon plus"></i> Subscribe
+                                    </button>
+                                </div>
+                            {% else %}
+                                <div class="ui left labeled button btn-subscribe" data-topic-id="{{ topic.pk }}">
+                                    <div class="ui basic label"><i
+                                            class="ui icon user"></i>{{ topic.subscribers.count }}</div>
+                                    <button class="ui button"><i
+                                            class="ui icon plus"></i> Unsubscribe
+                                    </button>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -40,5 +52,31 @@
 {% endblock %}
 
 {% block post-content %}
+    <div class="ui modal first interest">
+        <div class="ui icon header">
+            <i class="archive icon"></i>
+            How much are you interest in the Topic?
+            <div class="ui small text">
+                To create better experience, we want to know your preferences. You can edit them later.
+            </div>
+        </div>
+
+        <div class="content text-center">
+            <div class="ui massive star rating" data-rating="0" data-max-rating="5"></div>
+        </div>
+    </div>
+    <div class="ui modal second interest">
+        <div class="ui icon header">
+            <i class="archive icon"></i>
+            How much knowledge do you have about the Topic?
+            <div class="ui small text">
+                To create better experience, we want to know your preferences. You can edit them later.
+            </div>
+        </div>
+
+        <div class="content text-center">
+            <div class="ui massive star rating" data-rating="0" data-max-rating="5"></div>
+        </div>
+    </div>
 
 {% endblock %}

@@ -1,6 +1,10 @@
 html {
   font-size: 100%; }
 
+.small.text {
+  font-size: 12px;
+  font-size: 0.75rem; }
+
 .menu.top {
   min-height: 64px;
   min-height: 4rem; }
