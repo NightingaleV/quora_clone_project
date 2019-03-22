@@ -8,11 +8,11 @@ $('.btn-subscribe').on('click', function () {
 
     $.ajax({
         type: "POST",
-        url: '/topics/subscribe/',
+        url: '/topics/',
         data: {topic_id: topicId},
         success: function (response) {
             // console.log('Success to contact the server');
-            // console.log(response);
+            console.log(response);
             if (response['status'] === 'subscribed') {
                 numSubs += 1;
                 subsCounter.text(numSubs);

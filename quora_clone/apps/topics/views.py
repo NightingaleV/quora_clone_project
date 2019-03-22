@@ -15,7 +15,7 @@ class ListTopic(ListView):
     context_object_name = 'topics'
 
     def post(self, request):
-        if self.request.is_ajax() and self.request.is_authenticated:
+        if self.request.is_ajax() and self.request.user.is_authenticated:
             topic_id = request.POST['topic_id']
             data = {}
             try:
@@ -24,7 +24,7 @@ class ListTopic(ListView):
                 if subscribe_topic[1]:
                     data['status'] = 'subscribed'
                 else:
-                    TopicSubscription.objects.filter(user=self.request.user, topic=topic_id)
+                    TopicSubscription.objects.filter(user=self.request.user, topic=topic_id).delete()
                     data['status'] = 'unsubscribed'
             except ObjectDoesNotExist:
                 data['status'] = 'objectDoesNotExist'
