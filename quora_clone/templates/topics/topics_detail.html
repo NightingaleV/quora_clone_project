@@ -1,19 +1,81 @@
 {% extends 'base.html' %}
-{% block pre-content %}
+
+{% block title %}
+    Topic - {{ topic.name }}
+{% endblock %}
+
+{% block content %}
     <div class="row">
-        <div class="col-2 offset-4">
-            <h1>{{ topic.name }}</h1>
-        </div>
-        <div class="col-2">
-            {% if user.is_authenticated %}
-                <a href="{% url 'topics:posts:create-question' topic_slug=topic.slug %}" class="ui button red">Ask a
-                    question</a>
-            {% endif %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-4 offset-4">
-            <p>{{ topic.description_html|safe }}</p>
+        <div class="col-10 offset-1">
+            {% include 'posts/_posts_menu.html' %}
+            <div class="ui " data-tab="Profile">
+                <div class="ui items">
+                    {% for question in questions_list %}
+                        <div class="ui segments">
+                            <div class="ui segment">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h2 class="header">{{ question }}</h2>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="item">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h3 class="header">{{ question.user }}</h3>
+                                                </div>
+                                                <div class="col-12 ui accordion answer-accordion">
+                                                    <div class="title">
+                                                        {{ question.answers.first.content|truncatechars:355 }}
+                                                    </div>
+                                                    <div class="content">
+                                                        {{ question.answers.first }}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui segment">
+                                <div class="buttons">
+                                    <div class="ui labeled button" tabindex="0">
+                                        <div class="ui button">
+                                            <i class="heart icon"></i> Upvote
+                                        </div>
+                                        <a class="ui basic label">
+                                            2,048
+                                        </a>
+                                    </div>
+                                    <button data-answer-id="0"
+                                            class="ui icon basic button button-bookmark" type="button"><i
+                                            class="ui icon bookmark"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {#                        <div class="item">#}
+                        {#                            <div class="content">#}
+                        {#                                <a class="header">{{ question.content }}</a>#}
+                        {#                                <div class="meta">#}
+                        {#                                    <span>{{ question.user }}</span>#}
+                        {#                                </div>#}
+                        {#                                <div class="description">#}
+                        {#                                    <p></p>#}
+                        {#                                </div>#}
+                        {#                                <div class="extra">#}
+                        {#                                    Additional Details#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {#                        </div>#}
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
         </div>
     </div>
 {% endblock %}

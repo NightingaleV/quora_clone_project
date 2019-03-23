@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.contrib import messages
 
 from .models import Topic, TopicSubscription
+from quora_clone.apps.posts.models import Question
 
 
 # Create your views here.
@@ -77,8 +78,18 @@ class DetailTopic(DetailView):
     context_object_name = 'topic'
     slug_field = 'slug'
     slug_url_kwarg = 'topic_slug'
+    extra_context = {}
 
     def get_context_data(self, *args, **kwargs):
-        context = super(DetailTopic, self).get_context_data(**kwargs)
+        context = super(DetailTopic, self).get_context_data(*args, **kwargs)
+
+        # topic = self.object
+        # context['questions_list'] = topic.questions.all()
+
+        context['questions_list'] = Question.objects.filter(topic=self.object).select_related('user')
+
+        # context_questions = Question.objects.filter(topic=self.get_object())
+
+        # context['questions_list2'] = Topic.objects.prefetch_related('questions')
 
         return context
