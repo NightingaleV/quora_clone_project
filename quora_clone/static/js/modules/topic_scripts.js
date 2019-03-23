@@ -1,12 +1,10 @@
-$('.btn-subscribe').click(function () {
-    // show first now
-    $('.first.modal')
-        .modal('show')
-    ;
-    // attach events to buttons
+$(document).ready(function () {
     $('.second.modal')
         .modal('attach events', '.first .icon')
     ;
+    $('.second .rating').click(function () {
+        $('.second.modal').modal('hide');
+    });
 });
 
 $(document).ready(function () {
@@ -18,6 +16,3 @@ $(document).ready(function () {
 });
 
 
-$('.second .rating').click(function () {
-    $('.second.modal').modal('hide');
-});

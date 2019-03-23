@@ -18,30 +18,26 @@
                            class="header"><h2
                         >{{ topic.name }}</h2></a>
                         <div class="meta">
-                            <div class="ui tiny label">Subscribers: <span
-                                    class="subscribers-counter">{{ topic.subscribers.count }}</span><i
+                            <div class="ui label">Subscribers: <span
+                                    class="subs-counter">{{ topic.subscribers.count }}</span><i
                                     class="ui icon user"></i></div>
                         </div>
                         <div class="description">
                             <p></p>
                         </div>
-                        <div class="extra">
-                            {% if user in topic.subscribers.all %}
-                                <div class="ui left labeled button btn-subscribe" data-topic-id="{{ topic.pk }}">
-                                    <div class="ui basic label"><i
-                                            class="ui icon user"></i>{{ topic.subscribers.count }}</div>
-                                    <button class="ui button"><i
-                                            class="ui icon plus"></i> Subscribe
-                                    </button>
-                                </div>
+                        <div class="extra subscription">
+                            {% if user not in topic.subscribers.all %}
+                                {#SUBSCRIBE BUTTON#}
+                                <button type="button" data-topic-id="{{ topic.pk }}"
+                                        class="ui red button subscribe">
+                                    <i class="left ui icon plus"></i><span class="text">Subscribe</span>
+                                </button>
                             {% else %}
-                                <div class="ui left labeled button btn-subscribe" data-topic-id="{{ topic.pk }}">
-                                    <div class="ui basic label"><i
-                                            class="ui icon user"></i>{{ topic.subscribers.count }}</div>
-                                    <button class="ui button"><i
-                                            class="ui icon plus"></i> Unsubscribe
-                                    </button>
-                                </div>
+                                {#UNSUBSCRIBE BUTTON#}
+                                <button type="button" data-topic-id="{{ topic.pk }}"
+                                        class="ui button subscribe unsubscribe">
+                                    <i class="left ui icon minus"></i><span class="text">Unsubscribe</span>
+                                </button>
                             {% endif %}
                         </div>
                     </div>
@@ -62,10 +58,10 @@
         </div>
 
         <div class="content text-center">
-            <div class="ui massive star rating" data-rating="0" data-max-rating="5"></div>
+            <div class="ui massive star rating" data-rating="0" data-max-rating="5" data-topic-id="0"></div>
         </div>
     </div>
-    <div class="ui modal second interest">
+    <div class="ui modal second knowledge">
         <div class="ui icon header">
             <i class="archive icon"></i>
             How much knowledge do you have about the Topic?
@@ -75,7 +71,7 @@
         </div>
 
         <div class="content text-center">
-            <div class="ui massive star rating" data-rating="0" data-max-rating="5"></div>
+            <div class="ui massive star rating" data-rating="0" data-max-rating="5" data-topic-id="0"></div>
         </div>
     </div>
 

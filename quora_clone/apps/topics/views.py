@@ -15,23 +15,48 @@ class ListTopic(ListView):
     context_object_name = 'topics'
 
     def post(self, request):
+        print(request.POST)
         if self.request.is_ajax() and self.request.user.is_authenticated:
-            topic_id = request.POST['topic_id']
-            data = {}
-            try:
-                subscribe_topic = TopicSubscription.objects.get_or_create(user=self.request.user,
-                                                                          topic_id=topic_id)
-                if subscribe_topic[1]:
-                    data['status'] = 'subscribed'
-                else:
-                    TopicSubscription.objects.filter(user=self.request.user, topic=topic_id).delete()
-                    data['status'] = 'unsubscribed'
-            except ObjectDoesNotExist:
-                data['status'] = 'objectDoesNotExist'
-            return JsonResponse(data)
+            # Different POST request
+            if 'interest_rating' in request.POST:
+                return self.set_interest_rating(request)
+            elif 'knowledge_rating' in request.POST:
+                return self.set_knowledge_rating(request)
+            else:
+                return self.subscribe_topic(request)
         else:
             messages.add_message(request, messages.INFO, 'You have to login for this operation')
             return reverse('users:login')
+
+    def subscribe_topic(self, request):
+        topic_id = request.POST['topic_id']
+        data = {}
+        try:
+            subscribe_topic = TopicSubscription.objects.get_or_create(user=self.request.user,
+                                                                      topic_id=topic_id)
+            if subscribe_topic[1]:
+                data['status'] = 'subscribed'
+            else:
+                TopicSubscription.objects.filter(user=self.request.user, topic=topic_id).delete()
+                data['status'] = 'unsubscribed'
+        except ObjectDoesNotExist:
+            data['status'] = 'objectDoesNotExist'
+        return JsonResponse(data)
+
+    def set_interest_rating(self, request):
+        topic_id = request.POST['topic_id']
+        interest_rating = request.POST['interest_rating']
+        data = {}
+        try:
+            topic = TopicSubscription.objects.get(id=topic_id)
+            topic.interest = int(interest_rating)
+            topic.save()
+        except ObjectDoesNotExist:
+            data['status'] = 'objectDoesNotExist'
+        return JsonResponse(data)
+
+    def set_knowledge_rating(self, request):
+        pass
 
 
 # Create your views here.
