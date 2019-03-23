@@ -15,6 +15,7 @@ const spawn = require('child_process').spawn;
 const browserSync = require('browser-sync').create();
 const reload = browserSync.reload;
 const cache = require('gulp-cache');
+const babel = require("gulp-babel");
 
 const app = 'quora_clone';
 const paths = {
@@ -46,6 +47,9 @@ gulp.task('sass', function () {
 // Javascript minification
 gulp.task('scripts', function () {
     return gulp.src([paths.JS_MODULES + '/ajax_csrf.js', paths.JS_MODULES + '/**/*.js'])
+        .pipe(babel({
+			presets: ['@babel/preset-env']
+		}))
         .pipe(concat('master.js'))
         .pipe(plumber()) // Checks for errors
         .pipe(gulp.dest(paths.JS))

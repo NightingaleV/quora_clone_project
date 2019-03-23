@@ -1,57 +1,71 @@
-// Show Knowledge + interest modals after subscribing
-$(document).on('click', ".subscription > .button", function () {
-    event.preventDefault();
-    var buttonSubscribe = $(this);
-    var topicId = $(this).attr('data-topic-id');
-    var subsCounter = $(this).closest('.topic').find('.subs-counter');
-    var subButtonIcon = $(this).find('.icon');
-    var subButtonText = $(this).find('.text');
-    var numSubs = parseInt(subsCounter.text());
-
-    $.ajax({
-        type: "POST",
-        url: '/topics/',
-        data: {topic_id: topicId},
-        success: function (response) {
-            // console.log('Success to contact the server');
-            console.log(response);
-            if (response['status'] === 'subscribed') {
-                numSubs += 1;
-                subsCounter.text(numSubs);
-                subButtonText.text('Unsubscribe');
-
-                buttonSubscribe.removeClass('subscribe red');
-                buttonSubscribe.addClass('unsubscribe');
-
-                subButtonIcon.removeClass('plus');
-                subButtonIcon.addClass('minus');
-                $('.interest.modal .rating').attr('data-topic-id', topicId);
-                $('.knowledge.modal .rating').attr('data-topic-id', topicId);
-                $('.interest.modal').modal('show');
-
-
-            } else if (response['status'] === 'unsubscribed') {
-                numSubs -= 1;
-                subsCounter.text(numSubs);
-                buttonSubscribe.removeClass('unsubscribe');
-
-                subButtonText.text('Subscribe');
-                buttonSubscribe.addClass('subscribe red');
-
-                subButtonIcon.removeClass('minus');
-                subButtonIcon.addClass('plus');
-            } else {
-                console.log('we Fail')
-            }
-        },
-        error: function (response) {
-            //console.log('Failure, request not reach the database');
-        },
-    })
-});
-
-// MODALS
 $(document).ready(function () {
+    // MODAL
+    function prepareRating(topicId) {
+        let interestRating = $('.interest.modal .rating');
+        let knowledgeRating = $('.knowledge.modal .rating');
+        // Set Topic
+        interestRating.attr('data-topic-id', topicId);
+        interestRating.attr('data-rating', 0);
+        interestRating.rating('clear rating');
+        knowledgeRating.attr('data-topic-id', topicId);
+        knowledgeRating.attr('data-rating', 0);
+        knowledgeRating.rating('clear rating');
+
+
+    }
+    // Show Knowledge + interest modals after subscribing
+    $(document).on('click', ".subscription > .button", function () {
+        event.preventDefault();
+        let buttonSubscribe = $(this);
+        let topicId = $(this).attr('data-topic-id');
+        let subsCounter = $(this).closest('.topic').find('.subs-counter');
+        let subButtonIcon = $(this).find('.icon');
+        let subButtonText = $(this).find('.text');
+        let numSubs = parseInt(subsCounter.text());
+
+
+        $.ajax({
+            type: "POST",
+            url: '/topics/',
+            data: {topic_id: topicId},
+            success: function (response) {
+                // console.log('Success to contact the server');
+                console.log(response);
+                if (response['status'] === 'subscribed') {
+                    numSubs += 1;
+                    subsCounter.text(numSubs);
+                    subButtonText.text('Unsubscribe');
+
+                    buttonSubscribe.removeClass('subscribe red');
+                    buttonSubscribe.addClass('unsubscribe');
+
+                    subButtonIcon.removeClass('plus');
+                    subButtonIcon.addClass('minus');
+                    prepareRating(topicId);
+
+                    $('.interest.modal').modal('show');
+
+
+                } else if (response['status'] === 'unsubscribed') {
+                    numSubs -= 1;
+                    subsCounter.text(numSubs);
+                    buttonSubscribe.removeClass('unsubscribe');
+
+                    subButtonText.text('Subscribe');
+                    buttonSubscribe.addClass('subscribe red');
+
+                    subButtonIcon.removeClass('minus');
+                    subButtonIcon.addClass('plus');
+                } else {
+                    console.log('we Fail')
+                }
+            },
+            error: function (response) {
+                //console.log('Failure, request not reach the database');
+            },
+        })
+    });
+
     $('.second.modal')
         .modal('attach events', '.first .icon')
     ;
@@ -63,47 +77,65 @@ $(document).ready(function () {
 $(document).ready(function () {
     // All your normal JS code goes in here
     $(".rating").rating();
-    $('.rating').click(function () {
-        console.log($(this).rating('get rating'))
-    });
+    // $('.rating').click(function () {
+    //     console.log($(this).rating('get rating'))
+    // });
 });
 
-$('.modal.interest .rating').click(function () {
-    let interestRating = $(this).rating('get rating');
+// Show Knowledge + interest modals after subscribing
+$(document).on('click', ".modal.interest .rating", function () {
     let topicId = $(this).attr('data-topic-id');
-    console.log(interestRating);
     console.log(topicId);
+    let interestRating = $(this).rating('get rating');
+    console.log(interestRating);
+
     $.ajax({
         type: "POST",
         url: '/topics/',
         data: {
-            interest_rating: interestRating, topic_id: topicId
+            interest_rating: interestRating,
+            topic_id: topicId
         },
         success: function (response) {
             // console.log('Success to contact the server');
+            console.log(response);
+            if (response['status'] === 'rating_saved') {
+
+            } else {
+                console.log('we Fail')
+            }
         },
         error: function (response) {
-            // console.log('Failure, request not reach the database');
+            //console.log('Failure, request not reach the database');
         },
     })
+
 });
-
-
 // Show Knowledge + interest modals after subscribing
-// $(document).on('click', ".modal.interest .rating", function () {
-//     let interestRating = $(this).rating('get rating');
-//     let topicId = $(this).attr('data-topic-id');
-//     $.ajax({
-//         type: "POST",
-//         url: '/topics/',
-//         data: {
-//             interest_rating: interestRating, topic_id: topicId
-//         },
-//         success: function (response) {
-//             // console.log('Success to contact the server');
-//         },
-//         error: function (response) {
-//             // console.log('Failure, request not reach the database');
-//         },
-//     })
-// });
+$(document).on('click', ".modal.knowledge .rating", function () {
+    let topicId = $(this).attr('data-topic-id');
+    console.log(topicId);
+    let knowledgeRating = $(this).rating('get rating');
+    console.log(knowledgeRating);
+    $.ajax({
+        type: "POST",
+        url: '/topics/',
+        data: {
+            knowledge_rating: knowledgeRating,
+            topic_id: topicId
+        },
+        success: function (response) {
+            // console.log('Success to contact the server');
+            console.log(response);
+            if (response['status'] === 'rating_saved') {
+
+            } else {
+                console.log('we Fail')
+            }
+        },
+        error: function (response) {
+            //console.log('Failure, request not reach the database');
+        },
+    })
+
+});

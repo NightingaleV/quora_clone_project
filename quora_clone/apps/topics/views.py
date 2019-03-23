@@ -48,15 +48,26 @@ class ListTopic(ListView):
         interest_rating = request.POST['interest_rating']
         data = {}
         try:
-            topic = TopicSubscription.objects.get(id=topic_id)
+            topic = TopicSubscription.objects.get(user=self.request.user, topic=topic_id)
             topic.interest = int(interest_rating)
             topic.save()
+            data['status'] = 'rating_saved'
         except ObjectDoesNotExist:
             data['status'] = 'objectDoesNotExist'
         return JsonResponse(data)
 
     def set_knowledge_rating(self, request):
-        pass
+        topic_id = request.POST['topic_id']
+        knowledge_rating = request.POST['knowledge_rating']
+        data = {}
+        try:
+            topic = TopicSubscription.objects.get(user=self.request.user, topic=topic_id)
+            topic.knowledge = int(knowledge_rating)
+            topic.save()
+            data['status'] = 'rating_saved'
+        except ObjectDoesNotExist:
+            data['status'] = 'objectDoesNotExist'
+        return JsonResponse(data)
 
 
 # Create your views here.
