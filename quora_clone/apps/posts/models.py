@@ -7,12 +7,22 @@ from quora_clone.apps.utils.models import CreationModificationDateMixin
 from quora_clone.apps.topics.models import Topic
 
 
+# QUESTION
+# ------------------------------------------------------------------------------
+class QuestionQuerySet(models.QuerySet):
+    pass
+
+
 # Create your models here.
 class Question(CreationModificationDateMixin, models.Model):
     content = models.CharField(max_length=300, blank=False, unique=True)
     slug = models.SlugField(max_length=350, allow_unicode=True, unique=True)
     topic = models.ForeignKey(Topic, related_name='questions', on_delete=models.CASCADE)
     user = models.ForeignKey(AUTH_USER_MODEL, related_name='questions', on_delete=models.SET_NULL, null=True)
+
+    # Managers
+    objects = models.Manager()
+    data = QuestionQuerySet.as_manager()
 
     class Meta:
         ordering = ['-created_at']
@@ -25,12 +35,25 @@ class Question(CreationModificationDateMixin, models.Model):
         super(Question, self).save(*args, **kwargs)
 
 
+# ANSWER
+# ------------------------------------------------------------------------------
+class AnswerQuerySet(models.QuerySet):
+    def add_upvote_counter(self):
+        return self.annotate(num_upvotes=models.Count('upvotes'))
+
+    def order_by_upvotes(self):
+        return self.add_upvote_counter().order_by('-num_upvotes')
+
+
 class Answer(CreationModificationDateMixin, models.Model):
     content = models.TextField()
     user = models.ForeignKey(AUTH_USER_MODEL, related_name='answers', on_delete=models.CASCADE)
     question = models.ForeignKey(Question, related_name='answers', on_delete=models.CASCADE)
     bookmarks = models.ManyToManyField(AUTH_USER_MODEL, through='Bookmarks', related_name='bookmarks')
     upvotes = models.ManyToManyField(AUTH_USER_MODEL, through='Upvotes', related_name='upvotes')
+
+    objects = models.Manager()
+    data = AnswerQuerySet.as_manager()
 
     class Meta:
         ordering = ['-created_at']
