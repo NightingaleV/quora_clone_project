@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="col-8">
+        <div class="ui upvote small left labeled button">
+            <a class="ui basic label">
+                {{ question.answers.first.num_upvotes }}
+            </a>
+            {% if user.is_authenticated %}
+                {% if user not in answer.upvotes.all %}
+                    <button class="ui small basic button" type="button" data-answer-id="">
+                        <i class="ui icon red heart"></i> Upvote
+                    </button>
+                {% else %}
+                    <button class="ui small button" type="button" data-answer-id="">
+                        <i class="heart icon"></i> Downvote
+                    </button>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'users:login' %}" class="ui small basic button"><i class="ui icon red heart"></i> Upvote</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-1 offset-3">
+        <button class="ui icon tiny basic button button-bookmark" type="button" data-answer-id=""><i
+                class="ui icon bookmark"></i></button>
+    </div>
+</div>

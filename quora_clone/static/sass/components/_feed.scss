@@ -1,0 +1,73 @@
+.question {
+  .header {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+}
+
+
+$answer-text-padding: 0px 25px;
+
+.answer {
+  .credits {
+    padding: 10px 0 0 30px;
+
+    .image {
+      $feed-profile-image-measures: 65px;
+      width: $feed-profile-image-measures;
+      height: $feed-profile-image-measures;
+      float: left;
+    }
+
+    .credentials {
+      height: 100%;
+      display: flex;
+      padding: 0px 15px 10px 5px;
+      justify-content: center;
+      flex-direction: column;
+      
+      .follow{
+        float: right;
+        position: absolute;
+        right: 10px;
+      }
+
+      .author {
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+
+      .description {
+        font-size: 0.95rem;
+        padding: 3px 0px;
+        margin-left:10px;
+      }
+
+      .created-at {
+        font-size: 0.7rem;
+        color: rgba(0, 0, 0, 0.55);
+        margin-left:5px;
+      }
+    }
+  }
+
+  .text {
+    padding: $answer-text-padding;
+    text-align: left;
+
+    .title{
+      padding: 0 !important;
+    }
+  }
+}
+// Bottom bar of segment with upvote/bookmark etc
+.segment.action-bar{
+  padding: 10px 20px;
+}
+
+.upvote{
+
+  .basic.button{
+    color:red !important;
+  }
+}
