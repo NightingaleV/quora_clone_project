@@ -1,10 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% for question in questions_list %}
+    <div class="ui segments">
+        <div class="ui segment">
+            <div class="row question">
+                <div class="col-12">
+                    <h2 class="header">{{ question.content }}</h2>
+                </div>
+            </div>
+            <div class="row answer d-flex">
+                {% with question.answers.first as answer %}
+                    <div class="col-12 credits mt-2">
+                        <img class="ui circular image"
+                             src="{{ answer.user.profile_image.url }}"
+                             alt="Profile photography - {{ answer.user }}">
+                        <div class="credentials">
+                            <span class="author"><a href="{% url 'users:profile' alias=answer.user.username %}">{{ answer.user }}</a></span>
+                                <div class="ui basic blue mini follow button">
+                                    <i class="user plus icon"></i> Follow
+                                </div>
+                            <span class="description">Develop public quickly live. Suggest analysis total media to. Experience carry take notice mind officer.</span>
+                            {% if answer.user.description %}
+                                <span class="description">{{ answer.user.description }}</span>
+                            {% endif %}
+                            <span class="created-at">Answered {{ answer.created_at }}</span>
+
+                        </div>
+                    </div>
+                    {% if answer.content|length >= 455 %}
+                        <div class="col-12 text ui accordion">
+                            <div class="title preview">
+                                {{ answer.content|truncatechars:455 }}
+                            </div>
+                            <div class="content">
+                                {{ answer.content }}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-12 text">
+                            <div class="content">
+                                {{ answer.content }}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                {% endwith %}
+            </div>
+        </div>
+        <div class="ui segment action-bar">
+            {% with question.answers.first as answer %}
+                {% include 'posts/_answer_bottom_bar.html' %}
+            {% endwith %}
+        </div>
+    </div>
+{% endfor %}

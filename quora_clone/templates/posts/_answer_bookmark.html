@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% if user.is_authenticated %}
+    {% if user not in answer.bookmark.all %}
+        <button data-answer-id="0"
+                class="ui icon basic button button-bookmark" type="button"><i class="ui icon bookmark"></i></button>
+    {% else %}
+        <button data-answer-id="0"
+                class="ui icon grey button button-bookmark" type="button"><i class="ui icon bookmark"></i></button>
+    {% endif %}
+{% else %}
+    <a href="{% url 'users:login' %}" class="ui button red" type="button">
+        <i class="ui icon bookmark"></i>
+    </a>
+{% endif %}
