@@ -14,6 +14,7 @@ from .views import (
     UserPasswordResetCompleteView,
     UserRedirectView,
     UserProfileView,
+    UserFollowAjax,
 )
 
 app_name = 'users'
@@ -33,7 +34,8 @@ urlpatterns = [
     path('password-change/', UserPasswordChangeView.as_view(), name='password-change'),
     path('password-change/done', UserPasswordChangeDoneView.as_view(), name='password-change-done'),
     path('redirect/', UserRedirectView.as_view(), name='redirect'),
-    # User Profiles
+    # User
     path('@<str:alias>/', UserProfileView.as_view(), name='profile'),
+    path('follow/', UserFollowAjax.as_view(), name='follow')
     # path('', include('django.contrib.auth.urls')),
 ]
