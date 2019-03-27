@@ -8,13 +8,14 @@
 @import "base/_fonts.scss";
 
 // Layout
-@import "layout/design.scss";
+@import "layout/_base.scss";
 //@import "layout/_navbar.scss";
 //@import "layout/_sidebar.scss";
 //@import "layout/_todo.scss";
 
 
 // Components
+@import "components/_feed.scss";
 //@import "components/_icon.scss";
 //@import "components/_button.scss";
 
