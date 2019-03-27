@@ -5,8 +5,12 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.contrib import messages
 
+from django.db.models import Prefetch
+
+from django.contrib.auth import get_user_model
+
 from .models import Topic, TopicSubscription
-from quora_clone.apps.posts.models import Question
+from quora_clone.apps.posts.models import Question, Answer
 
 
 # Create your views here.
@@ -70,6 +74,12 @@ class ListTopic(ListView):
             data['status'] = 'objectDoesNotExist'
         return JsonResponse(data)
 
+# This could work with infinite scroll
+# def get_ajax(self, *args, **kwargs):
+#     context = self.get_context_data(**kwargs)
+#     rendered = render_to_string(self.template_name,
+#                                 context_instance=RequestContext(self.request, context))
+#     return HttpResponse(rendered)
 
 # Create your views here.
 class DetailTopic(DetailView):
@@ -82,14 +92,16 @@ class DetailTopic(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(DetailTopic, self).get_context_data(*args, **kwargs)
+        # STEP 1
+        # This is how it should be - easiest way, but include lot of junk data
+        # context['questions_list'] = Question.objects.filter(topic=self.object).prefetch_related('answers__user')
 
-        # topic = self.object
-        # context['questions_list'] = topic.questions.all()
+        # STEP 2
+        # context['questions_list'] = Question.objects.filter(topic=self.object).prefetch_related(
+        #     Prefetch('answers', queryset=Answer.objects.all().select_related('user')))
 
-        context['questions_list'] = Question.objects.filter(topic=self.object).select_related('user')
-
-        # context_questions = Question.objects.filter(topic=self.get_object())
-
-        # context['questions_list2'] = Topic.objects.prefetch_related('questions')
+        # STEP 3
+        context['questions_list'] = Question.objects.filter(topic=self.object, answers__isnull=False).prefetch_related(
+            Prefetch('answers', queryset=Answer.data.order_by_upvotes().select_related('user').prefetch_related('upvotes')))
 
         return context

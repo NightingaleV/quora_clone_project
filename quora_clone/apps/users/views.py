@@ -1,5 +1,7 @@
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model, authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -7,7 +9,7 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordChangeView, PasswordChangeDoneView,
                                        PasswordResetView, PasswordResetDoneView,
                                        PasswordResetConfirmView, PasswordResetCompleteView)
-from django.views.generic import DetailView, ListView, RedirectView, UpdateView, CreateView, FormView
+from django.views.generic import DetailView, View, ListView, RedirectView, UpdateView, CreateView, FormView
 from django.contrib.auth import get_user
 # Custom Imports
 from .forms import UserCreationForm, UserUpdateForm
@@ -100,3 +102,24 @@ class UserProfileView(DetailView):
     slug_field = 'username'
     slug_url_kwarg = "alias"
     context_object_name = 'user'
+
+
+class UserFollowAjax(View):
+    def post(self, request):
+        # self.request == request, they are attributes and also parameters
+        if self.request.is_ajax():
+            follower_id = request.POST['follower_id']
+            following_id = request.POST['following_id']
+            data = {}
+            try:
+                follow = User.objects.get_or_create(follower_id=follower_id, following_id=following_id)
+                # Means user wasn't followed before
+                if follow[1]:
+                    data['status'] = 'followingCreated'
+                else:
+                    # Delete if was already followed
+                    follow[0].delete()
+                    data['status'] = 'followingDeleted'
+            except ObjectDoesNotExist as e:
+                data['status'] = 'objectDoesNotExist'
+            return JsonResponse(data)
