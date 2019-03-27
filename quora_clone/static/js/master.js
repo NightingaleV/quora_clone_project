@@ -35,6 +35,8 @@ $.ajaxSetup({
   }
 });
 "use strict";
+"use strict";
+"use strict";
 
 $(document).ready(function () {
   // MODAL
