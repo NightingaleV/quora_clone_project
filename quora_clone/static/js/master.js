@@ -158,18 +158,21 @@ $(document).on('click', ".modal.knowledge .rating", function () {
 });
 "use strict";
 
-$(document).ready(function () {
-  $('.second.modal').modal('attach events', '.first .icon');
-  $('.second .rating').click(function () {
-    $('.second.modal').modal('hide');
-  });
-});
-$(document).ready(function () {
-  // All your normal JS code goes in here
-  $(".rating").rating();
-  $('.rating').click(function () {
-    console.log($(this).rating('get rating'));
-  });
+$('.ui.accordion').accordion({
+  selector: {
+    accordion: '.answer .accordion',
+    title: '.preview',
+    trigger: '.preview',
+    content: '.content'
+  },
+  debug: true,
+  duration: 1,
+  onOpen: function onOpen() {
+    console.log($(this));
+    var answer = $(this).closest('.answer'); //answer.find('.answer-collapse').hide();
+
+    answer.find('.preview').hide();
+  }
 });
 "use strict";
 
