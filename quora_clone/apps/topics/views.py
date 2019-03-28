@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.generic import ListView, DetailView
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.utils import IntegrityError
 from django.urls import reverse
 from django.contrib import messages
 
@@ -27,11 +28,11 @@ class ListTopic(ListView):
                 return self.set_interest_rating(request)
             elif 'knowledge_rating' in request.POST:
                 return self.set_knowledge_rating(request)
-            else:
+            elif 'topic_id' in request.POST:
                 return self.subscribe_topic(request)
-        else:
-            messages.add_message(request, messages.INFO, 'You have to login for this operation')
-            return reverse('users:login')
+            else:
+                messages.add_message(request, messages.INFO, 'You have to login for this operation')
+                return HttpResponseRedirect(reverse('users:login'))
 
     def subscribe_topic(self, request):
         topic_id = request.POST['topic_id']
@@ -44,8 +45,8 @@ class ListTopic(ListView):
             else:
                 TopicSubscription.objects.filter(user=self.request.user, topic=topic_id).delete()
                 data['status'] = 'unsubscribed'
-        except ObjectDoesNotExist:
-            data['status'] = 'objectDoesNotExist'
+        except IntegrityError:
+            data['status'] = 'error'
         return JsonResponse(data)
 
     def set_interest_rating(self, request):
@@ -73,6 +74,7 @@ class ListTopic(ListView):
         except ObjectDoesNotExist:
             data['status'] = 'objectDoesNotExist'
         return JsonResponse(data)
+
 
 # This could work with infinite scroll
 # def get_ajax(self, *args, **kwargs):
@@ -102,6 +104,7 @@ class DetailTopic(DetailView):
 
         # STEP 3
         context['questions_list'] = Question.objects.filter(topic=self.object, answers__isnull=False).prefetch_related(
-            Prefetch('answers', queryset=Answer.data.order_by_upvotes().select_related('user').prefetch_related('upvotes')))
+            Prefetch('answers',
+                     queryset=Answer.data.order_by_upvotes().select_related('user').prefetch_related('upvotes')))
 
         return context

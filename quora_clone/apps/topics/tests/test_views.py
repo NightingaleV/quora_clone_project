@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.urls.exceptions import NoReverseMatch
 from django.contrib.auth import get_user_model
 from quora_clone.apps.topics.views import ListTopic
+from quora_clone.apps.topics.models import Topic, TopicSubscription
 
 User = get_user_model()
 
@@ -16,6 +17,16 @@ class TestTopicListView(TestCase):
         self.template = 'topics/topics_list.html'
         self.context_keys = ['topics']
         self.response = self.client.get(self.url_path)
+
+        # For User Authentication
+        self.user = User.objects.get_or_create(username='test_user')[0]
+        self.user.set_password('12345')
+        self.user.save()
+
+        self.topic = Topic.objects.get_or_create(name='Interesting Topic')[0]
+
+        # For ajax
+        self.json_kwargs = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
 
     # Test URLs
     def test_topic_list_url(self):
@@ -41,10 +52,6 @@ class TestTopicListView(TestCase):
 
     # Test Return 200 for logged user
     def test_templates_for_user(self):
-        user = User.objects.create(username='test_user')
-        user.set_password('12345')
-        user.save()
-
         self.client.login(username='test_user', password='12345')
         self.assertEqual(200, self.response.status_code, f'Problem with template {self.template}')
 
@@ -53,6 +60,56 @@ class TestTopicListView(TestCase):
         for key in self.context_keys:
             self.assertTrue(f'Key {key} not in the context object', key in self.response.context)
 
+    def test_ajax_subscribe_without_arguments(self):
+        self.client.login(username='test_user', password='12345')
+        response = self.client.post(self.url_path, data={}, **self.json_kwargs)
+        self.assertRedirects(response, reverse('users:login'))
+
+    def test_ajax_subscribe_topic(self):
+        self.client.login(username='test_user', password='12345')
+        # Subscribe
+        json_data = {'topic_id': self.topic.pk}
+        response = self.client.post(self.url_path, data=json_data, **self.json_kwargs)
+        data = response.json()
+        self.assertEqual(data['status'], 'subscribed')
+        # Unsubscribe
+        response = self.client.post(self.url_path, data=json_data, **self.json_kwargs)
+        data = response.json()
+        self.assertEqual(data['status'], 'unsubscribed')
+
+    def test_ajax_interest_rating(self):
+        self.client.login(username='test_user', password='12345')
+        # Subscribe
+        json_data = {'topic_id': self.topic.pk}
+        response = self.client.post(self.url_path, data=json_data, **self.json_kwargs)
+        # Put interest rating inside bridge table
+        json_data = {'topic_id': self.topic.pk, 'interest_rating': 5}
+        response = self.client.post(self.url_path, data=json_data, **self.json_kwargs)
+
+        # Check if returning right responsse
+        data = response.json()
+        self.assertEqual(data['status'], 'rating_saved')
+
+        # Check if right interest rating is in database
+        subscription = TopicSubscription.objects.get(user_id=self.user.pk, topic_id=self.topic.pk)
+        self.assertEqual(subscription.interest, json_data['interest_rating'])
+
+    def test_ajax_knowledge_rating(self):
+        self.client.login(username='test_user', password='12345')
+        # Subscribe
+        json_data = {'topic_id': self.topic.pk}
+        response = self.client.post(self.url_path, data=json_data, **self.json_kwargs)
+        # Put interest rating inside bridge table
+        json_data = {'topic_id': self.topic.pk, 'knowledge_rating': 5}
+        response = self.client.post(self.url_path, data=json_data, **self.json_kwargs)
+
+        # Check if returning right responsse
+        data = response.json()
+        self.assertEqual(data['status'], 'rating_saved')
+
+        # Check if right interest rating is in database
+        subscription = TopicSubscription.objects.get(user_id=self.user.pk, topic_id=self.topic.pk)
+        self.assertEqual(subscription.knowledge, json_data['knowledge_rating'])
 
 # url = reverse('archive', args=[1988])
 # assertEqual(url, '/archive/1988/')
