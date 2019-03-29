@@ -111,6 +111,17 @@ class TestTopicListView(TestCase):
         subscription = TopicSubscription.objects.get(user_id=self.user.pk, topic_id=self.topic.pk)
         self.assertEqual(subscription.knowledge, json_data['knowledge_rating'])
 
+
+class TestTopicDetailView(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.url_name = 'topics:detail'
+        self.topic = Topic.objects.get_or_create(name='Topic')[0]
+
+    def test_context_data(self):
+        response = self.client.get(reverse(self.url_name, kwargs={'topic_slug': self.topic.slug}))
+        self.assertIsNotNone(response.context['questions_list'])
+
 # url = reverse('archive', args=[1988])
 # assertEqual(url, '/archive/1988/')
 
