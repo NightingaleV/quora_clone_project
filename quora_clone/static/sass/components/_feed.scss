@@ -58,6 +58,9 @@ $answer-text-padding: 0px 25px;
     .title{
       padding: 0 !important;
     }
+    .content{
+      padding: 0 !important;
+    }
   }
 }
 // Bottom bar of segment with upvote/bookmark etc
@@ -65,9 +68,9 @@ $answer-text-padding: 0px 25px;
   padding: 10px 20px;
 }
 
-.upvote{
+.upvote-wrapper{
 
-  .basic.button{
+  .upvote.button{
     color:red !important;
   }
 }

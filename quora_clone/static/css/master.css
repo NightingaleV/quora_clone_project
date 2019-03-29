@@ -63,11 +63,13 @@ html {
   text-align: left; }
   .answer .text .title {
     padding: 0 !important; }
+  .answer .text .content {
+    padding: 0 !important; }
 
 .segment.action-bar {
   padding: 10px 20px; }
 
-.upvote .basic.button {
+.upvote-wrapper .upvote.button {
   color: red !important; }
 
 .topic-list.ui.divided.items > .item {
