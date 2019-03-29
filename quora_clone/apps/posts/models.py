@@ -80,6 +80,8 @@ class Upvotes(models.Model):
     answer = models.ForeignKey(Answer, related_name='upvoted_by', on_delete=models.CASCADE)
     created_at = models.DateTimeField(_('creation date and time'), auto_now_add=True)
 
+    objects = models.Manager()
+
     def __str__(self):
         return f"{self.user} upvoted the {self.answer}"
 

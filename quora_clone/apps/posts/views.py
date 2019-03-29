@@ -9,7 +9,7 @@ from .models import Upvotes, Bookmarks
 # Create your views here.
 class UpvoteAnswerAjax(View):
     def post(self, request):
-        # self.request == request, they are attributes and also parameters
+        # self.request == request -> request is an attribute and also a parameter, but why... hm ?
         if self.request.is_ajax():
             answer_id = request.POST['answer_id']
             user_id = request.POST['user_id']
