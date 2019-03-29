@@ -1,17 +1,22 @@
 <div class="row">
     <div class="col-8">
-        <div class="ui upvote small left labeled button">
-            <a class="ui basic label">
-                {{ question.answers.first.num_upvotes }}
-            </a>
+        <div class="ui upvote-wrapper small left labeled button">
+            <span class="ui basic label counter">
+                {% if user.is_authenticated and user in answer.upvotes.all %}
+                            <i class="ui red heart icon"></i>
+                    {% else %}
+                    <i class="ui grey heart icon"></i>
+                {% endif %}
+                <span class="text">{{ answer.num_upvotes }}</span>
+            </span>
             {% if user.is_authenticated %}
                 {% if user not in answer.upvotes.all %}
-                    <button class="ui small basic button" type="button" data-answer-id="">
-                        <i class="ui icon red heart"></i> Upvote
+                    <button class="ui small basic action upvote button" type="button" data-user-id="{{ user.id }}" data-answer-id="{{ answer.id }}">
+                        <i class="red arrow up icon"></i><span class="text">Upvote</span>
                     </button>
                 {% else %}
-                    <button class="ui small button" type="button" data-answer-id="">
-                        <i class="heart icon"></i> Downvote
+                    <button class="ui small basic action button" type="button" data-user-id="{{ user.id }}" data-answer-id="{{ answer.id }}">
+                        <i class="arrow down icon"></i><span class="text">Downvote</span>
                     </button>
                 {% endif %}
             {% else %}
@@ -20,7 +25,13 @@
         </div>
     </div>
     <div class="col-1 offset-3">
-        <button class="ui icon tiny basic button button-bookmark" type="button" data-answer-id=""><i
+        {% if user not in answer.bookmarks.all %}
+            <button class="ui icon tiny basic button button-bookmark" type="button" data-user-id="{{ user.id }}" data-answer-id="{{ answer.id }}"><i
                 class="ui icon bookmark"></i></button>
+        {% else %}
+            <button class="ui icon tiny basic button button-bookmark" type="button" data-user-id="{{ user.id }}" data-answer-id="{{ answer.id }}"><i
+                class="ui red icon bookmark"></i></button>
+        {% endif %}
+
     </div>
 </div>

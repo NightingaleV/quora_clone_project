@@ -32,6 +32,7 @@ $(document).ready(function () {
                 // console.log('Success to contact the server');
                 console.log(response);
                 if (response['status'] === 'subscribed') {
+                    console.log(topicId);
                     numSubs += 1;
                     subsCounter.text(numSubs);
                     subButtonText.text('Unsubscribe');
@@ -57,7 +58,7 @@ $(document).ready(function () {
                     subButtonIcon.removeClass('minus');
                     subButtonIcon.addClass('plus');
                 } else {
-                    console.log('we Fail')
+                    console.log('Integrity Error')
                 }
             },
             error: function (response) {

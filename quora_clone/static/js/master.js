@@ -35,7 +35,95 @@ $.ajaxSetup({
   }
 });
 "use strict";
+
+$(document).ready(function () {
+  $(document).on('click', ".button-bookmark", function () {
+    event.preventDefault();
+    var button = $(this);
+    var objectId = button.attr('data-answer-id');
+    var userId = button.attr('data-user-id');
+    var objectCounter = button.closest('.topic').find('.counter');
+    var buttonIcon = button.find('.icon');
+    $.ajax({
+      type: "POST",
+      // TODO ZMENIT STRUKTURU URL AJAX REQUESTU
+      url: '/actions/bookmark-answer/',
+      data: {
+        answer_id: objectId,
+        user_id: userId
+      },
+      success: function success(response) {
+        // console.log('Success to contact the server');
+        console.log(response);
+
+        if (response['status'] === 'bookmarkSaved') {
+          buttonIcon.addClass('red');
+        } else if (response['status'] === 'bookmarkDeleted') {
+          buttonIcon.removeClass('red');
+        } else {
+          console.log('we Fail');
+        }
+      },
+      error: function error(response) {//console.log('Failure, request not reach the database');
+      }
+    });
+  });
+});
 "use strict";
+
+$(document).ready(function () {
+  $(document).on('click', ".upvote-wrapper > .action.button", function () {
+    event.preventDefault();
+    var button = $(this);
+    var objectId = button.attr('data-answer-id');
+    var userId = button.attr('data-user-id');
+    var objectCounterText = button.closest('.upvote-wrapper').find('.counter .text');
+    var objectCounterIcon = button.closest('.upvote-wrapper').find('.counter .icon');
+    var buttonIcon = button.find('.icon');
+    var buttonText = button.find('.text');
+    var objectCounterNum = parseInt(objectCounterText.text());
+    $.ajax({
+      type: "POST",
+      url: '/actions/upvote-answer/',
+      data: {
+        answer_id: objectId,
+        user_id: userId
+      },
+      success: function success(response) {
+        // console.log('Success to contact the server');
+        console.log(response);
+
+        if (response['status'] === 'upvoteSaved') {
+          // From Upvote to Downvote
+          objectCounterNum += 1;
+          objectCounterText.text(objectCounterNum);
+          objectCounterIcon.removeClass('grey');
+          objectCounterIcon.addClass('red');
+          buttonText.text('Downvote');
+          button.removeClass('upvote');
+          button.addClass('downvote');
+          buttonIcon.removeClass('arrow up red');
+          buttonIcon.addClass('arrow down');
+        } else if (response['status'] === 'upvoteDeleted') {
+          // From downvote to upvote
+          objectCounterNum -= 1;
+          objectCounterText.text(objectCounterNum);
+          objectCounterIcon.removeClass('red');
+          objectCounterIcon.addClass('grey');
+          buttonText.text('Upvote');
+          button.removeClass('downvote');
+          button.addClass('upvote');
+          buttonIcon.removeClass('arrow down');
+          buttonIcon.addClass('arrow up red');
+        } else {
+          console.log('we Fail');
+        }
+      },
+      error: function error(response) {//console.log('Failure, request not reach the database');
+      }
+    });
+  });
+});
 "use strict";
 
 $(document).ready(function () {
@@ -72,6 +160,7 @@ $(document).ready(function () {
         console.log(response);
 
         if (response['status'] === 'subscribed') {
+          console.log(topicId);
           numSubs += 1;
           subsCounter.text(numSubs);
           subButtonText.text('Unsubscribe');
@@ -90,7 +179,7 @@ $(document).ready(function () {
           subButtonIcon.removeClass('minus');
           subButtonIcon.addClass('plus');
         } else {
-          console.log('we Fail');
+          console.log('Integrity Error');
         }
       },
       error: function error(response) {//console.log('Failure, request not reach the database');

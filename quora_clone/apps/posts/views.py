@@ -24,7 +24,7 @@ class UpvoteAnswerAjax(View):
                     upvote[0].delete()
                     data['status'] = 'upvoteDeleted'
             except ObjectDoesNotExist as e:
-                data['status'] = 'objectDoesNotExist'
+                data['status'] = 'error'
             return JsonResponse(data)
 
 
@@ -45,5 +45,5 @@ class BookmarkAnswerAjax(View):
                     bookmark[0].delete()
                     data['status'] = 'bookmarkDeleted'
             except ObjectDoesNotExist as e:
-                data['status'] = 'objectDoesNotExist'
+                data['status'] = 'error'
             return JsonResponse(data)

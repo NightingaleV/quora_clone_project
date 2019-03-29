@@ -103,8 +103,14 @@ class DetailTopic(DetailView):
         #     Prefetch('answers', queryset=Answer.objects.all().select_related('user')))
 
         # STEP 3
-        context['questions_list'] = Question.objects.filter(topic=self.object, answers__isnull=False).prefetch_related(
-            Prefetch('answers',
-                     queryset=Answer.data.order_by_upvotes().select_related('user').prefetch_related('upvotes')))
+        # Preparing queries
+        questions_from_topic = Question.objects.filter(topic=self.object, answers__isnull=False).distinct()
+        answers_with_related_data = Answer.data.order_by_upvotes().select_related('user').prefetch_related('upvotes',
+                                                                                                           'bookmarks')
+        questions_including_answers = questions_from_topic.prefetch_related(
+            Prefetch('answers', queryset=answers_with_related_data)
+        )
+
+        context['questions_list'] = questions_including_answers
 
         return context
