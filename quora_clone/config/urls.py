@@ -25,6 +25,7 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='pages/index.html'), name='home-page'),
     path('topics/', include('quora_clone.apps.topics.urls')),
     path('users/', include('quora_clone.apps.users.urls')),
+    path('actions/', include('quora_clone.apps.posts.ajax_urls')),
     path('admin/', admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),
 ]
