@@ -94,23 +94,21 @@ class DetailTopic(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(DetailTopic, self).get_context_data(*args, **kwargs)
-        # STEP 1
-        # This is how it should be - easiest way, but include lot of junk data
-        # context['questions_list'] = Question.objects.filter(topic=self.object).prefetch_related('answers__user')
 
-        # STEP 2
-        # context['questions_list'] = Question.objects.filter(topic=self.object).prefetch_related(
-        #     Prefetch('answers', queryset=Answer.objects.all().select_related('user')))
+        # TODO maybe change sorting questions
+        if not self.request.GET.get('display') or self.request.GET.get('display') == 'feed':
+            questions_from_topic = Question.objects.filter(topic=self.object, answers__isnull=False).distinct()
+            answers_with_related_data = Answer.data.order_by_upvotes().select_related('user').prefetch_related(
+                'upvotes',
+                'bookmarks')
+            questions_including_answers = questions_from_topic.prefetch_related(
+                Prefetch('answers', queryset=answers_with_related_data)
+            )
 
-        # STEP 3
-        # Preparing queries
-        questions_from_topic = Question.objects.filter(topic=self.object, answers__isnull=False).distinct()
-        answers_with_related_data = Answer.data.order_by_upvotes().select_related('user').prefetch_related('upvotes',
-                                                                                                           'bookmarks')
-        questions_including_answers = questions_from_topic.prefetch_related(
-            Prefetch('answers', queryset=answers_with_related_data)
-        )
+            context['questions_list'] = questions_including_answers
 
-        context['questions_list'] = questions_including_answers
+        if self.request.GET.get('display') == 'to_answer':
+            context['questions_list'] = Question.objects.filter(topic=self.object, answers__isnull=True)
+            context['active_menu'] = self.request.GET.get('display')
 
         return context
