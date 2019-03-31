@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import View
-from .models import Upvotes, Bookmarks
+from .models import Upvotes, Bookmarks, FollowQuestion, AnswerLater
 
 
 # Create your views here.
@@ -44,6 +44,44 @@ class BookmarkAnswerAjax(View):
                     # Delete if was already bookmarked
                     bookmark[0].delete()
                     data['status'] = 'bookmarkDeleted'
+            except ObjectDoesNotExist as e:
+                data['status'] = 'error'
+            return JsonResponse(data)
+
+
+class FollowQuestionAjax(View):
+    def post(self, request):
+        if self.request.is_ajax():
+            question_id = request.POST['question_id']
+            user_id = request.POST['user_id']
+            data = {}
+            try:
+                follow_question = FollowQuestion.objects.get_or_create(user_id=user_id, question_id=question_id)
+                if follow_question[1]:
+                    data['status'] = 'questionFollowed'
+                else:
+                    # Delete if was already bookmarked
+                    follow_question[0].delete()
+                    data['status'] = 'questionUnfollowed'
+            except ObjectDoesNotExist as e:
+                data['status'] = 'error'
+            return JsonResponse(data)
+
+
+class RemindQuestionAjax(View):
+    def post(self, request):
+        if self.request.is_ajax():
+            question_id = request.POST['question_id']
+            user_id = request.POST['user_id']
+            data = {}
+            try:
+                follow_question = AnswerLater.objects.get_or_create(user_id=user_id, question_id=question_id)
+                if follow_question[1]:
+                    data['status'] = 'reminderCreated'
+                else:
+                    # Delete if was already bookmarked
+                    follow_question[0].delete()
+                    data['status'] = 'reminderDeleted'
             except ObjectDoesNotExist as e:
                 data['status'] = 'error'
             return JsonResponse(data)

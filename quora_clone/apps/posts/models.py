@@ -19,6 +19,8 @@ class Question(CreationModificationDateMixin, models.Model):
     slug = models.SlugField(max_length=350, allow_unicode=True, unique=True)
     topic = models.ForeignKey(Topic, related_name='questions', on_delete=models.CASCADE)
     user = models.ForeignKey(AUTH_USER_MODEL, related_name='questions', on_delete=models.SET_NULL, null=True)
+    reminder = models.ManyToManyField(AUTH_USER_MODEL, through='AnswerLater', related_name='reminder')
+    follow_question = models.ManyToManyField(AUTH_USER_MODEL, through='FollowQuestion', related_name='follow_question')
 
     # Managers
     objects = models.Manager()
@@ -87,3 +89,25 @@ class Upvotes(models.Model):
 
     class Meta:
         unique_together = ['answer', 'user']
+
+
+class FollowQuestion(models.Model):
+    user = models.ForeignKey(AUTH_USER_MODEL, related_name='follow_q', on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, related_name='followed_by', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user} follow the {self.question}'
+
+    class Meta:
+        unique_together = ['user', 'question']
+
+
+class AnswerLater(models.Model):
+    user = models.ForeignKey(AUTH_USER_MODEL, related_name='want_to_remind', on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, related_name='to_be_reminded', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user} follow the {self.question}'
+
+    class Meta:
+        unique_together = ['user', 'question']
