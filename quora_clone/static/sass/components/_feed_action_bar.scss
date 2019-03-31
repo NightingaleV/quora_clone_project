@@ -1,0 +1,10 @@
+.unanswered-question-action-bar {
+  .button{
+    @include breakpoint(xs){
+      font-size: 0.75rem;
+    }
+  }
+  .answer-later.button{
+    margin-left:1rem;
+  }
+}

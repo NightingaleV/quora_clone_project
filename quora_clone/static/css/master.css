@@ -20,13 +20,13 @@ html {
   font-size: 1.25rem;
   font-weight: bold; }
 
-.answer .credits {
+.answer-wrapper .credits {
   padding: 10px 0 0 30px; }
-  .answer .credits .image {
+  .answer-wrapper .credits .image {
     width: 65px;
     height: 65px;
     float: left; }
-  .answer .credits .credentials {
+  .answer-wrapper .credits .credentials {
     height: 100%;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -39,31 +39,31 @@ html {
     -webkit-box-direction: normal;
         -ms-flex-direction: column;
             flex-direction: column; }
-    .answer .credits .credentials .follow {
+    .answer-wrapper .credits .credentials .follow {
       float: right;
       position: absolute;
       right: 10px; }
-    .answer .credits .credentials .author {
+    .answer-wrapper .credits .credentials .author {
       font-weight: bold;
       font-size: 17.6px;
       font-size: 1.1rem; }
-    .answer .credits .credentials .description {
+    .answer-wrapper .credits .credentials .description {
       font-size: 15.2px;
       font-size: 0.95rem;
       padding: 3px 0px;
       margin-left: 10px; }
-    .answer .credits .credentials .created-at {
+    .answer-wrapper .credits .credentials .created-at {
       font-size: 11.2px;
       font-size: 0.7rem;
       color: rgba(0, 0, 0, 0.55);
       margin-left: 5px; }
 
-.answer .text {
+.answer-wrapper .text {
   padding: 0px 25px;
   text-align: left; }
-  .answer .text .title {
+  .answer-wrapper .text .title {
     padding: 0 !important; }
-  .answer .text .content {
+  .answer-wrapper .text .content {
     padding: 0 !important; }
 
 .segment.action-bar {
@@ -71,6 +71,14 @@ html {
 
 .upvote-wrapper .upvote.button {
   color: red !important; }
+
+@media (max-width: 767px) {
+  .unanswered-question-action-bar .button {
+    font-size: 0.75rem; } }
+
+.unanswered-question-action-bar .answer-later.button {
+  margin-left: 16px;
+  margin-left: 1rem; }
 
 .topic-list.ui.divided.items > .item {
   margin: 0;
