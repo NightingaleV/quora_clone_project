@@ -127,6 +127,82 @@ $(document).ready(function () {
 "use strict";
 
 $(document).ready(function () {
+  $(document).on('click', "button.follow-question", function () {
+    event.preventDefault();
+    var button = $(this);
+    var objectId = button.attr('data-question-id');
+    var userId = button.attr('data-user-id');
+    var objectCounterText = button.closest('.follow-question-wrapper').find('.counter .text');
+    var objectCounterNum = parseInt(objectCounterText.text());
+    var buttonIcon = button.find('.icon');
+    var buttonText = button.find('.text');
+    $.ajax({
+      type: "POST",
+      url: '/actions/follow-question/',
+      data: {
+        question_id: objectId,
+        user_id: userId
+      },
+      success: function success(response) {
+        // console.log('Success to contact the server');
+        console.log(response);
+
+        if (response['status'] === 'questionFollowed') {
+          objectCounterNum += 1;
+          objectCounterText.text(objectCounterNum);
+          buttonText.text('Followed Question');
+          buttonIcon.removeClass('blue');
+        } else if (response['status'] === 'questionUnfollowed') {
+          objectCounterNum -= 1;
+          objectCounterText.text(objectCounterNum);
+          buttonText.text('Follow Question');
+          buttonIcon.addClass('blue');
+        } else {
+          console.log('Failed');
+        }
+      },
+      error: function error(response) {//console.log('Failure, request not reach the database');
+      }
+    });
+  });
+});
+"use strict";
+
+$(document).ready(function () {
+  $(document).on('click', "button.answer-later", function () {
+    event.preventDefault();
+    var button = $(this);
+    var objectId = button.attr('data-question-id');
+    var userId = button.attr('data-user-id');
+    var buttonIcon = button.find('.icon');
+    var buttonText = button.find('.text');
+    $.ajax({
+      type: "POST",
+      url: '/actions/remind-question/',
+      data: {
+        question_id: objectId,
+        user_id: userId
+      },
+      success: function success(response) {
+        // console.log('Success to contact the server');
+        console.log(response);
+
+        if (response['status'] === 'reminderCreated') {
+          buttonIcon.removeClass('outline');
+        } else if (response['status'] === 'reminderDeleted') {
+          buttonIcon.addClass('outline');
+        } else {
+          console.log('Failed');
+        }
+      },
+      error: function error(response) {//console.log('Failure, request not reach the database');
+      }
+    });
+  });
+});
+"use strict";
+
+$(document).ready(function () {
   // MODAL
   function prepareRating(topicId) {
     var interestRating = $('.interest.modal .rating');

@@ -1,12 +1,13 @@
 <div class="ui secondary pointing menu">
-    <a class="active item">
+    <a href="{% url 'topics:detail'  topic_slug=topic.slug %}?display=feed" class="{% if not active_menu %}active{% endif %} item">
         Top Answers
     </a>
-    <a class="item">
+    <a href="{% url 'topics:detail'  topic_slug=topic.slug %}?display=to_answer"
+       class="{% if active_menu == 'to_answer' %}active{% endif %} item">
         Waiting Questions
     </a>
-    <a class="item">
-        Friends
+    <a class="{% if active_menu == 'contributors' %}active{% endif %} item">
+        Contributors {{ active_menu }}
     </a>
     <div class="right menu">
         <a class="ui item">
