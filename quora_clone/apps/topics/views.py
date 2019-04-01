@@ -97,7 +97,7 @@ class DetailTopic(DetailView):
 
         # TODO maybe change sorting questions
         # List of answered questions
-        if not self.request.GET.get('display') or self.request.GET.get('display') == 'feed':
+        if not self.request.GET.get('active') or self.request.GET.get('active') == 'feed':
             questions_from_topic = Question.objects.filter(topic=self.object, answers__isnull=False,
                                                            answers__is_published__exact=True).distinct()
             answers_with_related_data = Answer.data.published().order_by_upvotes().select_related(
@@ -112,9 +112,9 @@ class DetailTopic(DetailView):
             context['active'] = 'feed'
 
         # List of unanswered questions
-        if self.request.GET.get('display') == 'to_answer':
+        if self.request.GET.get('active') == 'to_answer':
             context['questions_list'] = Question.data.unanswered(topic=self.object)
-            context['active'] = self.request.GET.get('display')
+            context['active'] = self.request.GET.get('active')
 
         # Add form for answering question
         context['answer_create_form'] = AnswerCreationForm()

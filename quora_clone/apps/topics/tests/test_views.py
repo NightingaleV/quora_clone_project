@@ -118,9 +118,15 @@ class TestTopicDetailView(TestCase):
         self.url_name = 'topics:detail'
         self.topic = Topic.objects.get_or_create(name='Topic')[0]
 
-    def test_context_data(self):
+    def test_context_feed_data(self):
         response = self.client.get(reverse(self.url_name, kwargs={'topic_slug': self.topic.slug}))
         self.assertIsNotNone(response.context['questions_list'])
+        self.assertEqual(response.context['active'], 'feed')
+
+    def test_context_data_of_unanswered_questions(self):
+        response = self.client.get(reverse(self.url_name, kwargs={'topic_slug': self.topic.slug})+'?active=to_answer')
+        self.assertIsNotNone(response.context['questions_list'])
+        self.assertEqual(response.context['active'], 'to_answer')
 
 # url = reverse('archive', args=[1988])
 # assertEqual(url, '/archive/1988/')
