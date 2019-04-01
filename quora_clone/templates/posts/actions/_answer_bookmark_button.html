@@ -1,0 +1,15 @@
+{% if user.is_authenticated %}
+    {% if user not in answer.bookmarks.all %}
+        <button class="ui icon tiny basic button button-bookmark" type="button" data-user-id="{{ user.id }}"
+                data-answer-id="{{ answer.id }}"><i
+                class="ui icon bookmark"></i></button>
+    {% else %}
+        <button class="ui icon tiny basic button button-bookmark" type="button" data-user-id="{{ user.id }}"
+                data-answer-id="{{ answer.id }}"><i
+                class="ui red icon bookmark"></i></button>
+    {% endif %}
+{% else %}
+    <a href="{% url 'users:login' %}" class="ui icon tiny basic button" type="button">
+        <i class="ui red icon bookmark"></i>
+    </a>
+{% endif %}

@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.generic import ListView, DetailView
 from django.core.exceptions import ObjectDoesNotExist
@@ -11,6 +12,7 @@ from django.contrib.auth import get_user_model
 from .models import Topic, TopicSubscription
 from quora_clone.apps.posts.models import Question, Answer
 from quora_clone.apps.posts.forms import AnswerCreationForm
+
 
 # Create your views here.
 class ListTopic(ListView):
@@ -94,9 +96,12 @@ class DetailTopic(DetailView):
         context = super(DetailTopic, self).get_context_data(*args, **kwargs)
 
         # TODO maybe change sorting questions
+        # List of answered questions
         if not self.request.GET.get('display') or self.request.GET.get('display') == 'feed':
-            questions_from_topic = Question.objects.filter(topic=self.object, answers__isnull=False).distinct()
-            answers_with_related_data = Answer.data.order_by_upvotes().select_related('user').prefetch_related(
+            questions_from_topic = Question.objects.filter(topic=self.object, answers__isnull=False,
+                                                           answers__is_published__exact=True).distinct()
+            answers_with_related_data = Answer.data.published().order_by_upvotes().select_related(
+                'user').prefetch_related(
                 'upvotes',
                 'bookmarks')
             questions_including_answers = questions_from_topic.prefetch_related(
@@ -104,11 +109,12 @@ class DetailTopic(DetailView):
             )
 
             context['questions_list'] = questions_including_answers
+            context['active'] = 'feed'
 
         # List of unanswered questions
         if self.request.GET.get('display') == 'to_answer':
-            context['questions_list'] = Question.objects.filter(topic=self.object, answers__isnull=True)
-            context['active_menu'] = self.request.GET.get('display')
+            context['questions_list'] = Question.data.unanswered(topic=self.object)
+            context['active'] = self.request.GET.get('display')
 
         # Add form for answering question
         context['answer_create_form'] = AnswerCreationForm()

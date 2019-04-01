@@ -9,14 +9,15 @@
         <div class="col-lg-10 offset-lg-1 col-12">
             <div class="row">
                 <div class="col-12">
-                    {% include 'posts/_posts_menu.html' %}
+                    {% include 'topics/_topics_feed_menu.html' %}
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
-                    <div class="feed">
-                        {% include 'posts/_feed.html' %}
-                    </div>
+                    <div class="feed"></div>
+                    {% if questions_list %}
+                        {% include 'posts/feed.html' %}
+                    {% endif %}
                 </div>
             </div>
         </div>

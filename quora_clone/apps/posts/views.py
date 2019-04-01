@@ -15,6 +15,10 @@ class CreateAnswerView(CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        self.object = form.save(commit=False)
+        if self.request.POST['action'] == 'Save':
+            self.object.is_published = False
+            self.object.save()
         valid = super().form_valid(form)
         return valid
 

@@ -1,0 +1,11 @@
+{% if user.is_authenticated %}
+    {# ANSWER - to write answer #}
+    <button class="ui small red inverted action answer button" type="button" data-user-id="{{ user.id }}"
+            data-question-id="{{ question.id }}">
+        <i class="red pencil alternate icon"></i><span class="text">Answer</span>
+    </button>
+{% else %}
+    <a href="{% url 'users:login' %}" class="ui small red inverted action answer button" type="button">
+        <i class="red pencil alternate icon"></i><span class="text">Answer</span>
+    </a>
+{% endif %}

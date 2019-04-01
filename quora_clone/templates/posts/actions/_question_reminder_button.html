@@ -1,0 +1,13 @@
+{% if user.is_authenticated %}
+    {# ANSWER LATER - reminder #}
+    <button class="ui small basic action answer-later button" type="button" data-user-id="{{ user.id }}"
+            data-question-id="{{ question.id }}">
+        <i class="red bell {% if user not in question.reminder.all %}outline{% endif %} icon"></i><span
+            class="text">Answer later</span>
+    </button>
+{% else %}
+    <a href="{% url 'users:login' %}" class="ui small basic action answer-later button" type="button">
+        <i class="red bell icon"></i><span
+            class="text">Answer later</span>
+    </a>
+{% endif %}

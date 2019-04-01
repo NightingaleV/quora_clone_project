@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
@@ -10,7 +11,9 @@ from quora_clone.apps.topics.models import Topic
 # QUESTION
 # ------------------------------------------------------------------------------
 class QuestionQuerySet(models.QuerySet):
-    pass
+    def unanswered(self, topic):
+        return self.filter(Q(answers__isnull=True) | Q(
+            answers__is_published=False), topic=topic)
 
 
 # Create your models here.
@@ -46,6 +49,9 @@ class AnswerQuerySet(models.QuerySet):
     def order_by_upvotes(self):
         return self.add_upvote_counter().order_by('-num_upvotes')
 
+    def published(self):
+        return self.filter(is_published=True)
+
 
 class Answer(CreationModificationDateMixin, models.Model):
     content = models.TextField()
@@ -53,6 +59,7 @@ class Answer(CreationModificationDateMixin, models.Model):
     question = models.ForeignKey(Question, related_name='answers', on_delete=models.CASCADE)
     bookmarks = models.ManyToManyField(AUTH_USER_MODEL, through='Bookmarks', related_name='bookmarks')
     upvotes = models.ManyToManyField(AUTH_USER_MODEL, through='Upvotes', related_name='upvotes')
+    is_published = models.BooleanField('is_published', default=True)
 
     objects = models.Manager()
     data = AnswerQuerySet.as_manager()

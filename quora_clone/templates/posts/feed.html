@@ -6,19 +6,19 @@
                     <h2 class="header">{{ question.content }}</h2>
                 </div>
             </div>
-            {% if question.answers.all %}
+            {% if active == 'feed'%}
                 {% with question.answers.first as answer %}
-                    {% include 'posts/_posts_answer.html' %}
+                    {% include 'posts/_answer_content.html' %}
                 {% endwith %}
             {% endif %}
         </div>
         <div class="ui segment action-bar">
-            {% if question.answers.all %}
+            {% if active == 'feed' %}
                 {% with question.answers.first as answer %}
-                    {% include 'posts/_answer_bottom_bar.html' %}
+                    {% include 'posts/_action_bar_answer.html' %}
                 {% endwith %}
-            {% else %}
-                {% include 'posts/_question_bottom_bar.html' %}
+            {% elif active == 'to_answer' %}
+                {% include 'posts/_action_bar_question.html' %}
             {% endif %}
         </div>
     </div>
