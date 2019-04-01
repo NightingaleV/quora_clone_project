@@ -22,7 +22,7 @@ $(document).ready(function () {
                 if (response['status'] === 'questionFollowed') {
                     objectCounterNum += 1;
                     objectCounterText.text(objectCounterNum);
-                    buttonText.text('Followed Question');
+                    buttonText.text('Following Question');
                     buttonIcon.removeClass('blue')
 
                 } else if (response['status'] === 'questionUnfollowed') {

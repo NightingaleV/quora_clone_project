@@ -5,14 +5,12 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
 from django.urls import reverse
 from django.contrib import messages
-
 from django.db.models import Prefetch
-
 from django.contrib.auth import get_user_model
 
 from .models import Topic, TopicSubscription
 from quora_clone.apps.posts.models import Question, Answer
-
+from quora_clone.apps.posts.forms import AnswerCreationForm
 
 # Create your views here.
 class ListTopic(ListView):
@@ -107,8 +105,12 @@ class DetailTopic(DetailView):
 
             context['questions_list'] = questions_including_answers
 
+        # List of unanswered questions
         if self.request.GET.get('display') == 'to_answer':
             context['questions_list'] = Question.objects.filter(topic=self.object, answers__isnull=True)
             context['active_menu'] = self.request.GET.get('display')
+
+        # Add form for answering question
+        context['answer_create_form'] = AnswerCreationForm()
 
         return context

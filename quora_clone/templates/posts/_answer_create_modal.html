@@ -1,0 +1,51 @@
+{% with answer_create_form as form %}
+    <div class="row">
+        <div class="col-12">
+            <div class="ui create-answer modal">
+                <i class="close icon"></i>
+                <h2 class="header">
+                    <span class="question text">Sstar view action recently couple. Dog sometimes day eat style. Sister dark project?</span>
+                </h2>
+                <div class="image content">
+                    <form method="POST" action="{% url 'posts_ajax:create-answer' %}" class="ui col-12 form">
+                        {% csrf_token %}
+
+                        <div class="col-12">{% if form.non_fields_errors %}
+                            <div class="ui visible small error message">
+                                <i class="close icon"></i>
+                                <div class="header">
+                                    Ups! Something went wrong:
+                                </div>
+                                <ul class="list">
+                                    {{ form.non_fields_errors }}
+                                </ul>
+                            </div>
+                        {% endif %}</div>
+                        <div class="field col-12">
+                            <label for="{{ form.content.id_for_label }}">Write your answer</label>
+                            {{ form.content }}
+                            {% if form.content.errors %}
+                                <div class="ui visible tiny error message">
+                                    <i class="close icon"></i>{{ form.content.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="hidden">{{ form.question }}</div>
+                        <button class="ui red button" type="submit" name="publish">Publish</button>
+                    <button class="ui button" type="submit" name="save">Save</button>
+
+                    </form>
+                </div>
+                <div class="actions">
+                    <div class="ui black deny button">
+                        Nope
+                    </div>
+                    <div class="ui positive right labeled icon button">
+                        Yep, that's me
+                        <i class="checkmark icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endwith %}

@@ -150,7 +150,7 @@ $(document).ready(function () {
         if (response['status'] === 'questionFollowed') {
           objectCounterNum += 1;
           objectCounterText.text(objectCounterNum);
-          buttonText.text('Followed Question');
+          buttonText.text('Following Question');
           buttonIcon.removeClass('blue');
         } else if (response['status'] === 'questionUnfollowed') {
           objectCounterNum -= 1;
@@ -350,5 +350,14 @@ $('.message .close').on('click', function () {
 $(document).ready(function () {
   $('.menu .item').tab({
     history: false
+  });
+});
+$(document).ready(function () {
+  $('.answer.button').click(function () {
+    var questionId = $(this).attr('data-question-id');
+    var answerModal = $('.create-answer.modal');
+    var questionIdInput = answerModal.find('.question-id-input');
+    questionIdInput.val(questionId);
+    answerModal.modal('show');
   });
 });

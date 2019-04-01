@@ -13,3 +13,13 @@ $(document).ready(function () {
 });
 
 
+$(document).ready(function () {
+    $('.answer.button').click(function () {
+        let questionId = $(this).attr('data-question-id');
+        let answerModal = $('.create-answer.modal');
+        let questionIdInput = answerModal.find('.question-id-input');
+        questionIdInput.val(questionId);
+
+       answerModal.modal('show');
+    });
+});

@@ -2,8 +2,26 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic import View
+from django.views.generic import View, FormView, CreateView, UpdateView
+from django.urls import reverse_lazy
+
 from .models import Upvotes, Bookmarks, FollowQuestion, AnswerLater
+from .forms import AnswerCreationForm, AnswerEditForm
+
+
+class CreateAnswerView(CreateView):
+    form_class = AnswerCreationForm
+    success_url = reverse_lazy('home-page')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        valid = super().form_valid(form)
+        return valid
+
+
+class UpdateAnswerView(UpdateView):
+    form_class = AnswerEditForm
+    success_url = reverse_lazy('home-page')
 
 
 # Create your views here.
