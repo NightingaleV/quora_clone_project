@@ -32,9 +32,16 @@ class CreateAnswerView(CreateView):
 class EditAnswerView(UpdateView):
     model = Answer
     form_class = AnswerEditForm
-    success_url = reverse_lazy('home-page')
-    template_name = 'posts/_modal_answer_update.html'
+    # success_url = reverse_lazy('home-page')
+    template_name = 'posts/_modal_answer_edit.html'
     pk_url_kwarg = 'answer_id'
+
+    def form_valid(self, form):
+        if self.request.is_ajax():
+            self.object = form.save()
+            data = {'status': 'success'}
+            return JsonResponse(data)
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(EditAnswerView, self).get_context_data()

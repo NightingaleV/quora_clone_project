@@ -157,11 +157,13 @@ $(document).ready(function () {
 "use strict";
 
 $(document).ready(function () {
-  $(document).on('click', ".answer-edit.button", function () {
+  // OPEN EDIT MODAL
+  $(document).on('click', ".edit-answer.button", function () {
     event.preventDefault();
     var button = $(this);
     var answerId = button.attr('data-answer-id');
-    var modalWrapper = $('.modal-wrapper');
+    var modalWrapper = $('.modal-wrapper'); // LOAD MODAL FROM HTTP request
+
     $.ajax({
       type: "GET",
       url: '/actions/edit-answer/' + answerId,
@@ -170,7 +172,7 @@ $(document).ready(function () {
         // console.log('Success to contact the server');
         console.log(response);
         modalWrapper.append(response);
-        var answerEditModal = $('.update-answer');
+        var answerEditModal = $('.edit-answer.modal');
         answerEditModal.modal({
           onHidden: function onHidden() {
             answerEditModal.remove();
@@ -180,6 +182,31 @@ $(document).ready(function () {
       error: function error(response) {//console.log('Failure, request not reach the database');
       }
     });
+  }); // Submit ANSWER
+
+  $(document).on('click', ".edit-answer .submit.button", function () {
+    event.preventDefault();
+    var button = $(this);
+    var modal = $('.edit-answer');
+    var form = $('.edit-answer .form');
+    var requestUrl = form.attr('action');
+    $.ajax({
+      type: "POST",
+      url: requestUrl,
+      data: form.serialize(),
+      success: function success(response) {
+        // console.log('Success to contact the server');
+        console.log(response);
+        window.location.reload();
+      },
+      error: function error(response) {//console.log('Failure, request not reach the database');
+      }
+    });
+  }); // DELETE ANSWER
+
+  $(document).on('click', ".edit-answer .delete.button", function () {
+    event.preventDefault();
+    var button = $('edit-answer');
   });
 });
 "use strict";

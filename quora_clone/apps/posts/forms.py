@@ -24,4 +24,4 @@ class AnswerCreationForm(forms.ModelForm):
 class AnswerEditForm(forms.ModelForm):
     class Meta:
         model = Answer
-        fields = ['content']
+        fields = ['content', 'is_published']

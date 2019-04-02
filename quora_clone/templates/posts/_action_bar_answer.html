@@ -4,8 +4,9 @@
         <div class="float-right">
             {% if user.pk is answer.user.pk %}
                 {% include 'posts/actions/_answer_edit_button.html' %}
+            {% else %}
+                {% include 'posts/actions/_answer_bookmark_button.html' %}
             {% endif %}
-            {% include 'posts/actions/_answer_bookmark_button.html' %}
         </div>
     </div>
 </div>

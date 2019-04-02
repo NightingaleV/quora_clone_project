@@ -1,0 +1,48 @@
+<div class="ui edit-answer modal">
+    <i class="close icon"></i>
+    <h2 class="header">
+        <span class="question text">{{ modal_question.content }}</span>
+    </h2>
+    <div class="image content">
+        <form method="POST" action="{% url 'posts_ajax:edit-answer' answer_id=object.pk %}" class="ui col-12 form">
+            {% csrf_token %}
+            <div class="col-12">{% if form.non_fields_errors %}
+                <div class="ui visible small error message">
+                    <i class="close icon"></i>
+                    <div class="header">
+                        Ups! Something went wrong:
+                    </div>
+                    <ul class="list">
+                        {{ form.non_fields_errors }}
+                    </ul>
+                </div>
+            {% endif %}</div>
+            <div class="field col-12">
+                <label for="{{ form.content.id_for_label }}">Edit your answer</label>
+                {{ form.content }}
+                {% if form.content.errors %}
+                    <div class="ui visible tiny error message">
+                        <i class="close icon"></i>{{ form.content.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="field col-12">
+                <div class="ui checkbox">
+                    {{ form.is_published }}
+                    <label for="{{ form.is_published.id_for_label }}">Make public</label>
+                    {% if form.is_published.errors %}
+                    <div class="ui visible tiny error message">
+                        <i class="close icon"></i>{{ form.is_published.errors }}
+                    </div>
+                {% endif %}
+                </div>
+            </div>
+            <div class="actions d-flex justify-content-center">
+                <button type="button" class="ui red submit inverted button"><i
+                        class="edit outline icon"></i>Save
+                </button>
+                <button class="ui basic button delete"><i class="trash icon"></i> Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
