@@ -48,13 +48,34 @@ $(document).ready(function () {
                 //console.log('Failure, request not reach the database');
             },
         });
-
     });
 
     // DELETE ANSWER
     $(document).on('click', ".edit-answer .delete.button", function () {
         event.preventDefault();
-        let button = $('edit-answer')
+        let button = $('edit-answer');
+        let form = $('.edit-answer .form');
+        let formRequestUrl = form.attr('action');
+        let urlArray = formRequestUrl.split('/');
+        let requestUrl = '/actions/delete-answer/';
+        let answerId = urlArray[urlArray.length - 1]
+        console.log(urlArray[urlArray.length - 1]);
+        $.ajax({
+            type: "POST",
+            url: requestUrl,
+            data: {answer_id: answerId},
+            success: function (response) {
+                // console.log('Success to contact the server');
+                console.log(response);
+                if (response['status'] === 'answerDeleted') {
+                    window.location.reload();
+                }
+                // window.location.reload();
 
+            },
+            error: function (response) {
+                //console.log('Failure, request not reach the database');
+            },
+        });
     });
 });

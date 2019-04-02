@@ -50,6 +50,23 @@ class EditAnswerView(UpdateView):
 
 
 # Create your views here.
+class DeleteAnswerAjax(View):
+    def post(self, request):
+        if self.request.is_ajax():
+            answer_id = request.POST['answer_id']
+            user_id = self.request.user.pk
+            data = {}
+            try:
+                answer = Answer.objects.get(id=answer_id, user_id=user_id)
+                answer.delete()
+                data['status'] = 'answerDeleted'
+            except ObjectDoesNotExist as e:
+                data['status'] = 'error'
+
+            return JsonResponse(data)
+
+
+# Create your views here.
 class UpvoteAnswerAjax(View):
     def post(self, request):
         # self.request == request -> request is an attribute and also a parameter, but why... hm ?

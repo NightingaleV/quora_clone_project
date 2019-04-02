@@ -207,6 +207,30 @@ $(document).ready(function () {
   $(document).on('click', ".edit-answer .delete.button", function () {
     event.preventDefault();
     var button = $('edit-answer');
+    var form = $('.edit-answer .form');
+    var formRequestUrl = form.attr('action');
+    var urlArray = formRequestUrl.split('/');
+    var requestUrl = '/actions/delete-answer/';
+    var answerId = urlArray[urlArray.length - 1];
+    console.log(urlArray[urlArray.length - 1]);
+    $.ajax({
+      type: "POST",
+      url: requestUrl,
+      data: {
+        answer_id: answerId
+      },
+      success: function success(response) {
+        // console.log('Success to contact the server');
+        console.log(response);
+
+        if (response['status'] === 'answerDeleted') {
+          window.location.reload();
+        } // window.location.reload();
+
+      },
+      error: function error(response) {//console.log('Failure, request not reach the database');
+      }
+    });
   });
 });
 "use strict";
