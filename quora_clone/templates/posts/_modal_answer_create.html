@@ -1,0 +1,44 @@
+<div class="ui create-answer modal">
+    <i class="close icon"></i>
+    <h2 class="header">
+        <span class="question text">{{ modal_question.content }}</span>
+    </h2>
+    <div class="image content">
+        <form method="POST" action="{% url 'posts_ajax:create-answer' %}" class="ui col-12 form">
+            {% csrf_token %}
+            <div class="col-12">{% if form.non_fields_errors %}
+                <div class="ui visible small error message">
+                    <i class="close icon"></i>
+                    <div class="header">
+                        Ups! Something went wrong:
+                    </div>
+                    <ul class="list">
+                        {{ form.non_fields_errors }}
+                    </ul>
+                </div>
+            {% endif %}</div>
+            <div class="field col-12">
+                <label for="{{ form.content.id_for_label }}">Write your answer</label>
+                {{ form.content }}
+                {% if form.content.errors %}
+                    <div class="ui visible tiny error message">
+                        <i class="close icon"></i>{{ form.content.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="hidden">{{ form.question }}</div>
+            <input type="submit" name="action" value="Publish" class="ui red button">
+            <input type="submit" name="action" value="Save" class="ui button">
+
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui black deny button">
+            Nope
+        </div>
+        <div class="ui positive right labeled icon button">
+            Yep, that's me
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>

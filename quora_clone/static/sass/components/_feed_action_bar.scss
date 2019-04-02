@@ -4,6 +4,13 @@
       font-size: 0.75rem;
     }
   }
+  .answer{
+    &:hover{
+      .red.icon{
+        color:white !important;
+      }
+    }
+  }
   .answer-later.button{
     margin-left:1rem;
   }

@@ -76,6 +76,9 @@ html {
   .unanswered-question-action-bar .button {
     font-size: 0.75rem; } }
 
+.unanswered-question-action-bar .answer:hover .red.icon {
+  color: white !important; }
+
 .unanswered-question-action-bar .answer-later.button {
   margin-left: 16px;
   margin-left: 1rem; }

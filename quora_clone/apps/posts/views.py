@@ -5,13 +5,19 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import View, FormView, CreateView, UpdateView
 from django.urls import reverse_lazy
 
-from .models import Upvotes, Bookmarks, FollowQuestion, AnswerLater
+from .models import Question, Answer, Upvotes, Bookmarks, FollowQuestion, AnswerLater
 from .forms import AnswerCreationForm, AnswerEditForm
 
 
 class CreateAnswerView(CreateView):
     form_class = AnswerCreationForm
+    template_name = 'posts/_modal_answer_create.html'
     success_url = reverse_lazy('home-page')
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateAnswerView, self).get_context_data()
+        context['modal_question'] = Question.objects.get(id=self.request.GET.get('question_id'))
+        return context
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -23,9 +29,17 @@ class CreateAnswerView(CreateView):
         return valid
 
 
-class UpdateAnswerView(UpdateView):
+class EditAnswerView(UpdateView):
+    model = Answer
     form_class = AnswerEditForm
     success_url = reverse_lazy('home-page')
+    template_name = 'posts/_modal_answer_update.html'
+    pk_url_kwarg = 'answer_id'
+
+    def get_context_data(self, **kwargs):
+        context = super(EditAnswerView, self).get_context_data()
+        context['modal_question'] = Question.objects.get(pk=self.object.question.pk)
+        return context
 
 
 # Create your views here.

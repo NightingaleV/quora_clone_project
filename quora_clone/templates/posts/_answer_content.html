@@ -6,9 +6,11 @@
         <div class="credentials">
                                 <span class="author"><a
                                         href="{% url 'users:profile' alias=answer.user.username %}">{{ answer.user }}</a></span>
-            <div class="ui basic blue mini follow button">
+            {% if user.pk is not answer.user.pk %}
+                <button class="ui basic blue mini follow button" type="button">
                 <i class="user plus icon"></i> Follow
-            </div>
+            </button>
+            {% endif %}
             <span class="description">Develop public quickly live. Suggest analysis total media to. Experience carry take notice mind officer.</span>
             {% if answer.user.description %}
                 <span class="description">{{ answer.user.description }}</span>

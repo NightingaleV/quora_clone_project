@@ -127,6 +127,64 @@ $(document).ready(function () {
 "use strict";
 
 $(document).ready(function () {
+  $(document).on('click', ".answer.button", function () {
+    event.preventDefault();
+    var button = $(this);
+    var questionId = button.attr('data-question-id');
+    var modalWrapper = $('.modal-wrapper');
+    $.ajax({
+      type: "GET",
+      url: '/actions/create-answer/',
+      data: {
+        question_id: questionId
+      },
+      success: function success(response) {
+        // console.log('Success to contact the server');
+        console.log(response);
+        modalWrapper.append(response);
+        var answerCreateModal = $('.create-answer.modal');
+        answerCreateModal.modal({
+          onHidden: function onHidden() {
+            answerCreateModal.remove();
+          }
+        }).modal('show');
+      },
+      error: function error(response) {//console.log('Failure, request not reach the database');
+      }
+    });
+  });
+});
+"use strict";
+
+$(document).ready(function () {
+  $(document).on('click', ".answer-edit.button", function () {
+    event.preventDefault();
+    var button = $(this);
+    var answerId = button.attr('data-answer-id');
+    var modalWrapper = $('.modal-wrapper');
+    $.ajax({
+      type: "GET",
+      url: '/actions/edit-answer/' + answerId,
+      data: {},
+      success: function success(response) {
+        // console.log('Success to contact the server');
+        console.log(response);
+        modalWrapper.append(response);
+        var answerEditModal = $('.update-answer');
+        answerEditModal.modal({
+          onHidden: function onHidden() {
+            answerEditModal.remove();
+          }
+        }).modal('show');
+      },
+      error: function error(response) {//console.log('Failure, request not reach the database');
+      }
+    });
+  });
+});
+"use strict";
+
+$(document).ready(function () {
   $(document).on('click', "button.follow-question", function () {
     event.preventDefault();
     var button = $(this);
@@ -350,14 +408,5 @@ $('.message .close').on('click', function () {
 $(document).ready(function () {
   $('.menu .item').tab({
     history: false
-  });
-});
-$(document).ready(function () {
-  $('.answer.button').click(function () {
-    var questionId = $(this).attr('data-question-id');
-    var answerModal = $('.create-answer.modal');
-    var questionIdInput = answerModal.find('.question-id-input');
-    questionIdInput.val(questionId);
-    answerModal.modal('show');
   });
 });
