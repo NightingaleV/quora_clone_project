@@ -191,6 +191,7 @@ $(document).ready(function () {
     var form = $('.create-answer .form');
     var questionId = $('.create-answer.modal .question.text').attr('data-question-id');
     var data = form.serialize() + '&question=' + questionId;
+    console.log(data);
     $.ajax({
       type: "POST",
       url: requestUrl,
@@ -291,7 +292,6 @@ $(document).ready(function () {
     event.preventDefault();
     var button = $(this);
     var objectId = button.attr('data-question-id');
-    var userId = button.attr('data-user-id');
     var objectCounterText = button.closest('.follow-question-wrapper').find('.counter .text');
     var objectCounterNum = parseInt(objectCounterText.text());
     var buttonIcon = button.find('.icon');
@@ -300,8 +300,7 @@ $(document).ready(function () {
       type: "POST",
       url: '/actions/follow-question/',
       data: {
-        question_id: objectId,
-        user_id: userId
+        question_id: objectId
       },
       success: function success(response) {
         // console.log('Success to contact the server');
@@ -333,15 +332,13 @@ $(document).ready(function () {
     event.preventDefault();
     var button = $(this);
     var objectId = button.attr('data-question-id');
-    var userId = button.attr('data-user-id');
     var buttonIcon = button.find('.icon');
     var buttonText = button.find('.text');
     $.ajax({
       type: "POST",
       url: '/actions/remind-question/',
       data: {
-        question_id: objectId,
-        user_id: userId
+        question_id: objectId
       },
       success: function success(response) {
         // console.log('Success to contact the server');

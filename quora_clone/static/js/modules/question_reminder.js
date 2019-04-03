@@ -3,7 +3,6 @@ $(document).ready(function () {
         event.preventDefault();
         let button = $(this);
         let objectId = button.attr('data-question-id');
-        let userId = button.attr('data-user-id');
         let buttonIcon = button.find('.icon');
         let buttonText = button.find('.text');
 
@@ -12,7 +11,6 @@ $(document).ready(function () {
             url: '/actions/remind-question/',
             data: {
                 question_id: objectId,
-                user_id: userId,
             },
             success: function (response) {
                 // console.log('Success to contact the server');

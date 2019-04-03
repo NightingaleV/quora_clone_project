@@ -64,7 +64,7 @@ $(document).ready(function () {
         let form = $('.create-answer .form');
         let questionId = $('.create-answer.modal .question.text').attr('data-question-id');
         let data = form.serialize() + '&question=' + questionId;
-
+        console.log(data);
         $.ajax({
             type: "POST",
             url: requestUrl,

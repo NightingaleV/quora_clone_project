@@ -1,8 +1,6 @@
 <div class="ui follow-question-wrapper small labeled button float-right">
     {% if user.is_authenticated %}
-        <button class="ui small basic action follow-question button" type="button"
-                data-user-id="{{ user.id }}"
-                data-question-id="{{ question.id }}">
+        <button class="ui small basic action follow-question button" type="button" data-question-id="{{ question.id }}">
             {% if user not in question.follow_question.all %}
                 <i class="blue plus icon"></i><span class="text">Follow Question</span>
             {% else %}

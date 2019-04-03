@@ -114,7 +114,7 @@ class FollowQuestionAjax(View):
     def post(self, request):
         if self.request.is_ajax():
             question_id = request.POST['question_id']
-            user_id = request.POST['user_id']
+            user_id = self.request.user.pk
             data = {}
             try:
                 follow_question = FollowQuestion.objects.get_or_create(user_id=user_id, question_id=question_id)
@@ -133,7 +133,7 @@ class RemindQuestionAjax(View):
     def post(self, request):
         if self.request.is_ajax():
             question_id = request.POST['question_id']
-            user_id = request.POST['user_id']
+            user_id = self.request.user.pk
             data = {}
             try:
                 follow_question = AnswerLater.objects.get_or_create(user_id=user_id, question_id=question_id)

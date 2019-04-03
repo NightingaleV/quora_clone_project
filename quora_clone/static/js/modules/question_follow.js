@@ -3,7 +3,6 @@ $(document).ready(function () {
         event.preventDefault();
         let button = $(this);
         let objectId = button.attr('data-question-id');
-        let userId = button.attr('data-user-id');
         let objectCounterText = button.closest('.follow-question-wrapper').find('.counter .text');
         let objectCounterNum = parseInt(objectCounterText.text());
         let buttonIcon = button.find('.icon');
@@ -14,7 +13,6 @@ $(document).ready(function () {
             url: '/actions/follow-question/',
             data: {
                 question_id: objectId,
-                user_id: userId,
             },
             success: function (response) {
                 // console.log('Success to contact the server');
