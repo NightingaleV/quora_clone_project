@@ -1,3 +1,6 @@
+{% if active == 'contributors' %}
+    {% include 'topics/_topic_contributors.html' %}
+{% endif %}
 {% for question in questions_list %}
     <div class="ui segments">
         <div class="ui segment">
@@ -6,7 +9,7 @@
                     <h2 class="header">{{ question.content }}</h2>
                 </div>
             </div>
-            {% if active == 'feed'%}
+            {% if active == 'feed' %}
                 {% with question.answers.first as answer %}
                     {% include 'posts/_answer_content.html' %}
                 {% endwith %}

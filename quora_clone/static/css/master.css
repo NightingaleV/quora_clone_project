@@ -83,6 +83,25 @@ html {
   margin-left: 16px;
   margin-left: 1rem; }
 
+.create-answer .form .text-area {
+  width: 100%; }
+
+@media (max-width: 767px) {
+  .unanswered-question-action-bar .button {
+    font-size: 0.75rem; } }
+
+.unanswered-question-action-bar .answer:hover .red.icon {
+  color: white !important; }
+
+.unanswered-question-action-bar .answer-later.button {
+  margin-left: 16px;
+  margin-left: 1rem; }
+
+.contributors.table .title {
+  font-size: 19.2px;
+  font-size: 1.2rem;
+  padding-top: 10px !important; }
+
 .topic-list.ui.divided.items > .item {
   margin: 0;
   padding: 16px 0 !important;

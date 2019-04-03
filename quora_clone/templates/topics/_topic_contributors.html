@@ -1,0 +1,48 @@
+<table class="ui very basic padded celled contributors table">
+    <thead>
+    <tr>
+        <th class="center aligned title">Place</th>
+        <th class="title">Contributors</th>
+        <th class="ui center aligned title"><i class="ui red thumbs up outline icon"></i>Upvotes</th>
+        <th class="center aligned title"><i class="ui icon users"></i>Answers</th>
+        <th class="center aligned title"><i class="ui icon red pencil alternate"></i> Followers</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for contributor in contributors %}
+        <tr>
+            <td>
+
+                <h2 class="ui center aligned header">
+                    {% if forloop.first %}
+                        <i class="ui icon yellow trophy"></i>
+                    {% elif forloop.counter == 2 %}
+                        <i class="ui icon grey tiny trophy"></i>
+                    {% else %}
+                        {{ forloop.counter }}.
+                    {% endif %}
+
+                </h2>
+            </td>
+            <td>
+                <h4 class="ui image header">
+                    <img src="{{ contributor.profile_image.url }}" class="ui circular image"
+                         alt="{{ contributor.username }}">
+                    <div class="content">
+                        {{ contributor }}
+                    </div>
+                </h4>
+            </td>
+            <td class="center aligned">
+                <span class="ui text">{{ contributor.num_upvotes }}</span>
+            </td>
+            <td class="center aligned">
+                <span class="ui text">{{ contributor.num_answers }}</span>
+            </td>
+            <td class="center aligned">
+                <span class="ui text">{{ contributor.num_follows }}</span>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

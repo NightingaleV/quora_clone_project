@@ -1,17 +1,17 @@
 from django.shortcuts import render
-from django.db.models import Q
+from django.db.models import Q, Prefetch, Sum, Count
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.generic import ListView, DetailView
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
 from django.urls import reverse
 from django.contrib import messages
-from django.db.models import Prefetch
 from django.contrib.auth import get_user_model
-
 from .models import Topic, TopicSubscription
 from quora_clone.apps.posts.models import Question, Answer
 from quora_clone.apps.posts.forms import AnswerCreationForm
+
+User = get_user_model()
 
 
 # Create your views here.
@@ -113,12 +113,29 @@ class DetailTopic(DetailView):
 
         # List of unanswered questions
         if self.request.GET.get('active') == 'to_answer':
+            context['active'] = self.request.GET.get('active')
             context['questions_list'] = Question.data.filter(topic=self.object).count_answers().filter(
                 num_answers__lt=3).already_answered_by_user(self.request.user.pk).prefetch_related('follow_question',
                                                                                                    'reminder')
+
+        if self.request.GET.get('active') == 'contributors':
             context['active'] = self.request.GET.get('active')
 
+            best_contributors = User.objects.filter(answers__question__topic=self.object).distinct().annotate(
+                num_answers=Count('answers', distinct=True, filter=Q(answers__is_published=True))).annotate(
+                num_follows=Count('follower')).annotate(
+                num_upvotes=Count('answers__upvotes')).order_by('-num_upvotes')[0:10]
+            context['contributors'] = best_contributors
+
+            # # upvote_counts =
+            # context['contributors'] = User.objects.filter(answers__question__topic=self.object).distinct()
+            #
+            # context['statistics'] = Answer.data.filter(user=self.object.pk).add_upvote_counter().aggregate(
+            #     Sum('num_upvotes'))
+            # context['num_answers'] = Answer.data.filter(user=self.object.pk).count()
+            # context['user_followers'] = UserFollowersBridge.objects.filter(following=self.object.pk).count()
+
         # Add form for answering question
-        context['answer_create_form'] = AnswerCreationForm()
+        # context['answer_create_form'] = AnswerCreationForm()
 
         return context

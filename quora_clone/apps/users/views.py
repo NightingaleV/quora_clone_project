@@ -11,9 +11,12 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordResetConfirmView, PasswordResetCompleteView)
 from django.views.generic import DetailView, View, ListView, RedirectView, UpdateView, CreateView, FormView
 from django.contrib.auth import get_user
+# For aggregation
+from django.db.models import Count, Sum
+from quora_clone.apps.posts.models import Answer
 # Custom Imports
 from .forms import UserCreationForm, UserUpdateForm
-
+from .models import UserFollowersBridge
 User = get_user_model()
 
 
@@ -102,6 +105,13 @@ class UserProfileView(DetailView):
     slug_field = 'username'
     slug_url_kwarg = "alias"
     context_object_name = 'user'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['statistics'] = Answer.data.filter(user=self.object.pk).add_upvote_counter().aggregate(Sum('num_upvotes'))
+        context['num_answers'] = Answer.data.filter(user=self.object.pk).count()
+        context['user_followers'] = UserFollowersBridge.objects.filter(following=self.object.pk).count()
+        return context
 
 
 class UserFollowAjax(View):

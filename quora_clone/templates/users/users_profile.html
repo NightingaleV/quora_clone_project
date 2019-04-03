@@ -42,7 +42,7 @@
                             <div class="mt-4 ui three tiny statistics">
                                 <div class="statistic">
                                     <div class="value">
-                                        <i class="ui icon red pencil alternate"></i> 32
+                                        <i class="ui icon red pencil alternate"></i> {{ num_answers }}
                                     </div>
                                     <div class="label">
                                         Answers
@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="statistic">
                                     <div class="value">
-                                        <i class="ui red thumbs up outline icon"></i> 250356
+                                        <i class="ui red thumbs up outline icon"></i> {{ statistics.num_upvotes__sum }}
                                     </div>
                                     <div class="label">
                                         Upvotes
@@ -58,7 +58,7 @@
                                 </div>
                                 <div class="statistic">
                                     <div class="value">
-                                        <i class="ui icon users"></i> 23500
+                                        <i class="ui icon users"></i> {{ user_followers }}
                                     </div>
                                     <div class="label">
                                         Followers

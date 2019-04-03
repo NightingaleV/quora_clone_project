@@ -26,18 +26,25 @@
                             <p></p>
                         </div>
                         <div class="extra subscription">
-                            {% if user not in topic.subscribers.all %}
-                                {#SUBSCRIBE BUTTON#}
-                                <button type="button" data-topic-id="{{ topic.pk }}"
-                                        class="ui red button subscribe">
-                                    <i class="left ui icon plus"></i><span class="text">Subscribe</span>
-                                </button>
+                            {% if user.is_authenticated %}
+                                {% if user not in topic.subscribers.all %}
+                                    {#SUBSCRIBE BUTTON#}
+                                    <button type="button" data-topic-id="{{ topic.pk }}"
+                                            class="ui red button subscribe">
+                                        <i class="left ui icon plus"></i><span class="text">Subscribe</span>
+                                    </button>
+                                {% else %}
+                                    {#UNSUBSCRIBE BUTTON#}
+                                    <button type="button" data-topic-id="{{ topic.pk }}"
+                                            class="ui button subscribe unsubscribe">
+                                        <i class="left ui icon minus"></i><span class="text">Unsubscribe</span>
+                                    </button>
+                                {% endif %}
                             {% else %}
-                                {#UNSUBSCRIBE BUTTON#}
-                                <button type="button" data-topic-id="{{ topic.pk }}"
-                                        class="ui button subscribe unsubscribe">
-                                    <i class="left ui icon minus"></i><span class="text">Unsubscribe</span>
-                                </button>
+                                <a href="{% url 'users:login' %}" data-topic-id="{{ topic.pk }}"
+                                   class="ui red button">
+                                    <i class="left ui icon plus"></i><span class="text">Subscribe</span>
+                                </a>
                             {% endif %}
                         </div>
                     </div>

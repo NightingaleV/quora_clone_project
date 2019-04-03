@@ -55,6 +55,9 @@ class AnswerQuerySet(models.QuerySet):
     def published(self):
         return self.filter(is_published=True)
 
+    def unpublished(self):
+        return self.filter(is_published=False)
+
 
 class Answer(CreationModificationDateMixin, models.Model):
     content = models.TextField()
