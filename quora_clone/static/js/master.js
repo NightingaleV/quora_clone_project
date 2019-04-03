@@ -126,15 +126,45 @@ $(document).ready(function () {
 });
 "use strict";
 
+// $(document).ready(function () {
+//     $(document).on('click', ".answer.button", function () {
+//         event.preventDefault();
+//         let button = $(this);
+//         let questionId = button.attr('data-question-id');
+//         let modalWrapper = $('.modal-wrapper');
+//
+//
+//         $.ajax({
+//             type: "GET",
+//             url: '/actions/create-answer/',
+//             data: {question_id: questionId},
+//             success: function (response) {
+//                 // console.log('Success to contact the server');
+//                 console.log(response);
+//                 modalWrapper.append(response);
+//                 let answerCreateModal = $('.create-answer.modal');
+//                 answerCreateModal.modal({onHidden:function () {
+//                         answerCreateModal.remove()
+//                     }}).modal('show')
+//             },
+//             error: function (response) {
+//                 //console.log('Failure, request not reach the database');
+//             },
+//         })
+//     });
+// });
 $(document).ready(function () {
+  var requestUrl = '/actions/create-answer/'; // OPEN EDIT MODAL
+
   $(document).on('click', ".answer.button", function () {
     event.preventDefault();
     var button = $(this);
     var questionId = button.attr('data-question-id');
-    var modalWrapper = $('.modal-wrapper');
+    var modalWrapper = $('.modal-wrapper'); // LOAD MODAL FROM HTTP request
+
     $.ajax({
       type: "GET",
-      url: '/actions/create-answer/',
+      url: requestUrl,
       data: {
         question_id: questionId
       },
@@ -148,6 +178,27 @@ $(document).ready(function () {
             answerCreateModal.remove();
           }
         }).modal('show');
+      },
+      error: function error(response) {//console.log('Failure, request not reach the database');
+      }
+    });
+  }); // Submit New ANSWER
+
+  $(document).on('click', ".create-answer .submit.button", function () {
+    event.preventDefault();
+    var button = $(this);
+    var modal = $('.create-answer.modal');
+    var form = $('.create-answer .form');
+    var questionId = $('.create-answer.modal .question.text').attr('data-question-id');
+    var data = form.serialize() + '&question=' + questionId;
+    $.ajax({
+      type: "POST",
+      url: requestUrl,
+      data: data,
+      success: function success(response) {
+        // console.log('Success to contact the server');
+        console.log(response);
+        window.location.reload();
       },
       error: function error(response) {//console.log('Failure, request not reach the database');
       }
@@ -187,7 +238,7 @@ $(document).ready(function () {
   $(document).on('click', ".edit-answer .submit.button", function () {
     event.preventDefault();
     var button = $(this);
-    var modal = $('.edit-answer');
+    var modal = $('.edit-answer.modal');
     var form = $('.edit-answer .form');
     var requestUrl = form.attr('action');
     $.ajax({

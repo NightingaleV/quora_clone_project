@@ -1,7 +1,7 @@
 <div class="ui create-answer modal">
     <i class="close icon"></i>
     <h2 class="header">
-        <span class="question text">{{ modal_question.content }}</span>
+        <span class="question text" data-question-id="{{ modal_question.id }}">{{ modal_question.content }}</span>
     </h2>
     <div class="image content">
         <form method="POST" action="{% url 'posts_ajax:create-answer' %}" class="ui col-12 form">
@@ -26,24 +26,21 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="hidden">{{ form.question }}</div>
-            <input type="submit" name="action" value="Publish" class="ui red button">
-            <input type="submit" name="action" value="Save" class="ui button">
-        <button type="submit" name="action" value="Publish" class="ui red button"><i class="save outline icon"></i>Publish
-            </button>
-        <button type="submit" name="action" value="Save" class="ui button"><i class="save outline icon"></i>Save
-            </button>
-        <button type="submit" class="ui red button"><i class="eraser icon"></i>Discard
-            </button>
+            <div class="field col-12">
+                <div class="ui checkbox">
+                    {{ form.is_published }}
+                    <label for="{{ form.is_published.id_for_label }}">Publish publicly</label>
+                    {% if form.is_published.errors %}
+                        <div class="ui visible tiny error message">
+                            <i class="close icon"></i>{{ form.is_published.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="actions d-flex justify-content-center">
+                <button type="submit" class="ui red submit button"><i class="save outline icon"></i>Save
+                </button>
+            </div>
         </form>
-    </div>
-    <div class="actions">
-        <div class="ui black deny button">
-            Nope
-        </div>
-        <div class="ui positive right labeled icon button">
-            Yep, that's me
-            <i class="checkmark icon"></i>
-        </div>
     </div>
 </div>

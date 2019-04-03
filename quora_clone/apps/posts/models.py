@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, FilteredRelation, Count
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
@@ -11,9 +11,12 @@ from quora_clone.apps.topics.models import Topic
 # QUESTION
 # ------------------------------------------------------------------------------
 class QuestionQuerySet(models.QuerySet):
-    def unanswered(self, topic):
-        return self.filter(Q(answers__isnull=True) | Q(
-            answers__is_published=False), topic=topic)
+
+    def count_answers(self):
+        return self.annotate(num_answers=Count('answers', True, filter=Q(answers__is_published=True)))
+
+    def already_answered_by_user(self, user_id):
+        return self.exclude(answers__user=user_id)
 
 
 # Create your models here.

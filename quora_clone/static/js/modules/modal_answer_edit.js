@@ -31,7 +31,7 @@ $(document).ready(function () {
     $(document).on('click', ".edit-answer .submit.button", function () {
         event.preventDefault();
         let button = $(this);
-        let modal = $('.edit-answer');
+        let modal = $('.edit-answer.modal');
         let form = $('.edit-answer .form');
         let requestUrl = form.attr('action');
         $.ajax({

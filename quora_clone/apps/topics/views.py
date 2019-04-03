@@ -93,7 +93,7 @@ class DetailTopic(DetailView):
     extra_context = {}
 
     def get_context_data(self, *args, **kwargs):
-        context = super(DetailTopic, self).get_context_data(*args, **kwargs)
+        context = super(DetailTopic, self).get_context_data(**kwargs)
 
         # TODO maybe change sorting questions
         # List of answered questions
@@ -113,7 +113,9 @@ class DetailTopic(DetailView):
 
         # List of unanswered questions
         if self.request.GET.get('active') == 'to_answer':
-            context['questions_list'] = Question.data.unanswered(topic=self.object)
+            context['questions_list'] = Question.data.filter(topic=self.object).count_answers().filter(
+                num_answers__lt=3).already_answered_by_user(self.request.user.pk).prefetch_related('follow_question',
+                                                                                                   'reminder')
             context['active'] = self.request.GET.get('active')
 
         # Add form for answering question

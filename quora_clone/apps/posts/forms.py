@@ -5,7 +5,7 @@ from .models import Answer, Question
 class AnswerCreationForm(forms.ModelForm):
     class Meta:
         model = Answer
-        fields = {'content', 'question'}
+        fields = {'content', 'question', 'is_published'}
         widgets = {
             'content': forms.Textarea(attrs={
                 'cols': None,

@@ -12,19 +12,20 @@ from .forms import AnswerCreationForm, AnswerEditForm
 class CreateAnswerView(CreateView):
     form_class = AnswerCreationForm
     template_name = 'posts/_modal_answer_create.html'
-    success_url = reverse_lazy('home-page')
 
     def get_context_data(self, **kwargs):
         context = super(CreateAnswerView, self).get_context_data()
-        context['modal_question'] = Question.objects.get(id=self.request.GET.get('question_id'))
+        if self.request.method == 'GET':
+            context['modal_question'] = Question.objects.get(id=self.request.GET.get('question_id'))
         return context
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         self.object = form.save(commit=False)
-        if self.request.POST['action'] == 'Save':
-            self.object.is_published = False
+        if self.request.is_ajax():
             self.object.save()
+            data = {'status': 'success'}
+            return JsonResponse(data)
         valid = super().form_valid(form)
         return valid
 
