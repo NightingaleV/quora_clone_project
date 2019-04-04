@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.db.models import Q, Prefetch, Sum, Count
+from django.db.models import Q, Prefetch, Sum, Count, Case, When, Value, IntegerField, Subquery, OuterRef
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.generic import ListView, DetailView
 from django.core.exceptions import ObjectDoesNotExist
@@ -10,6 +10,7 @@ from django.contrib.auth import get_user_model
 from .models import Topic, TopicSubscription
 from quora_clone.apps.posts.models import Question, Answer
 from quora_clone.apps.posts.forms import AnswerCreationForm
+from quora_clone.apps.users.models import UserFollowersBridge
 
 User = get_user_model()
 
@@ -19,6 +20,9 @@ class ListTopic(ListView):
     model = Topic
     template_name = 'topics/topics_list.html'
     context_object_name = 'topics'
+
+    def get_queryset(self):
+        return Topic.objects.all().prefetch_related('subscribers')
 
     def post(self, request):
         print(request.POST)
@@ -96,6 +100,9 @@ class DetailTopic(DetailView):
         context = super(DetailTopic, self).get_context_data(**kwargs)
 
         # TODO maybe change sorting questions
+        user_following = UserFollowersBridge.objects.filter(follower=self.request.user).values_list('following', flat=True)
+        context['user_following'] = user_following
+
         # List of answered questions
         if not self.request.GET.get('active') or self.request.GET.get('active') == 'feed':
             questions_from_topic = Question.objects.filter(topic=self.object, answers__isnull=False,

@@ -118,11 +118,11 @@ class UserFollowAjax(View):
     def post(self, request):
         # self.request == request, they are attributes and also parameters
         if self.request.is_ajax():
-            follower_id = request.POST['follower_id']
+            follower_id = request.user.pk
             following_id = request.POST['following_id']
             data = {}
             try:
-                follow = User.objects.get_or_create(follower_id=follower_id, following_id=following_id)
+                follow = UserFollowersBridge.objects.get_or_create(follower_id=follower_id, following_id=following_id)
                 # Means user wasn't followed before
                 if follow[1]:
                     data['status'] = 'followingCreated'

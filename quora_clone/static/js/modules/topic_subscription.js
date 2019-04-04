@@ -37,8 +37,8 @@ $(document).ready(function () {
                     subsCounter.text(numSubs);
                     subButtonText.text('Unsubscribe');
 
-                    buttonSubscribe.removeClass('subscribe red');
-                    buttonSubscribe.addClass('unsubscribe');
+                    buttonSubscribe.removeClass('subscribe red inverted');
+                    buttonSubscribe.addClass('unsubscribe basic');
 
                     subButtonIcon.removeClass('plus');
                     subButtonIcon.addClass('minus');
@@ -50,10 +50,10 @@ $(document).ready(function () {
                 } else if (response['status'] === 'unsubscribed') {
                     numSubs -= 1;
                     subsCounter.text(numSubs);
-                    buttonSubscribe.removeClass('unsubscribe');
+                    buttonSubscribe.removeClass('unsubscribe basic');
 
                     subButtonText.text('Subscribe');
-                    buttonSubscribe.addClass('subscribe red');
+                    buttonSubscribe.addClass('subscribe red inverted');
 
                     subButtonIcon.removeClass('minus');
                     subButtonIcon.addClass('plus');
@@ -101,6 +101,8 @@ $(document).on('click', ".modal.interest .rating", function () {
             // console.log('Success to contact the server');
             console.log(response);
             if (response['status'] === 'rating_saved') {
+                $('.second.modal').modal('show');
+                $('.first.modal').modal('hide');
 
             } else {
                 console.log('we Fail')

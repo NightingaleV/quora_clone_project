@@ -16,6 +16,9 @@ class User(AbstractUser):
     profile_image = models.ImageField(upload_to='profile_images/', blank=True)
     follow_system = models.ManyToManyField('self', symmetrical=False, through='UserFollowersBridge')
 
+    # Managers
+    objects = models.Manager()
+
     def __str__(self):
         return "@{}".format(self.username)
 
@@ -45,6 +48,8 @@ class UserFollowersBridge(models.Model):
     follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')
     following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
     created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = models.Manager()
 
     class Meta:
         unique_together = ('follower', 'following')

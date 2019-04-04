@@ -39,10 +39,12 @@ html {
     -webkit-box-direction: normal;
         -ms-flex-direction: column;
             flex-direction: column; }
-    .answer-wrapper .credits .credentials .follow {
+    .answer-wrapper .credits .credentials .follow-user {
       float: right;
       position: absolute;
       right: 10px; }
+      .answer-wrapper .credits .credentials .follow-user .text {
+        padding: 0; }
     .answer-wrapper .credits .credentials .author {
       font-weight: bold;
       font-size: 17.6px;
@@ -100,7 +102,8 @@ html {
 .contributors.table .title {
   font-size: 19.2px;
   font-size: 1.2rem;
-  padding-top: 10px !important; }
+  padding-top: 32px !important;
+  padding-top: 2rem !important; }
 
 .topic-list.ui.divided.items > .item {
   margin: 0;

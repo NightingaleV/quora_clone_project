@@ -25,11 +25,14 @@ $answer-text-padding: 0px 25px;
       padding: 0px 15px 10px 5px;
       justify-content: center;
       flex-direction: column;
-      
-      .follow{
+
+      .follow-user {
         float: right;
         position: absolute;
         right: 10px;
+        .text{
+          padding: 0;
+        }
       }
 
       .author {
@@ -40,13 +43,13 @@ $answer-text-padding: 0px 25px;
       .description {
         font-size: 0.95rem;
         padding: 3px 0px;
-        margin-left:10px;
+        margin-left: 10px;
       }
 
       .created-at {
         font-size: 0.7rem;
         color: rgba(0, 0, 0, 0.55);
-        margin-left:5px;
+        margin-left: 5px;
       }
     }
   }
@@ -55,23 +58,25 @@ $answer-text-padding: 0px 25px;
     padding: $answer-text-padding;
     text-align: left;
 
-    .title{
+    .title {
       padding: 0 !important;
     }
-    .content{
+
+    .content {
       padding: 0 !important;
     }
   }
 }
+
 // Bottom bar of segment with upvote/bookmark etc
-.segment.action-bar{
+.segment.action-bar {
   padding: 10px 20px;
 }
 
-.upvote-wrapper{
+.upvote-wrapper {
 
-  .upvote.button{
-    color:red !important;
+  .upvote.button {
+    color: red !important;
   }
 }
 

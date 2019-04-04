@@ -397,8 +397,8 @@ $(document).ready(function () {
           numSubs += 1;
           subsCounter.text(numSubs);
           subButtonText.text('Unsubscribe');
-          buttonSubscribe.removeClass('subscribe red');
-          buttonSubscribe.addClass('unsubscribe');
+          buttonSubscribe.removeClass('subscribe red inverted');
+          buttonSubscribe.addClass('unsubscribe basic');
           subButtonIcon.removeClass('plus');
           subButtonIcon.addClass('minus');
           prepareRating(topicId);
@@ -406,9 +406,9 @@ $(document).ready(function () {
         } else if (response['status'] === 'unsubscribed') {
           numSubs -= 1;
           subsCounter.text(numSubs);
-          buttonSubscribe.removeClass('unsubscribe');
+          buttonSubscribe.removeClass('unsubscribe basic');
           subButtonText.text('Subscribe');
-          buttonSubscribe.addClass('subscribe red');
+          buttonSubscribe.addClass('subscribe red inverted');
           subButtonIcon.removeClass('minus');
           subButtonIcon.addClass('plus');
         } else {
@@ -447,7 +447,10 @@ $(document).on('click', ".modal.interest .rating", function () {
       // console.log('Success to contact the server');
       console.log(response);
 
-      if (response['status'] === 'rating_saved') {} else {
+      if (response['status'] === 'rating_saved') {
+        $('.second.modal').modal('show');
+        $('.first.modal').modal('hide');
+      } else {
         console.log('we Fail');
       }
     },
@@ -507,5 +510,39 @@ $('.message .close').on('click', function () {
 $(document).ready(function () {
   $('.menu .item').tab({
     history: false
+  });
+});
+"use strict";
+
+$(document).ready(function () {
+  $(document).on('click', "button.follow-user", function () {
+    event.preventDefault();
+    var button = $(this);
+    var objectId = button.attr('data-user-id');
+    var buttonIcon = button.find('.icon');
+    var buttonText = button.find('.text');
+    $.ajax({
+      type: "POST",
+      url: '/users/follow/',
+      data: {
+        following_id: objectId
+      },
+      success: function success(response) {
+        // console.log('Success to contact the server');
+        console.log(response);
+
+        if (response['status'] === 'followingCreated') {
+          buttonText.text('Following');
+          button.removeClass('basic');
+        } else if (response['status'] === 'followingDeleted') {
+          buttonText.text('Follow');
+          button.addClass('basic');
+        } else {
+          console.log('Failed');
+        }
+      },
+      error: function error(response) {//console.log('Failure, request not reach the database');
+      }
+    });
   });
 });
