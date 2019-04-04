@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Question - {{ question.content }}
+{% endblock %}
+
+{% block pre-content %}
+    <div class="row mb-3">
+        <div class="col-8 offset-2">
+            <div class="ui">
+                <div class="ui ">
+                    <h1 class="ui large header mb-3">{{ question.content }}</h1></div>
+                {% include 'posts/_action_bar_question.html' %}
+                {% with question.answers.count as num_answers %}
+                <div class="ui horizontal divider mt-4">{{ num_answers }} Answer{{ num_answers|pluralize }}</div>
+                {% endwith %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    {% if answers_list %}
+        <div class="row question-detail">
+            <div class="col-lg-8 offset-lg-2 col-12">
+                {% for answer in answers_list %}
+                    <div class="ui segments">
+                        <div class="ui segment">
+                            <div class="row question">
+                                {% include 'posts/_answer_content.html' %}
+                            </div>
+
+                        </div>
+                        <div class="ui segment action-bar">
+                            {% include 'posts/_action_bar_answer.html' %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

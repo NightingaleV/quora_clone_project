@@ -6,25 +6,28 @@
         <div class="credentials">
                                 <span class="author"><a
                                         href="{% url 'users:profile' alias=answer.user.username %}">{{ answer.user }}</a></span>
-            {% if user.is_authenticated %}
-                {% if answer.user.id not in user_following %}
-                    <button class="ui basic blue mini follow-user button" data-user-id="{{ answer.user.id }}"
-                            type="button">
-                        <i class="user plus icon"></i><span class="text">Follow</span>
-                    </button>
+            <div>
+                {% if user.is_authenticated %}
+                    {% if answer.user.id not in user_following %}
+                        <button class="ui basic blue mini follow-user button" data-user-id="{{ answer.user.id }}"
+                                type="button">
+                            <i class="user plus icon"></i><span class="text">Follow</span>
+                        </button>
+                    {% else %}
+                        <button class="ui blue mini follow-user button" data-user-id="{{ answer.user.id }}"
+                                type="button">
+                            <i class="user plus icon"></i><span class="text">Following</span>
+                        </button>
+                    {% endif %}
                 {% else %}
-                    <button class="ui blue mini follow-user button" data-user-id="{{ answer.user.id }}"
-                            type="button">
-                        <i class="user plus icon"></i><span class="text">Following</span>
-                    </button>
+                    <a class="ui basic blue mini follow-user button" href="{% url 'users:login' %}">
+                        <i class="user plus icon"></i><span class="text">Follow</span>
+                    </a>
                 {% endif %}
-            {% else %}
-                <a class="ui basic blue mini follow-user button" href="{% url 'users:login' %}">
-                    <i class="user plus icon"></i><span class="text">Follow</span>
-                </a>
-            {% endif %}
+                <p class="description">Develop public quickly live. Suggest analysis total media to. Experience carry take notice mind officer.</p>
 
-            <span class="description">Develop public quickly live. Suggest analysis total media to. Experience carry take notice mind officer.</span>
+            </div>
+
             {% if answer.user.description %}
                 <span class="description">{{ answer.user.description }}</span>
             {% endif %}

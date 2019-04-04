@@ -2,19 +2,46 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic import View, FormView, CreateView, UpdateView
+from django.views.generic import View, FormView, CreateView, UpdateView, DetailView
 from django.urls import reverse_lazy
 
 from .models import Question, Answer, Upvotes, Bookmarks, FollowQuestion, AnswerLater
 from .forms import AnswerCreationForm, AnswerEditForm
+from quora_clone.apps.users.models import UserFollowersBridge
 
 
-class CreateAnswerView(CreateView):
+class CreateQuestionView(CreateView):
+    pass
+
+
+class DetailQuestion(DetailView):
+    model = Question
+    context_object_name = 'question'
+    template_name = 'posts/question_detail_feed.html'
+    slug_field = 'slug'
+    slug_url_kwarg = 'question_slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['answers_list'] = Answer.data.filter(question=self.object).published().order_by_upvotes().select_related(
+            'user').prefetch_related(
+            'upvotes',
+            'bookmarks')
+
+        user_following = UserFollowersBridge.objects.filter(follower=self.request.user).values_list('following',
+                                                                                                    flat=True)
+        context['user_following'] = user_following
+
+        return context
+
+
+class CreateAnswer(CreateView):
     form_class = AnswerCreationForm
     template_name = 'posts/_modal_answer_create.html'
 
     def get_context_data(self, **kwargs):
-        context = super(CreateAnswerView, self).get_context_data()
+        context = super(CreateAnswer, self).get_context_data()
         if self.request.method == 'GET':
             context['modal_question'] = Question.objects.get(id=self.request.GET.get('question_id'))
         return context
@@ -30,7 +57,7 @@ class CreateAnswerView(CreateView):
         return valid
 
 
-class EditAnswerView(UpdateView):
+class EditAnswer(UpdateView):
     model = Answer
     form_class = AnswerEditForm
     # success_url = reverse_lazy('home-page')
@@ -45,7 +72,7 @@ class EditAnswerView(UpdateView):
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(EditAnswerView, self).get_context_data()
+        context = super(EditAnswer, self).get_context_data()
         context['modal_question'] = Question.objects.get(pk=self.object.question.pk)
         return context
 

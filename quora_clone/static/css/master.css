@@ -41,8 +41,7 @@ html {
             flex-direction: column; }
     .answer-wrapper .credits .credentials .follow-user {
       float: right;
-      position: absolute;
-      right: 10px; }
+      margin-right: 15px; }
       .answer-wrapper .credits .credentials .follow-user .text {
         padding: 0; }
     .answer-wrapper .credits .credentials .author {
@@ -73,6 +72,10 @@ html {
 
 .upvote-wrapper .upvote.button {
   color: red !important; }
+
+.question-detail .accordion .content.active {
+  padding-bottom: 8px;
+  padding-bottom: 0.5rem; }
 
 @media (max-width: 767px) {
   .unanswered-question-action-bar .button {
