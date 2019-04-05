@@ -1,10 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% load posts_template_tags %}
+<div class="d-flex justify-content-center">
+    {% if paginated_object.has_other_pages %}
+        <div class="ui pagination menu">
+            {% if paginated_object.has_previous %}
+                <a href="?{% url_add_param page=1 %}" class="item"><i class="ui icon angle double left"></i>
+                    First</a>
+                <a href="?{% url_add_param page=paginated_object.previous_page_number %}" class="item"><i
+                        class="ui icon angle left"></i> Previous</a>
+            {% endif %}
+            <a href="" class="active item">Page {{ paginated_object.number }}
+                of {{ paginated_object.paginator.num_pages }}</a>
+            {% if paginated_object.has_next %}
+                <a href="?{% url_add_param page=paginated_object.next_page_number %}" class="item">Next <i
+                        class="ui icon angle right"></i></a>
+                <a href="?{% url_add_param page=paginated_object.paginator.num_pages %}" class="item">Last <i
+                        class="ui icon angle double right"></i></a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+<div class="col-12">
+    <div class="ui hidden divider"></div>
+</div>

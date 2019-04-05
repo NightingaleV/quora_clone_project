@@ -6,7 +6,7 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-lg-10 offset-lg-1 col-12">
+        <div class="col-lg-8 offset-lg-2 col-12">
             <div class="row">
                 <div class="col-12">
                     {% include 'topics/_topics_feed_menu.html' %}
@@ -20,4 +20,17 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block post-content %}
+<div class="ui divider hidden"></div>
+    {% if questions_list.paginator %}
+        {% with questions_list as paginated_object %}
+            <div class="row">
+                <div class="col-6 offset-3">
+                    {% include 'utils/_pagination.html' %}
+                </div>
+            </div>
+        {% endwith %}
+    {% endif %}
 {% endblock %}

@@ -41,7 +41,7 @@ html {
             flex-direction: column; }
     .answer-wrapper .credits .credentials .follow-user {
       float: right;
-      margin-right: 15px; }
+      margin: 0 15px 0 10px; }
       .answer-wrapper .credits .credentials .follow-user .text {
         padding: 0; }
     .answer-wrapper .credits .credentials .author {

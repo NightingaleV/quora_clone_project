@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
 from django.urls import reverse
+from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from .models import Topic, TopicSubscription
@@ -115,15 +116,18 @@ class DetailTopic(DetailView):
                 Prefetch('answers', queryset=answers_with_related_data)
             )
 
-            context['questions_list'] = questions_including_answers
+            paginator_question_list = Paginator(questions_including_answers, 10)
+            context['questions_list'] = paginator_question_list.get_page(self.request.GET.get('page'))
             context['active'] = 'feed'
 
         # List of unanswered questions
         if self.request.GET.get('active') == 'to_answer':
             context['active'] = self.request.GET.get('active')
-            context['questions_list'] = Question.data.filter(topic=self.object).count_answers().filter(
+            unanswered_questions_list = Question.data.filter(topic=self.object).count_answers().filter(
                 num_answers__lt=3).already_answered_by_user(self.request.user.pk).prefetch_related('follow_question',
                                                                                                    'reminder')
+            paginator_question_list = Paginator(unanswered_questions_list, 10)
+            context['questions_list'] = paginator_question_list.get_page(self.request.GET.get('page'))
 
         if self.request.GET.get('active') == 'contributors':
             context['active'] = self.request.GET.get('active')
@@ -133,16 +137,5 @@ class DetailTopic(DetailView):
                 num_follows=Count('follower')).annotate(
                 num_upvotes=Count('answers__upvotes')).order_by('-num_upvotes')[0:10]
             context['contributors'] = best_contributors
-
-            # # upvote_counts =
-            # context['contributors'] = User.objects.filter(answers__question__topic=self.object).distinct()
-            #
-            # context['statistics'] = Answer.data.filter(user=self.object.pk).add_upvote_counter().aggregate(
-            #     Sum('num_upvotes'))
-            # context['num_answers'] = Answer.data.filter(user=self.object.pk).count()
-            # context['user_followers'] = UserFollowersBridge.objects.filter(following=self.object.pk).count()
-
-        # Add form for answering question
-        # context['answer_create_form'] = AnswerCreationForm()
 
         return context
