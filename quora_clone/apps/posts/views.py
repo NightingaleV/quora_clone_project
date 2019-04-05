@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import View, FormView, CreateView, UpdateView, DetailView
 from django.urls import reverse_lazy
+from django.core.paginator import Paginator
 
 from .models import Question, Answer, Upvotes, Bookmarks, FollowQuestion, AnswerLater
 from .forms import AnswerCreationForm, AnswerEditForm
@@ -24,11 +25,13 @@ class DetailQuestion(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['answers_list'] = Answer.data.filter(question=self.object).published().order_by_upvotes().select_related(
+        answers_list = Answer.data.filter(question=self.object).published().order_by_upvotes().select_related(
             'user').prefetch_related(
             'upvotes',
             'bookmarks')
 
+        paginator_answers_list = Paginator(answers_list, 5)
+        context['answers_list'] = paginator_answers_list.get_page(self.request.GET.get('page'))
         user_following = UserFollowersBridge.objects.filter(follower=self.request.user).values_list('following',
                                                                                                     flat=True)
         context['user_following'] = user_following

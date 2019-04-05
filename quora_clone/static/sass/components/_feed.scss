@@ -1,7 +1,13 @@
 .question {
-  .header {
-    font-size: 1.25rem;
+  a.link {
+    color: black;
     font-weight: bold;
+    &:hover{
+      text-decoration: underline;
+    }
+    .header {
+      font-size: 1.35rem;
+    }
   }
 }
 
@@ -29,7 +35,8 @@ $answer-text-padding: 0px 25px;
       .follow-user {
         float: right;
         margin: 0 15px 0 10px;
-        .text{
+
+        .text {
           padding: 0;
         }
       }
@@ -79,9 +86,9 @@ $answer-text-padding: 0px 25px;
   }
 }
 
-.question-detail{
-  .accordion .content.active{
-    padding-bottom:0.5rem;
+.question-detail {
+  .accordion .content.active {
+    padding-bottom: 0.5rem;
   }
 }
 

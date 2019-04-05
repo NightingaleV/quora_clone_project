@@ -41,3 +41,16 @@
         </div>
     {% endif %}
 {% endblock %}
+
+{% block post-content %}
+<div class="ui divider hidden"></div>
+    {% if answers_list.paginator %}
+        {% with answers_list as paginated_object %}
+            <div class="row">
+                <div class="col-6 offset-3">
+                    {% include 'utils/_pagination.html' %}
+                </div>
+            </div>
+        {% endwith %}
+    {% endif %}
+{% endblock %}

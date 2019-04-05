@@ -7,7 +7,7 @@
             <div class="ui segment">
                 <div class="row question">
                     <div class="col-12">
-                        <h2 class="header"><a class="link" href="{% url 'topics:posts:question-detail' topic_slug=topic.slug question_slug=question.slug %}">{{ question.content }}</a></h2>
+                       <a class="link" href="{% url 'topics:posts:question-detail' topic_slug=topic.slug question_slug=question.slug %}"> <h2 class="header">{{ question.content }}</h2></a>
                     </div>
                 </div>
                 {% if active == 'feed' %}
