@@ -48,16 +48,18 @@ class ListAnsweredQuestion(ListView):
     paginate_by = 15
 
     def get_queryset(self):
-        # subscribed_topics = TopicSubscription.objects.filter(user=self.request.user).values_list('topic_id',flat=True)
+
         subscribed_topics = Topic.objects.subscribed_by(self.request.user).values_list('id', flat=True)
         people_followed_by_user = UserFollowersBridge.objects.filter(follower=self.request.user).values_list(
             'following',
             flat=True)
         if not self.request.GET.get('active') or self.request.GET.get('active') == 'feed':
-            questions_list = Question.data.filter(topic_id__in=subscribed_topics,
-                                                  answers__is_published=True).select_related('topic').distinct()
+            # After adding mode answers, maybe would be better to increase num_answers__gte
+            questions_list = Question.data.filter(topic_id__in=subscribed_topics)\
+                .count_answers().filter(num_answers__gte=1).exclude_already_answered_by_user(self.request.user.pk)\
+                .select_related('topic').distinct()
             queryset = questions_list.add_chance_to_like_a_answer(self.request.user) \
-                .order_by('-num_interest', '-answers__created_at') \
+                .order_by('-answers__created_at', '-num_interest') \
                 .prefetch_best_answers()
 
         elif self.request.GET.get('active') == 'following_questions':
@@ -69,18 +71,29 @@ class ListAnsweredQuestion(ListView):
             questions_list = Question.data.filter(topic_id__in=subscribed_topics,
                                                   answers__user__in=people_followed_by_user,
                                                   answers__is_published=True).select_related('topic')
-            queryset = questions_list.add_chance_to_like_a_answer(self.request.user).order_by('-answers__created_at') \
+            queryset = questions_list.add_chance_to_like_a_answer(self.request.user) \
+                .order_by('-answers__created_at') \
                 .prefetch_best_answers()
 
         elif self.request.GET.get('active') == 'bookmarks':
             user_bookmarks = Bookmarks.objects.filter(user=self.request.user).values_list('bookmark')
             questions_list = Question.data.filter(answers__in=user_bookmarks).select_related('topic')
-            queryset = questions_list.distinct().prefetch_bookmarks(self.request.user).order_by('-answers__saved_by__created_at')
+            queryset = questions_list.distinct().prefetch_bookmarks(self.request.user).order_by(
+                '-answers__saved_by__created_at')
+
+        elif self.request.GET.get('active') == 'upvoted':
+            user_upvoted = Upvotes.objects.filter(user=self.request.user).values_list('answer')
+            questions_list = Question.data.filter(answers__in=user_upvoted).select_related('topic')
+            queryset = questions_list.distinct().prefetch_upvoted(self.request.user).order_by(
+                '-answers__upvoted_by__created_at')
         else:
-            queryset = Question.data.filter(topic__slug=self.request.GET.get('active')).count_answers().filter(
-                num_answers__lt=3).exclude_already_answered_by_user(self.request.user.pk).prefetch_related(
-                'follow_question',
-                'reminder')
+            # After adding mode answers, maybe would be better to increase num_answers__gte
+            questions_list = Question.data.filter(topic__slug=self.request.GET.get('active')) \
+                .count_answers().filter(num_answers__gte=1).exclude_already_answered_by_user(self.request.user.pk) \
+                .select_related('topic').distinct()
+            queryset = questions_list.add_chance_to_like_a_answer(self.request.user) \
+                .order_by('-answers__created_at', '-num_interest') \
+                .prefetch_best_answers()
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -90,8 +103,8 @@ class ListAnsweredQuestion(ListView):
         context['user_following'] = user_following
         context['subscribed_topics'] = Topic.objects.subscribed_by(self.request.user)
         context['active'] = self.request.GET.get('active')
-        if context['active'] in ['feed', 'following_questions', 'fav_writers', 'bookmarks', None]:
-            context['have_answers'] = True
+        # if context['active'] in ['feed', 'following_questions', 'fav_writers', 'bookmarks', 'upvoted', None]:
+        context['have_answers'] = True
 
         return context
 

@@ -47,6 +47,10 @@ class QuestionQuerySet(models.QuerySet):
         answers_marked_as_bookmark = Answer.data.filter(saved_by__user=user).include_upvotes_bookmarks()
         return self.prefetch_related(Prefetch('answers', queryset=answers_marked_as_bookmark))
 
+    def prefetch_upvoted(self, user):
+        answers_upvoted_by_user = Answer.data.filter(upvoted_by__user=user).include_upvotes_bookmarks()
+        return self.prefetch_related(Prefetch('answers', queryset=answers_upvoted_by_user))
+
 
 # Create your models here.
 class Question(CreationModificationDateMixin, models.Model):
