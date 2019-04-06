@@ -124,7 +124,7 @@ class DetailTopic(DetailView):
         if self.request.GET.get('active') == 'to_answer':
             context['active'] = self.request.GET.get('active')
             unanswered_questions_list = Question.data.filter(topic=self.object).count_answers().filter(
-                num_answers__lt=3).already_answered_by_user(self.request.user.pk).prefetch_related('follow_question',
+                num_answers__lt=3).exclude_already_answered_by_user(self.request.user.pk).prefetch_related('follow_question',
                                                                                                    'reminder')
             paginator_question_list = Paginator(unanswered_questions_list, 10)
             context['questions_list'] = paginator_question_list.get_page(self.request.GET.get('page'))

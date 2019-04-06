@@ -8,17 +8,20 @@
                 <span class="text">{{ answer.num_upvotes }}</span>
             </span>
     {% if user.is_authenticated %}
-        {% if user not in answer.upvotes.all %}
-            <button class="ui small basic action upvote button" type="button" data-user-id="{{ user.id }}"
-                    data-answer-id="{{ answer.id }}">
-                <i class="red arrow up icon"></i><span class="text">Upvote</span>
-            </button>
-        {% else %}
-            <button class="ui small basic action button" type="button" data-user-id="{{ user.id }}"
-                    data-answer-id="{{ answer.id }}">
-                <i class="arrow down icon"></i><span class="text">Downvote</span>
-            </button>
+        {% if user.pk is not answer.user.pk %}
+            {% if user not in answer.upvotes.all %}
+                <button class="ui small basic action upvote button" type="button" data-user-id="{{ user.id }}"
+                        data-answer-id="{{ answer.id }}">
+                    <i class="red arrow up icon"></i><span class="text">Upvote</span>
+                </button>
+            {% else %}
+                <button class="ui small basic action button" type="button" data-user-id="{{ user.id }}"
+                        data-answer-id="{{ answer.id }}">
+                    <i class="arrow down icon"></i><span class="text">Downvote</span>
+                </button>
+            {% endif %}
         {% endif %}
+
     {% else %}
         <a href="{% url 'users:login' %}" class="ui small basic button"><i class="ui icon red heart"></i> Upvote</a>
     {% endif %}

@@ -21,8 +21,11 @@ from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
 
+from quora_clone.apps.posts.views import ListUnansweredQuestion
+
 urlpatterns = [
     path('', TemplateView.as_view(template_name='pages/index.html'), name='home-page'),
+    path('unanswered-questions/', ListUnansweredQuestion.as_view(), name='unanswered-questions-list'),
     path('topics/', include('quora_clone.apps.topics.urls')),
     path('users/', include('quora_clone.apps.users.urls')),
     path('actions/', include('quora_clone.apps.posts.ajax_urls')),

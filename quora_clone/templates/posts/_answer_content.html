@@ -3,28 +3,30 @@
         <img class="ui circular image"
              src="{{ answer.user.profile_image.url }}"
              alt="Profile photography - {{ answer.user }}">
-        <div class="credentials">
-                                <span class="author"><a
-                                        href="{% url 'users:profile' alias=answer.user.username %}">{{ answer.user }}</a></span>
+        <div class="credentials"><span class="author"><a href="">{{ answer.user }}</a></span>
             <div>
                 {% if user.is_authenticated %}
-                    {% if answer.user.id not in user_following %}
-                        <button class="ui basic blue mini follow-user button" data-user-id="{{ answer.user.id }}"
-                                type="button">
-                            <i class="user plus icon"></i><span class="text">Follow</span>
-                        </button>
-                    {% else %}
-                        <button class="ui blue mini follow-user button" data-user-id="{{ answer.user.id }}"
-                                type="button">
-                            <i class="user plus icon"></i><span class="text">Following</span>
-                        </button>
+                    {% if user.id is not answer.user.id %}
+                        {% if answer.user.id not in user_following %}
+                            <button class="ui basic blue mini follow-user button" data-user-id="{{ answer.user.id }}"
+                                    type="button">
+                                <i class="user plus icon"></i><span class="text">Follow</span>
+                            </button>
+                        {% else %}
+                            <button class="ui blue mini follow-user button" data-user-id="{{ answer.user.id }}"
+                                    type="button">
+                                <i class="user plus icon"></i><span class="text">Following</span>
+                            </button>
+                        {% endif %}
                     {% endif %}
+
                 {% else %}
                     <a class="ui basic blue mini follow-user button" href="{% url 'users:login' %}">
                         <i class="user plus icon"></i><span class="text">Follow</span>
                     </a>
                 {% endif %}
-                <p class="description">Develop public quickly live. Suggest analysis total media to. Experience carry take notice mind officer.</p>
+                <p class="description">Develop public quickly live. Suggest analysis total media to. Experience carry
+                    take notice mind officer.</p>
 
             </div>
 

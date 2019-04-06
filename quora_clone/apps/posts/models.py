@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Q, FilteredRelation, Count
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
+from django.db.models import Q, Prefetch, Sum, Max
 
 from quora_clone.config.settings.base import AUTH_USER_MODEL
 from quora_clone.apps.utils.models import CreationModificationDateMixin
@@ -15,8 +16,21 @@ class QuestionQuerySet(models.QuerySet):
     def count_answers(self):
         return self.annotate(num_answers=Count('answers', True, filter=Q(answers__is_published=True)))
 
-    def already_answered_by_user(self, user_id):
+    def add_chance_user_to_answer(self, user):
+        return self.annotate(num_knowlage=Max('topic__subscribed_by__knowledge',
+                                              filter=Q(topic__subscribed_by__user=user)))
+
+    def order_by_chance_to_answer(self):
+        return self.order_by('-num_knowlage')
+
+    def exclude_already_answered_by_user(self, user_id):
         return self.exclude(answers__user=user_id)
+
+    def prefetch_followers_reminders(self):
+        return self.prefetch_related('follow_question', 'reminder')
+
+    def get_unanswered(self):
+        return self.count_answers().filter(num_answers__lt=3)
 
 
 # Create your models here.

@@ -1,10 +1,16 @@
+.ui.segments {
+  margin: 0rem 0 2rem 0rem;
+}
+
 .question {
   a.link {
     color: black;
     font-weight: bold;
-    &:hover{
+
+    &:hover {
       text-decoration: underline;
     }
+
     .header {
       font-size: 1.35rem;
     }

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Questions - Help the community to answer those question
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-3">
+            <div class="ui vertical menu">
+                <a class="{% if not active or active == 'feed' %}active{% endif %} red item" href="?active=feed">
+                    <span class="title"><i class="ui icon red inbox"></i>Inbox</span>
+                </a>
+                <a class="ui red item {% if active == 'reminder' %}active{% endif %}" href="?active=reminder">
+                    <span class="title"><i class="ui icon red bell"></i> Reminder</span>
+                    <div class="ui red left pointing label">{{ num_reminders }}</div>
+                </a>
+                <a class="{% if active == 'my_concepts' %}active{% endif %} ui red item" href="?active=my_concepts">
+                    <span class="title"><i class="ui icon grey certificate"></i> Concepts</span>
+                    <div class="ui left label">{{ num_unpublished_by_user }}</div>
+                </a>
+                <a class="{% if active == 'my_answers' %}active{% endif %} ui red item" href="?active=my_answers">
+                    <span class="title"><i class="ui icon grey book"></i> Your Answers</span>
+                    <div class="ui left label">{{ num_published_by_user }}</div>
+                </a>
+                <div class="item">
+                    <div class="header">Your Topics</div>
+                    <div class="menu">
+                        {% for topic in subscribed_topics %}
+                            <a class="{% if active == topic.slug %}active{% endif %} item"
+                               href="?active={{ topic.slug }}">{{ topic.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-12">
+            <div class="row">
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="feed"></div>
+                    {% include 'posts/feed_for_view_with_sidebar.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block post-content %}
+    <div class="ui divider hidden"></div>
+    {% if paginator %}
+        {% with page_obj as paginated_object %}
+            <div class="row">
+                <div class="col-8 offset-3">
+                    {% include 'utils/_pagination.html' %}
+                </div>
+            </div>
+        {% endwith %}
+    {% endif %}
+{% endblock %}

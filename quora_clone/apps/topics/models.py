@@ -12,6 +12,9 @@ class TopicQuerySet(QuerySet):
     def related_questions(self):
         return self.filter()
 
+    def subscribed_by(self, user):
+        return self.filter(subscribed_by__user=user)
+
 
 # Topic Model
 # ------------------------------------------------------------------------------

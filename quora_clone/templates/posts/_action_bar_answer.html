@@ -1,6 +1,8 @@
 <div class="row">
     <div class="col-12">
+        {% if answer.is_published == 1 %}
         {% include 'posts/actions/_answer_upvote_button.html' %}
+        {% endif %}
         <div class="float-right">
             {% if user.pk is answer.user.pk %}
                 {% include 'posts/actions/_answer_edit_button.html' %}
