@@ -23,6 +23,13 @@ class QuestionQuerySet(models.QuerySet):
     def order_by_chance_to_answer(self):
         return self.order_by('-num_knowlage')
 
+    def add_chance_to_like_a_answer(self, user):
+        return self.annotate(num_interest=Max('topic__subscribed_by__interest',
+                                              filter=Q(topic__subscribed_by__user=user)))
+
+    def order_by_chance_to_like_a_answer(self):
+        return self.order_by('-num_interest')
+
     def exclude_already_answered_by_user(self, user_id):
         return self.exclude(answers__user=user_id)
 
@@ -31,6 +38,10 @@ class QuestionQuerySet(models.QuerySet):
 
     def get_unanswered(self):
         return self.count_answers().filter(num_answers__lt=3)
+
+    def prefetch_best_answers(self):
+        answers_with_related_data = Answer.data.published().distinct().add_upvote_counter().order_by_upvotes().include_upvotes_bookmarks()
+        return self.prefetch_related(Prefetch('answers', queryset=answers_with_related_data))
 
 
 # Create your models here.
@@ -60,6 +71,9 @@ class Question(CreationModificationDateMixin, models.Model):
 # ANSWER
 # ------------------------------------------------------------------------------
 class AnswerQuerySet(models.QuerySet):
+    def include_upvotes_bookmarks(self):
+        return self.select_related('user').prefetch_related('upvotes', 'bookmarks')
+
     def add_upvote_counter(self):
         return self.annotate(num_upvotes=models.Count('upvotes'))
 
@@ -121,6 +135,7 @@ class Upvotes(models.Model):
 class FollowQuestion(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, related_name='follow_q', on_delete=models.CASCADE)
     question = models.ForeignKey(Question, related_name='followed_by', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(_('creation date and time'), auto_now_add=True)
 
     def __str__(self):
         return f'{self.user} follow the {self.question}'

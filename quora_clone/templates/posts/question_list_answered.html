@@ -8,22 +8,32 @@
     <div class="row">
         <div class="col-3">
             <div class="ui vertical menu">
-                <a class="{% if not active or active == 'feed' %}active{% endif %} red item" href="?active=feed">
-                    <span class="title"><i class="ui icon red inbox"></i>New Stories</span>
+                <a class="{% if not active or active == 'feed' %}active red{% else %}grey{% endif %} item"
+                   href="?active=feed">
+                    <span class="title"><i
+                            class="ui icon {% if not active or active == 'feed' %}red{% else %}grey{% endif %} coffee"></i>New Stories</span>
                 </a>
-                <a class="ui red item {% if active == 'reminder' %}active{% endif %}" href="?active=reminder">
-                    <span class="title"><i class="ui icon red bell"></i> Followed Question</span>
-                    <div class="ui red left pointing label">{{ num_reminders }}</div>
+                <a class="{% if active == 'following_questions' %}active red{% endif %} ui item"
+                   href="?active=following_questions">
+                    <span class="title"><i
+                            class="ui icon {% if active == 'following_questions' %}red{% else %}grey{% endif %} thumbtack"></i> Following Questions</span>
                 </a>
-                <a class="{% if active == 'my_concepts' %}active{% endif %} ui red item" href="?active=my_concepts">
-                    <span class="title"><i class="ui icon grey certificate"></i> Stories from favourite writes</span>
-                    <div class="ui left label">{{ num_unpublished_by_user }}</div>
+                <a class="{% if active == 'fav_writers' %}active red{% else %}grey{% endif %} ui item"
+                   href="?active=fav_writers">
+                    <span class="title"><i
+                            class="ui icon {% if active == 'fav_writers' %}red{% else %}grey{% endif %} user circle"></i> Favourite Writers</span>
                 </a>
-                <a class="{% if active == 'my_answers' %}active{% endif %} ui red item" href="?active=my_answers">
-                    <span class="title"><i class="ui icon grey book"></i> Your Answers</span>
-                    <div class="ui left label">{{ num_published_by_user }}</div>
+                <a class="{% if active == 'bookmarks' %}active red{% else %}grey{% endif %} ui item"
+                   href="?active=bookmarks">
+                    <span class="title"><i
+                            class="ui icon {% if active == 'bookmarks' %}red{% else %}grey{% endif %} bookmark"></i> Bookmarks</span>
                 </a>
-                <div class="item">
+                <a class="{% if active == 'upvoted' %}active red{% else %}grey{% endif %} ui item"
+                   href="?active=upvoted">
+                    <span class="title"><i
+                            class="ui icon {% if active == 'upvoted' %}red{% else %}grey{% endif %} user like"></i> Upvoted</span>
+                </a>
+                <div class="item topic-links">
                     <div class="header">Your Topics</div>
                     <div class="menu">
                         {% for topic in subscribed_topics %}
@@ -39,8 +49,8 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    <div class="feed"></div>
-                    {% include 'posts/feed_for_view_with_sidebar.html' %}
+                    {{ questions_list.count }}
+                    <div class="feed">{% include 'posts/feed_list_views.html' %}</div>
                 </div>
             </div>
         </div>

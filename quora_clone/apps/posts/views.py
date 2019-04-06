@@ -51,18 +51,18 @@ class ListAnsweredQuestion(ListView):
         # subscribed_topics = TopicSubscription.objects.filter(user=self.request.user).values_list('topic_id',flat=True)
         subscribed_topics = Topic.objects.subscribed_by(self.request.user)
         if not self.request.GET.get('active') or self.request.GET.get('active') == 'feed':
-            unanswered_questions_list = Question.data.filter(
-                topic__in=subscribed_topics).get_unanswered().exclude_already_answered_by_user(
-                self.request.user.pk).prefetch_followers_reminders()
+            questions_from_topic = Question.data.filter(topic__in=subscribed_topics,
+                                                        answers__is_published=True).distinct()
+            queryset = questions_from_topic.add_chance_to_like_a_answer(self.request.user) \
+                .order_by('-num_interest', '-answers__created_at') \
+                .prefetch_best_answers()
 
-            queryset = unanswered_questions_list.add_chance_user_to_answer(self.request.user).order_by_chance_to_answer()
-
-        elif self.request.GET.get('active') == 'reminder':
-            queryset = Question.data.filter(
-                to_be_reminded__user_id=self.request.user.id).prefetch_followers_reminders()
+        elif self.request.GET.get('active') == 'following_questions':
+            questions_from_topic = Question.data.filter(followed_by__user=self.request.user)
+            queryset = questions_from_topic.distinct().prefetch_best_answers().order_by('-followed_by__created_at')
 
         elif self.request.GET.get('active') == 'my_concepts':
-            questions_from_topic = Question.objects.filter(answers__user=self.request.user, answers__is_published=False)
+            questions_from_topic = Question.data.filter(answers__user=self.request.user, answers__is_published=False)
             answers_with_related_data = Answer.data.unpublished().filter(user=self.request.user).select_related(
                 'user')
             queryset = questions_from_topic.prefetch_related(
@@ -70,8 +70,10 @@ class ListAnsweredQuestion(ListView):
             )
 
         elif self.request.GET.get('active') == 'my_answers':
-            questions_from_topic = Question.objects.filter(answers__user=self.request.user, answers__is_published=True).distinct()
-            answers_with_related_data = Answer.data.published().filter(user=self.request.user).add_upvote_counter().distinct().select_related(
+            questions_from_topic = Question.data.filter(answers__user=self.request.user,
+                                                        answers__is_published=True).distinct()
+            answers_with_related_data = Answer.data.published().filter(
+                user=self.request.user).add_upvote_counter().distinct().select_related(
                 'user').prefetch_related(
                 'upvotes',
                 'bookmarks')
@@ -87,6 +89,14 @@ class ListAnsweredQuestion(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
+        user_following = UserFollowersBridge.objects.filter(follower=self.request.user).values_list('following',
+                                                                                                    flat=True)
+        context['user_following'] = user_following
+        context['subscribed_topics'] = Topic.objects.subscribed_by(self.request.user)
+        context['active'] = self.request.GET.get('active')
+        if context['active'] in ['feed', 'following_questions', None]:
+            context['have_answers'] = True
+
         return context
 
 
@@ -99,12 +109,13 @@ class ListUnansweredQuestion(ListView):
     def get_queryset(self):
         # subscribed_topics = TopicSubscription.objects.filter(user=self.request.user).values_list('topic_id',flat=True)
         subscribed_topics = Topic.objects.subscribed_by(self.request.user)
-        if not self.request.GET.get('active') or self.request.GET.get('active') == 'feed':
+        if not self.request.GET.get('active') or self.request.GET.get('active') == 'to_answer':
             unanswered_questions_list = Question.data.filter(
                 topic__in=subscribed_topics).get_unanswered().exclude_already_answered_by_user(
                 self.request.user.pk).prefetch_followers_reminders()
 
-            queryset = unanswered_questions_list.add_chance_user_to_answer(self.request.user).order_by_chance_to_answer()
+            queryset = unanswered_questions_list.add_chance_user_to_answer(
+                self.request.user).order_by_chance_to_answer()
 
         elif self.request.GET.get('active') == 'reminder':
             queryset = Question.data.filter(
@@ -119,11 +130,16 @@ class ListUnansweredQuestion(ListView):
             )
 
         elif self.request.GET.get('active') == 'my_answers':
-            questions_from_topic = Question.objects.filter(answers__user=self.request.user, answers__is_published=True).distinct()
-            answers_with_related_data = Answer.data.published().filter(user=self.request.user).add_upvote_counter().distinct().select_related(
-                'user').prefetch_related(
-                'upvotes',
-                'bookmarks')
+            questions_from_topic = Question.objects.filter(answers__user=self.request.user,
+                                                           answers__is_published=True).distinct()
+            answers_with_related_data = Answer.data \
+                .published() \
+                .filter(user=self.request.user) \
+                .add_upvote_counter() \
+                .distinct() \
+                .select_related('user') \
+                .prefetch_related('upvotes', 'bookmarks')
+
             queryset = questions_from_topic.prefetch_related(
                 Prefetch('answers', queryset=answers_with_related_data)
             ).order_by('-answers__created_at')
@@ -138,11 +154,14 @@ class ListUnansweredQuestion(ListView):
         context = super().get_context_data(object_list=None, **kwargs)
         subscribed_topics = Topic.objects.subscribed_by(self.request.user)
         context['subscribed_topics'] = subscribed_topics
-        context['active'] = self.request.GET.get('active')
-
+        # For labels in sidebar menu
         context['num_reminders'] = AnswerLater.objects.filter(user=self.request.user).count()
         context['num_published_by_user'] = Answer.data.filter(user=self.request.user).published().count()
         context['num_unpublished_by_user'] = Answer.data.filter(user=self.request.user).unpublished().count()
+
+        context['active'] = self.request.GET.get('active')
+        if context['active'] in ['my_answers', 'my_concepts']:
+            context['have_answers'] = True
         return context
 
 

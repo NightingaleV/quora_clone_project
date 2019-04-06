@@ -16,9 +16,6 @@ class User(AbstractUser):
     profile_image = models.ImageField(upload_to='profile_images/', blank=True)
     follow_system = models.ManyToManyField('self', symmetrical=False, through='UserFollowersBridge')
 
-    # Managers
-    objects = models.Manager()
-
     def __str__(self):
         return "@{}".format(self.username)
 
