@@ -1,4 +1,5 @@
 from django.utils.http import urlencode
+from django.utils.safestring import mark_safe
 from django import template
 
 register = template.Library()
@@ -8,4 +9,4 @@ register = template.Library()
 def url_add_param(context, **kwargs):
     query = context['request'].GET.dict()
     query.update(kwargs)
-    return urlencode(query)
+    return mark_safe(urlencode(query))

@@ -17,6 +17,7 @@ from quora_clone.apps.posts.models import Answer
 # Custom Imports
 from .forms import UserCreationForm, UserUpdateForm
 from .models import UserFollowersBridge
+
 User = get_user_model()
 
 
@@ -108,13 +109,16 @@ class UserProfileView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['statistics'] = Answer.data.filter(user=self.object.pk).add_upvote_counter().aggregate(Sum('num_upvotes'))
+        context['statistics'] = Answer.data.filter(user=self.object.pk).add_upvote_counter().aggregate(
+            Sum('num_upvotes'))
         context['num_answers'] = Answer.data.filter(user=self.object.pk).count()
         context['user_followers'] = UserFollowersBridge.objects.filter(following=self.object.pk).count()
         return context
 
 
-class UserFollowAjax(View):
+class UserFollowAjax(LoginRequiredMixin, View):
+    login_url = 'users:login'
+
     def post(self, request):
         # self.request == request, they are attributes and also parameters
         if self.request.is_ajax():

@@ -9,8 +9,6 @@ from django.core.validators import MaxValueValidator
 # Topic Query Set
 # ------------------------------------------------------------------------------
 class TopicQuerySet(QuerySet):
-    def related_questions(self):
-        return self.filter()
 
     def subscribed_by(self, user):
         return self.filter(subscribed_by__user=user)

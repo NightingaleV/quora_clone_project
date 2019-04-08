@@ -25,7 +25,7 @@ class TestTopicListView(TestCase):
 
         self.topic = Topic.objects.get_or_create(name='Interesting Topic')[0]
 
-        # For ajax
+        # For ajax requests
         self.json_kwargs = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
 
     # Test URLs
@@ -124,9 +124,24 @@ class TestTopicDetailView(TestCase):
         self.assertEqual(response.context['active'], 'feed')
 
     def test_context_data_of_unanswered_questions(self):
-        response = self.client.get(reverse(self.url_name, kwargs={'topic_slug': self.topic.slug})+'?active=to_answer')
+        response = self.client.get(reverse(self.url_name, kwargs={'topic_slug': self.topic.slug}) + '?active=to_answer')
         self.assertIsNotNone(response.context['questions_list'])
         self.assertEqual(response.context['active'], 'to_answer')
+
+    def test_context_data_of_contributors(self):
+        response = self.client.get(
+            reverse(self.url_name, kwargs={'topic_slug': self.topic.slug}) + '?active=contributors')
+        self.assertIsNotNone(response.context['contributors'])
+        self.assertEqual(response.context['active'], 'contributors')
+
+    def test_context_data_of_logged_user(self):
+        # For User Authentication
+        self.user = User.objects.get_or_create(username='test_user')[0]
+        self.user.set_password('12345')
+        self.user.save()
+        self.client.login(username='test_user', password='12345')
+        response = self.client.get(reverse(self.url_name, kwargs={'topic_slug': self.topic.slug}))
+        self.assertIsNotNone(response.context['user_following'])
 
 # url = reverse('archive', args=[1988])
 # assertEqual(url, '/archive/1988/')

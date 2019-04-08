@@ -100,11 +100,12 @@ class DetailTopic(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(DetailTopic, self).get_context_data(**kwargs)
 
-        # TODO maybe change sorting questions
-        user_following = UserFollowersBridge.objects.filter(follower=self.request.user).values_list('following',
-                                                                                                    flat=True)
-        context['user_following'] = user_following
+        if self.request.user.is_authenticated:
+            user_following = UserFollowersBridge.objects.filter(follower=self.request.user).values_list('following',
+                                                                                                        flat=True)
+            context['user_following'] = user_following
 
+        # TODO maybe change sorting questions
         # List of answered questions
         if not self.request.GET.get('active') or self.request.GET.get('active') == 'feed':
             questions_from_topic = Question.objects.filter(topic=self.object, answers__isnull=False,
