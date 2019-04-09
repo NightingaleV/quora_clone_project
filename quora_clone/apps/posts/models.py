@@ -3,6 +3,7 @@ from django.db.models import Q, FilteredRelation, Count
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q, Prefetch, Sum, Max
+from django.urls import reverse
 
 from quora_clone.config.settings.base import AUTH_USER_MODEL
 from quora_clone.apps.utils.models import CreationModificationDateMixin
@@ -68,6 +69,9 @@ class Question(CreationModificationDateMixin, models.Model):
     class Meta:
         ordering = ['-created_at']
 
+    def get_absolute_url(self):
+        return reverse('topics:posts:question-detail', kwargs={'topic_slug': self.topic.slug, 'question_slug':  self.slug})
+
     def __str__(self):
         return f'{self.content}'
 
@@ -109,6 +113,9 @@ class Answer(CreationModificationDateMixin, models.Model):
     class Meta:
         ordering = ['-created_at']
         unique_together = ['id', 'user', 'question']
+
+    def get_absolute_url(self):
+        return self.question.get_absolute_url()
 
     def __str__(self):
         return f'{self.content}'

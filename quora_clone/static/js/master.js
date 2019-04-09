@@ -41,7 +41,6 @@ $(document).ready(function () {
     event.preventDefault();
     var button = $(this);
     var objectId = button.attr('data-answer-id');
-    var userId = button.attr('data-user-id');
     var objectCounter = button.closest('.topic').find('.counter');
     var buttonIcon = button.find('.icon');
     $.ajax({
@@ -49,8 +48,7 @@ $(document).ready(function () {
       // TODO ZMENIT STRUKTURU URL AJAX REQUESTU
       url: '/actions/bookmark-answer/',
       data: {
-        answer_id: objectId,
-        user_id: userId
+        answer_id: objectId
       },
       success: function success(response) {
         // console.log('Success to contact the server');
@@ -76,7 +74,6 @@ $(document).ready(function () {
     event.preventDefault();
     var button = $(this);
     var objectId = button.attr('data-answer-id');
-    var userId = button.attr('data-user-id');
     var objectCounterText = button.closest('.upvote-wrapper').find('.counter .text');
     var objectCounterIcon = button.closest('.upvote-wrapper').find('.counter .icon');
     var buttonIcon = button.find('.icon');
@@ -86,8 +83,7 @@ $(document).ready(function () {
       type: "POST",
       url: '/actions/upvote-answer/',
       data: {
-        answer_id: objectId,
-        user_id: userId
+        answer_id: objectId
       },
       success: function success(response) {
         // console.log('Success to contact the server');
@@ -199,7 +195,6 @@ $(document).ready(function () {
       success: function success(response) {
         // console.log('Success to contact the server');
         console.log(response);
-        window.location.reload();
       },
       error: function error(response) {//console.log('Failure, request not reach the database');
       }
@@ -279,6 +274,57 @@ $(document).ready(function () {
           window.location.reload();
         } // window.location.reload();
 
+      },
+      error: function error(response) {//console.log('Failure, request not reach the database');
+      }
+    });
+  });
+});
+"use strict";
+
+$(document).ready(function () {
+  var requestUrl = '/actions/create-question/'; // OPEN EDIT MODAL
+
+  $(document).on('click', ".create-question.button", function () {
+    event.preventDefault();
+    var button = $(this);
+    var modalWrapper = $('.modal-wrapper'); // LOAD MODAL FROM HTTP request
+
+    $.ajax({
+      type: "GET",
+      url: requestUrl,
+      data: {},
+      success: function success(response) {
+        // console.log('Success to contact the server');
+        console.log(response);
+        modalWrapper.append(response);
+        var questionCreateModal = $('.create-question.modal');
+        questionCreateModal.modal({
+          onHidden: function onHidden() {
+            questionCreateModal.remove();
+          }
+        }).modal('show');
+      },
+      error: function error(response) {//console.log('Failure, request not reach the database');
+      }
+    });
+  }); // Submit New QUESTION
+
+  $(document).on('click', ".create-answer .submit.button", function () {
+    event.preventDefault();
+    var button = $(this);
+    var modal = $('.create-question.modal');
+    var form = $('.create-question .form');
+    var data = form.serialize();
+    console.log(data);
+    $.ajax({
+      type: "POST",
+      url: requestUrl,
+      data: data,
+      success: function success(response) {
+        // console.log('Success to contact the server');
+        console.log(response);
+        modal.modal('hide');
       },
       error: function error(response) {//console.log('Failure, request not reach the database');
       }

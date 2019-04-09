@@ -2,6 +2,17 @@ from django import forms
 from .models import Answer, Question
 
 
+class QuestionCreationForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = {'topic', 'content'}
+
+    def __init__(self, *args, **kwargs):
+        super(QuestionCreationForm, self).__init__(*args, **kwargs)
+        self.initial['topic'] = 'Choose Topic'
+        self.fields['topic'].widget.attrs['class'] = "ui selection dropdown"
+
+
 class AnswerCreationForm(forms.ModelForm):
     class Meta:
         model = Answer

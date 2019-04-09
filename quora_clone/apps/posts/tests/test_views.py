@@ -39,14 +39,17 @@ class CreateAnswerView(PostsTestCase):
         self.assertEqual(self.url_path, reverse(self.url_name))
         self.assertEqual(self.url_name, resolve(self.url_path).view_name)
 
+    def test_permissions(self):
+        response = self.client.get(self.url_path)
+        self.assertEqual(response.status_code, 403)
+
     def test_ajax_get_modal_response(self):
         self.client.login(username='test_user', password='12345')
 
-        # Send Upvote request
-        form_data = {
+        json_data = {
             'question_id': self.question.id,
         }
-        response = self.client.get(self.url_path, data=form_data, **self.json_kwargs)
+        response = self.client.get(self.url_path, data=json_data, **self.json_kwargs)
         # Check if returning right response
         self.assertIsNotNone(response.context['modal_question'])
         self.assertEqual(response.status_code, 200)
@@ -54,7 +57,6 @@ class CreateAnswerView(PostsTestCase):
     def test_ajax_post_form_response(self):
         self.client.login(username='test_user', password='12345')
 
-        # Send Upvote request
         form_data = {
             'question': self.question.id,
             'content': 'example question',
@@ -64,6 +66,17 @@ class CreateAnswerView(PostsTestCase):
         # Check if returning right response
         data = response.json()
         self.assertEqual(data['status'], 'success')
+
+    def test_nonajax_form_response(self):
+        self.client.login(username='test_user', password='12345')
+        json_data = {
+            'question': self.question.id,
+            'content': 'example question',
+            'is_published': True
+        }
+        response = self.client.post(self.url_path, data=json_data)
+        # Check if redirecting to question of that answer
+        self.assertEqual(response.status_code, 302)
 
 
 class EditAnswerView(PostsTestCase):
@@ -80,7 +93,6 @@ class EditAnswerView(PostsTestCase):
     def test_ajax_get_modal_response(self):
         self.client.login(username='test_user', password='12345')
 
-        # Send Upvote request
         json_data = {
             'question_id': self.question.id,
         }
@@ -93,7 +105,6 @@ class EditAnswerView(PostsTestCase):
     def test_ajax_post_form_response(self):
         self.client.login(username='test_user', password='12345')
 
-        # Send Upvote request
         json_data = {
             'content': 'example question',
             'is_published': True
@@ -103,6 +114,21 @@ class EditAnswerView(PostsTestCase):
         # Check if returning right response
         data = response.json()
         self.assertEqual(data['status'], 'success')
+
+    def test_permissions(self):
+        response = self.client.get(reverse(self.url_name, kwargs={'answer_id': self.answer.id}))
+        self.assertEqual(response.status_code, 403)
+
+    def test_nonajax_form_response(self):
+        self.client.login(username='test_user', password='12345')
+        json_data = {
+            'content': 'example question',
+            'is_published': True
+        }
+        url = reverse(self.url_name, kwargs={'answer_id': self.answer.id})
+        response = self.client.post(url, data=json_data)
+        # Check if redirecting to question of that answer
+        self.assertEqual(response.status_code, 302)
 
 
 class DeleteAnswerAjax(PostsTestCase):
@@ -182,6 +208,51 @@ class PostsTestBookmarkAnswerCase(PostsTestCase):
 
 # QUESTION
 # ------------------------------------------------------------------------------
+class CreateQuestionView(PostsTestCase):
+    def setUp(self):
+        super().setUp()
+        self.url_path = '/actions/create-question/'
+        self.url_name = 'posts_ajax:create-question'
+
+    def test_view_url(self):
+        self.assertEqual(self.url_path, reverse(self.url_name))
+        self.assertEqual(self.url_name, resolve(self.url_path).view_name)
+
+    def test_permissions(self):
+        response = self.client.get(self.url_path)
+        self.assertEqual(response.status_code, 403)
+
+    def test_ajax_get_modal_response(self):
+        self.client.login(username='test_user', password='12345')
+
+        json_data = {}
+        response = self.client.get(self.url_path, data=json_data, **self.json_kwargs)
+        # Check if returning right response
+        self.assertEqual(response.status_code, 200)
+
+    def test_ajax_post_form_response(self):
+        self.client.login(username='test_user', password='12345')
+
+        json_data = {
+            'content': 'example_question',
+            'topic': self.topic.id
+        }
+        response = self.client.post(self.url_path, data=json_data, **self.json_kwargs)
+        # Check if returning right response
+        data = response.json()
+        self.assertEqual(data['status'], 'success')
+
+    def test_nonajax_form_response(self):
+        self.client.login(username='test_user', password='12345')
+        json_data = {
+            'content': 'example_question',
+            'topic': self.topic.id
+        }
+        response = self.client.post(self.url_path, data=json_data)
+        # Check if redirecting to question of that answer
+        self.assertEqual(response.status_code, 302)
+
+
 class TestFeedAnsweredQuestions(PostsTestCase):
     def setUp(self):
         super().setUp()

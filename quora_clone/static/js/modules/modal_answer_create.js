@@ -72,8 +72,6 @@ $(document).ready(function () {
             success: function (response) {
                 // console.log('Success to contact the server');
                 console.log(response);
-                window.location.reload();
-
             },
             error: function (response) {
                 //console.log('Failure, request not reach the database');

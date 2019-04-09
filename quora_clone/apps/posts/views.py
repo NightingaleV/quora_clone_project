@@ -6,9 +6,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import View, FormView, CreateView, UpdateView, DetailView, ListView
 from django.urls import reverse_lazy
 from django.core.paginator import Paginator
+from django.core.exceptions import PermissionDenied
 
 from .models import Question, Answer, Upvotes, Bookmarks, FollowQuestion, AnswerLater
-from .forms import AnswerCreationForm, AnswerEditForm
+from .forms import AnswerCreationForm, AnswerEditForm, QuestionCreationForm
 from quora_clone.apps.users.models import UserFollowersBridge
 from quora_clone.apps.topics.models import Topic, TopicSubscription
 
@@ -180,6 +181,30 @@ class ListUnansweredQuestion(ListView):
         return context
 
 
+class CreateQuestion(CreateView):
+    form_class = QuestionCreationForm
+    template_name = 'posts/_modal_question_create.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateQuestion, self).get_context_data()
+        return context
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return super().get(request, *args, **kwargs)
+        raise PermissionDenied()
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        self.object = form.save(commit=False)
+        if self.request.is_ajax():
+            self.object.save()
+            data = {'status': 'success'}
+            return JsonResponse(data)
+        valid = super().form_valid(form)
+        return valid
+
+
 class CreateAnswer(CreateView):
     form_class = AnswerCreationForm
     template_name = 'posts/_modal_answer_create.html'
@@ -189,6 +214,11 @@ class CreateAnswer(CreateView):
         if self.request.method == 'GET':
             context['modal_question'] = Question.objects.get(id=self.request.GET.get('question_id'))
         return context
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return super().get(request, *args, **kwargs)
+        raise PermissionDenied()
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -214,6 +244,11 @@ class EditAnswer(UpdateView):
         if self.request.method == 'GET':
             context['modal_question'] = Question.objects.get(pk=self.object.question.pk)
         return context
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            return super().get(request, *args, **kwargs)
+        raise PermissionDenied()
 
     def form_valid(self, form):
         if self.request.is_ajax():
