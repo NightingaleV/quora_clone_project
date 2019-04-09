@@ -3,7 +3,6 @@ $(document).ready(function () {
         event.preventDefault();
         let button = $(this);
         let objectId =button.attr('data-answer-id');
-        let userId = button.attr('data-user-id');
         let objectCounterText = button.closest('.upvote-wrapper').find('.counter .text');
         let objectCounterIcon = button.closest('.upvote-wrapper').find('.counter .icon');
         let buttonIcon = button.find('.icon');
@@ -16,7 +15,6 @@ $(document).ready(function () {
             url: '/actions/upvote-answer/',
             data: {
                 answer_id: objectId,
-                user_id: userId,
             },
             success: function (response) {
                 // console.log('Success to contact the server');

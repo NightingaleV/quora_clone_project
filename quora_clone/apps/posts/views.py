@@ -246,7 +246,7 @@ class UpvoteAnswerAjax(View):
         # self.request == request -> request is an attribute and also a parameter, but why... hm ?
         if self.request.is_ajax():
             answer_id = request.POST['answer_id']
-            user_id = request.POST['user_id']
+            user_id = request.user.id
             data = {}
             try:
                 upvote = Upvotes.objects.get_or_create(answer_id=answer_id, user_id=user_id)
@@ -267,7 +267,7 @@ class BookmarkAnswerAjax(View):
         # self.request == request, they are attributes and also parameters
         if self.request.is_ajax():
             answer_id = request.POST['answer_id']
-            user_id = request.POST['user_id']
+            user_id = request.user.id
             data = {}
             try:
                 bookmark = Bookmarks.objects.get_or_create(bookmark_id=answer_id, user_id=user_id)

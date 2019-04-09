@@ -140,7 +140,7 @@ class PostsTestUpvoteAnswerCase(PostsTestCase):
         self.client.login(username='test_user', password='12345')
 
         # Send Upvote request
-        json_data = {'user_id': self.user.id, 'answer_id': self.answer.pk}
+        json_data = {'answer_id': self.answer.pk}
         response = self.client.post(self.url_path, data=json_data, **self.json_kwargs)
         # Check if returning right response
         data = response.json()
@@ -167,7 +167,7 @@ class PostsTestBookmarkAnswerCase(PostsTestCase):
         self.client.login(username='test_user', password='12345')
 
         # Send Upvote request
-        json_data = {'user_id': self.user.id, 'answer_id': self.answer.pk}
+        json_data = {'answer_id': self.answer.pk}
         response = self.client.post(self.url_path, data=json_data, **self.json_kwargs)
         # Check if returning right response
         data = response.json()

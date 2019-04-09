@@ -3,7 +3,6 @@ $(document).ready(function () {
         event.preventDefault();
         let button = $(this);
         let objectId = button.attr('data-answer-id');
-        let userId = button.attr('data-user-id');
         let objectCounter = button.closest('.topic').find('.counter');
         let buttonIcon = button.find('.icon');
 
@@ -14,7 +13,6 @@ $(document).ready(function () {
             url: '/actions/bookmark-answer/',
             data: {
                 answer_id: objectId,
-                user_id: userId,
             },
             success: function (response) {
                 // console.log('Success to contact the server');
