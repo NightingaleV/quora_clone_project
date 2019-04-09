@@ -34,29 +34,31 @@ class DetailQuestion(DetailView):
 
         paginator_answers_list = Paginator(answers_list, 5)
         context['answers_list'] = paginator_answers_list.get_page(self.request.GET.get('page'))
-        user_following = UserFollowersBridge.objects.filter(follower=self.request.user).values_list('following',
-                                                                                                    flat=True)
-        context['user_following'] = user_following
+
+        if self.request.user.is_authenticated:
+            user_following = UserFollowersBridge.objects.filter(follower=self.request.user).values_list('following',
+                                                                                                        flat=True)
+            context['user_following'] = user_following
 
         return context
 
 
-class ListAnsweredQuestion(ListView):
+class FeedAnsweredQuestions(LoginRequiredMixin, ListView):
     model = Question
     context_object_name = 'questions_list'
     template_name = 'posts/question_list_answered.html'
     paginate_by = 15
+    login_url = 'users:login'
 
     def get_queryset(self):
-
         subscribed_topics = Topic.objects.subscribed_by(self.request.user).values_list('id', flat=True)
         people_followed_by_user = UserFollowersBridge.objects.filter(follower=self.request.user).values_list(
             'following',
             flat=True)
         if not self.request.GET.get('active') or self.request.GET.get('active') == 'feed':
             # After adding mode answers, maybe would be better to increase num_answers__gte
-            questions_list = Question.data.filter(topic_id__in=subscribed_topics)\
-                .count_answers().filter(num_answers__gte=1).exclude_already_answered_by_user(self.request.user.pk)\
+            questions_list = Question.data.filter(topic_id__in=subscribed_topics) \
+                .count_answers().filter(num_answers__gte=1).exclude_already_answered_by_user(self.request.user.pk) \
                 .select_related('topic').distinct()
             queryset = questions_list.add_chance_to_like_a_answer(self.request.user) \
                 .order_by('-answers__created_at', '-num_interest') \
@@ -94,6 +96,7 @@ class ListAnsweredQuestion(ListView):
             queryset = questions_list.add_chance_to_like_a_answer(self.request.user) \
                 .order_by('-answers__created_at', '-num_interest') \
                 .prefetch_best_answers()
+
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -117,7 +120,10 @@ class ListUnansweredQuestion(ListView):
 
     def get_queryset(self):
         # subscribed_topics = TopicSubscription.objects.filter(user=self.request.user).values_list('topic_id',flat=True)
-        subscribed_topics = Topic.objects.subscribed_by(self.request.user)
+        if self.request.user.is_authenticated:
+            subscribed_topics = Topic.objects.subscribed_by(self.request.user)
+        else:
+            subscribed_topics = Topic.objects.all()
         if not self.request.GET.get('active') or self.request.GET.get('active') == 'to_answer':
             unanswered_questions_list = Question.data.filter(
                 topic__in=subscribed_topics).get_unanswered().exclude_already_answered_by_user(
@@ -202,17 +208,19 @@ class EditAnswer(UpdateView):
     template_name = 'posts/_modal_answer_edit.html'
     pk_url_kwarg = 'answer_id'
 
+    def get_context_data(self, **kwargs):
+        context = super(EditAnswer, self).get_context_data()
+        # Render modal
+        if self.request.method == 'GET':
+            context['modal_question'] = Question.objects.get(pk=self.object.question.pk)
+        return context
+
     def form_valid(self, form):
         if self.request.is_ajax():
             self.object = form.save()
             data = {'status': 'success'}
             return JsonResponse(data)
         return super().form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super(EditAnswer, self).get_context_data()
-        context['modal_question'] = Question.objects.get(pk=self.object.question.pk)
-        return context
 
 
 # Create your views here.
