@@ -546,6 +546,11 @@ $('.ui.accordion').accordion({
 
     answer.find('.preview').hide();
   }
+}); // SIDEBAR MENU
+
+$('.side.menu').sticky({
+  context: '.feed-content',
+  offset: 95
 });
 "use strict";
 

@@ -15,6 +15,9 @@ html {
   padding-top: 32px;
   padding-top: 2rem; }
 
+.ui.side.menu.fixed {
+  margin-top: 150px; }
+
 .ui.segments {
   margin: 0px 0 32px 0px;
   margin: 0rem 0 2rem 0rem; }

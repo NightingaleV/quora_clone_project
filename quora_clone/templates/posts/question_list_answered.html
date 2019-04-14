@@ -7,7 +7,7 @@
 {% block content %}
     <div class="row">
         <div class="col-3">
-            <div class="ui vertical menu">
+            <div class="ui vertical side menu">
                 <a class="{% if not active or active == 'feed' %}active red{% else %}grey{% endif %} item"
                    href="?active=feed">
                     <span class="title"><i
@@ -44,12 +44,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-8 col-12">
-            <div class="row">
-            </div>
+        <div class="feed-content col-lg-8 col-12">
             <div class="row">
                 <div class="col-12">
-                    {{ questions_list.count }}
                     <div class="feed">{% include 'posts/feed_list_views.html' %}</div>
                 </div>
             </div>
