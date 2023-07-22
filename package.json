@@ -9,7 +9,7 @@
   "author": "Vitezslav Slavik",
   "license": "MIT",
   "dependencies": {
-    "npm": "^6.4.1"
+    "npm": "^9.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
@@ -28,7 +28,7 @@
     "gulp-pixrem": "^1.0.0",
     "gulp-plumber": "^1.2.0",
     "gulp-rename": "^1.4.0",
-    "gulp-sass": "^4.0.2",
+    "gulp-sass": "^5.1.0",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.1",
     "run-sequence": "^2.2.1"
